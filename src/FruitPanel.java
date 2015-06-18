@@ -399,9 +399,10 @@ public class FruitPanel extends JPanel implements Runnable {
 	}
 	
 	protected void openAction() {
+		String feName = "FruitEditor Files (*.feproj)";
+		String feExt = "feproj";
 		JFileChooser open = new JFileChooser();
-		FileNameExtensionFilter openFilt = new FileNameExtensionFilter
-				("FruitEditor Files (*.feproj)", "feproj");
+		FileNameExtensionFilter openFilt = new FileNameExtensionFilter(feName, feExt);
 		open.setFileFilter(openFilt);
 		
 		int confirm = open.showOpenDialog(null);
@@ -414,9 +415,10 @@ public class FruitPanel extends JPanel implements Runnable {
 	}
 	
 	protected void saveAction() {
+		String feName = "FruitEditor Files (*.feproj)"
+		String feExt = "feproj";
 		JFileChooser save = new JFileChooser();
-		FileNameExtensionFilter saveFilt = new FileNameExtensionFilter
-				("FruitEditor Files (*.feproj)", "feproj");
+		FileNameExtensionFilter saveFilt = new FileNameExtensionFilter(feName, feExt);
 		save.setFileFilter(saveFilt);
 	
 		int confirm = save.showSaveDialog(null);
