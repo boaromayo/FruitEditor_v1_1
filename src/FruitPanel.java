@@ -80,11 +80,31 @@ public class FruitPanel extends JPanel implements Runnable {
 	private JButton newBtn;
 	private JButton openBtn;
 	private JButton saveBtn;
-	// EDIT
+	// EDIT -> FIX
 	private JButton undoBtn;
 	private JButton redoBtn;
-	//
-	private JButton toolButton;
+	// EDIT
+	private JButton cutBtn;
+	private JButton copyBtn;
+	private JButton pasteBtn;
+	private JButton deleteBtn;
+	// VIEW -> SCALE
+	private JButton oneBtn;
+	private JButton twoBtn;
+	private JButton fourBtn;
+	private JButton eightBtn;
+	// VIEW -> MODE
+	private JButton mapModeBtn;
+	private JButton eventModeBtn;
+	// DRAW
+	private JButton pencilBtn;
+	private JButton squareBtn;
+	private JButton circleBtn;
+	private JButton fillBtn;
+	// FRUITTOOLS
+	private JButton cherryBtn;
+	private JButton orangeBtn;
+	private JButton limeBtn;
 	
 	// MENU COMPS: for other windows
 	private JInternalFrame frame;
@@ -104,8 +124,8 @@ public class FruitPanel extends JPanel implements Runnable {
 		// Set up the Toolbar.
 		toolbarSetup();
 		
-		// Set up the editor panel.
-		panelSetup();
+		// Set up the map panel.
+		mapSetup();
 		
 		// Execute the thread.
 		threadSetup();
@@ -146,6 +166,17 @@ public class FruitPanel extends JPanel implements Runnable {
 			}
 		} catch (Exception e) {
 			System.err.println("ERROR: " + e);
+		}
+	}
+	
+	//================================
+	// addNotify() - Reinforce thread start-up.
+	//================================
+	public void addNotify() {
+		super.addNotify();
+		if(t == null) {
+			t = new Thread(this);
+			t.start();
 		}
 	}
 	
@@ -246,6 +277,12 @@ public class FruitPanel extends JPanel implements Runnable {
 		closeItem = new JMenuItem("Close");
 		closeItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/*if (mapFile == null) {
+					FruitPrompt.ask("Do you want to save any changes?");
+				} else {
+					dispose();
+					System.exit(0);
+				}*/
 				dispose();
 				System.exit(0);
 			}
@@ -256,38 +293,38 @@ public class FruitPanel extends JPanel implements Runnable {
 	
 	protected void editSetup() {
 		// EDIT -> UNDO
-		menuItem = new JMenuItem("Undo");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+		undoItem = new JMenuItem("Undo");
+		undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 		//menuItem.addActionListener(new ActionListener() {});
-		menu.add(menuItem);
+		editMenu.add(undoItem);
 		// EDIT -> REDO
-		menuItem = new JMenuItem("Redo");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+		redoItem = new JMenuItem("Redo");
+		redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		//menuItem.addActionListener(new ActionListener() {});
-		menu.add(menuItem);
+		editMenu.add(redoItem);
 		// EDIT SEPARATOR
 		editMenu.addSeparator();
 		// EDIT -> CUT
-		menuItem = new JMenuItem("Cut");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-		//menuItem.addActionListener(new ActionListener() {});
-		menu.add(menuItem);
+		cutItem = new JMenuItem("Cut");
+		cutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+		//cutItem.addActionListener(new ActionListener() {});
+		editMenu.add(cutItem);
 		// EDIT -> COPY
-		menuItem = new JMenuItem("Copy");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
-		//menuItem.addActionListener(new ActionListener() {});
-		menu.add(menuItem);
+		copyItem = new JMenuItem("Copy");
+		copyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+		//copyItem.addActionListener(new ActionListener() {});
+		editMenu.add(copyItem);
 		// EDIT -> PASTE
-		menuItem = new JMenuItem("Paste");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
-		//menuItem.addActionListener(new ActionListener() {});
-		menu.add(menuItem);
+		pasteItem = new JMenuItem("Paste");
+		pasteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+		//pasteItem.addActionListener(new ActionListener() {});
+		editMenu.add(pasteItem);
 		// EDIT -> DELETE
-		menuItem = new JMenuItem("Delete");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke("DELETE"));
-		//menuItem.addActionListener(new ActionListener() {});
-		menu.add(menuItem);
-		menuBar.add(menu);
+		deleteItem = new JMenuItem("Delete");
+		deleteItem.setAccelerator(KeyStroke.getKeyStroke("DELETE"));
+		//deleteItem.addActionListener(new ActionListener() {});
+		editMenu.add(deleteItem);
+		menuBar.add(editMenu);
 	}
 	
 	protected void viewSetup() {
@@ -434,45 +471,32 @@ public class FruitPanel extends JPanel implements Runnable {
 	// toolbarSetup() - Set up the main toolbar menu.
 	//=====================================
 	protected void toolbarSetup() {
-
+		// Initialize toolBar.
 		mainToolBar = new JToolBar();
 		mainToolBar.setRollover(true); // Make a visual indication if mouse goes over the button
 		mainToolBar.setFloatable(false); // Ensure that toolbar is not adjustable
 		
-		final int TOOLCOLUMN = 7;
+		// Add tools in toolBar.
+		fileTool();
+		mainToolBar.addSeparator();
+		fixTool();
+		mainToolBar.addSeparator();
+		editTool();
+		mainToolBar.addSeparator();
+		viewTool();
+		mainToolBar.addSeparator();
+		scaleTool();
+		mainToolBar.addSeparator();
+		toolkitTool();
+		mainToolBar.addSeparator();
 		
-		for (int t = 0; t < TOOLCOLUMN; t++) {
-			
-			switch (t) {
-			case 0:
-				fileTool();
-				break;
-			case 1:
-				fixTool();
-				break;
-			case 2:
-				editTool();
-				break;
-			case 3:
-				viewTool();
-				break;
-			case 4:
-				scaleTool();
-				break;
-			case 5:
-				tbTool();
-				break;
-			case 6:
-				runTool();
-				break;
-			}
-			
-			mainToolBar.addSeparator();
-		}
-		
+		// Add toolbar to FruitPanel.
 		add(mainToolBar, BorderLayout.NORTH);
 	}
 	
+	//================================
+	// Setup the tool buttons for toolBar.
+	//================================
 	public void fileTool() {
 		
 		// Set up the integer for the fileTool for loop.
@@ -619,14 +643,14 @@ public class FruitPanel extends JPanel implements Runnable {
 		}
 	}
 	
-	public void tbTool() {
+	public void toolkitTool() {
 		
-		int tbt;
+		int tkt;
 		
 		String [] tBarShort = {"C", "O", "L"};
 		String [] tBarTip = {"Cherry DataBase", "Orange ScriptMaker", "Lime ResourceBase"};
 		
-		for (tbt = 0; tbt <= 2; tbt++) {
+		for (tkt = 0; tkt <= 2; tkt++) {
 			toolButton = new JButton(tBarShort[tbt]);
 			toolButton.setToolTipText(tBarTip[tbt]);
 			
@@ -637,7 +661,7 @@ public class FruitPanel extends JPanel implements Runnable {
 		}
 	}
 	
-	public void runTool() {
+	/*public void runTool() {
 		
 		toolButton = new JButton(">>");
 		toolButton.setToolTipText("Run Game");
@@ -646,15 +670,18 @@ public class FruitPanel extends JPanel implements Runnable {
 			toolButton.setEnabled(false);
 		
 		mainToolBar.add(toolButton);
-	}
+	}*/
 	
-	protected void panelSetup() {
+	//================================
+	// mapSetup() - Setup the panel where the map will go.
+	//================================
+	protected void mapSetup() {
 		
 		// Assign main panel.
 		mapPanel = new MapPanel();
 		
 		// Add panel to frame if there is a file in use.
 		if (mapFile != null)
-			add(mapPanel);
+			add(mapPanel, BorderLayout.EAST);
 	}
 }
