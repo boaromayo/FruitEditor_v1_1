@@ -7,9 +7,12 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
 
-public class MainPanel extends JPanel {
+public class FruitPanel extends JPanel implements Runnable {
 	
-	// VARIABLES.
+	// PANEL THREAD.
+	private Thread t;
+	
+	// DIMENSION CONSTANTS.
 	private static final int EWIDTH = 800;
 	private static final int EHEIGHT = 600;
 	
@@ -21,8 +24,10 @@ public class MainPanel extends JPanel {
 	// MENU COMPS: The Menus
 	private JMenu fileMenu;
 	private JMenu editMenu;
+	private JMenu drawMenu;
 	private JMenu viewMenu;
 	private JMenu toolMenu;
+	private JMenu helpMenu;
 	
 	// MENU COMPS: The Sub-Menus
 	private JMenu modeMenu;
@@ -41,32 +46,58 @@ public class MainPanel extends JPanel {
 	private JMenuItem openItem;
 	private JMenuItem saveItem;
 	private JMenuItem saveAsItem;
+	private JMenuItem closeItem;
 	// MENU: EDIT
-	private JMenuItem ;
-	// MENU: VIEW
-	private JMenuItem ;
+	private JMenuItem undoItem;
+	private JMenuItem redoItem;
+	private JMenuItem cutItem;
+	private JMenuItem copyItem;
+	private JMenuItem pasteItem;
+	private JMenuItem deleteItem;
+	// MENU: VIEW -> MODE
+	private JMenuItem oneItem;
+	private JMenuItem twoItem;
+	private JMenuItem fourItem;
+	private JMenuItem eightItem;
+	// MENU: VIEW -> SCALE
+	private JMenuItem mapModeItem;
+	private JMenuItem eventModeItem;
+	// MENU: DRAW
+	private JMenuItem pencilItem;
+	private JMenuItem rectItem;
+	private JMenuItem circleItem;
+	private JMenuItem fillItem;
 	// MENU: TOOLKIT
-	private JMenuItem ;
+	private JMenuItem databaseItem;
+	private JMenuItem scriptItem;
+	private JMenuItem resourceItem;
+	private JMenuItem configItem;
+	// MENU: HELP
+	private JMenuItem aboutItem;
 	
 	// MENU COMPS: Tool buttons
+	// FILE
+	private JButton newBtn;
+	private JButton openBtn;
+	private JButton saveBtn;
+	// EDIT
+	private JButton undoBtn;
+	private JButton redoBtn;
+	//
 	private JButton toolButton;
 	
 	// MENU COMPS: for other windows
 	private JInternalFrame frame;
-	private JDialog dialogFrame;
+	private JDialog aboutDialog;
 	
 	// OBJECTS.
 	private MapFile mapFile;
 	private MapPanel mapPanel;
 	
 	//CONSTRUCTOR.
-	public MainPanel() {
+	public FruitPanel() {
 		setSize(EWIDTH, EHEIGHT);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
-		setResizable(false);
-
+		
 		// Set up the editor menu
 		menuSetup();
 		
@@ -76,7 +107,46 @@ public class MainPanel extends JPanel {
 		// Set up the editor panel.
 		panelSetup();
 		
-		repaint(); // Repaint program JIC.
+		// Execute the thread.
+		threadSetup();
+		
+		setVisible(true);
+		setFocusable(true);
+		requestFocusInWindow();
+	}
+	
+	//================================
+	// threadSetup() - Setup thread.
+	//================================
+	private void threadSetup() {
+		t = new Thread(this);
+		t.start();
+	}
+	
+	//================================
+	// run() - Run the thread.
+	//================================
+	public void run() {
+		try {
+			long startTime, diffTime;
+			long waitTime;
+			
+			while(true) {
+				startTime = System.currentTimeInMillis();
+				
+				update(); // Update MapPanel.
+				repaint(); // Repaint program JIC.
+				
+				diffTime = System.currentTimeInMillis() - startTime;
+				
+				waitTime = startTime - diffTime / 1000;
+				
+				if (waitTime < 0) waitTime = 5;
+				Thread.sleep(waitTime);
+			}
+		} catch (Exception e) {
+			System.err.println("ERROR: " + e);
+		}
 	}
 	
 	//================================
@@ -100,9 +170,9 @@ public class MainPanel extends JPanel {
 		}
 		
 		// Create menu shortcuts.	
-	  fileMenu.setMnemonic(menuName[0].charAt(0));
-	  editMenu.setMnemonic(menuName[1].charAt(0));
-	  viewMenu.setMnemonic(menuName[2].charAt(0));
+	  	fileMenu.setMnemonic(menuName[0].charAt(0));
+	  	editMenu.setMnemonic(menuName[1].charAt(0));
+	  	viewMenu.setMnemonic(menuName[2].charAt(0));
 		toolMenu.setMnemonic(menuName[3].charAt(5)); // Make 'T' menu shortcut
 			
 		subSetup(); // Get the menu event methods.
@@ -272,7 +342,7 @@ public class MainPanel extends JPanel {
 				dialogFrame.setVisible(true);*/
 			}
 		});
-		toolMenu.add(scriptItem);
+		toolMenu.add(databaseItem);
 		// TOOLKIT -> ORANGE SCRIPTMAKER
 		scriptItem = new JMenuItem("Orange ScriptMaker");
 		scriptItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F10, ActionEvent.CTRL_MASK));
@@ -307,20 +377,20 @@ public class MainPanel extends JPanel {
 		menuBar.add(menu);
 	}*/
 	
-	/*protected void helpSetup() {
+	protected void helpSetup() {
 		// HELP -> ABOUT
-		menuItem = new JMenuItem("About...");
-		menuItem.addActionListener(new ActionListener() {
+		aboutItem = new JMenuItem("About...");
+		aboutItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent hae) {
-				dialogFrame = new EditorAbout();
-				dialogFrame.pack();
-				dialogFrame.setLocationRelativeTo(null);
-				dialogFrame.setVisible(true);
+				aboutDialog = new FruitAbout();
+				aboutDialog.pack();
+				aboutDialog.setLocationRelativeTo(null);
+				aboutDialog.setVisible(true);
 			}
 		});
-		menu.add(menuItem);
-		menuBar.add(menu);
-	}*/
+		helpMenu.add(aboutItem);
+		menuBar.add(helpMenu);
+	}
 	
 	protected void newAction() {
 		/*dialogFrame = new EditorNew();
@@ -437,7 +507,7 @@ public class MainPanel extends JPanel {
 					break;
 			}
 			
-			if (ft == 2 && efo == null) {
+			if (ft == 2 && mapFile == null) {
 				toolButton.setEnabled(false);
 			}
 			
@@ -457,7 +527,7 @@ public class MainPanel extends JPanel {
 			toolButton = new JButton(fixShort[fixt]);
 			toolButton.setToolTipText(fixTip[fixt]);
 			
-			if (efo == null)
+			if (mapFile == null)
 				toolButton.setEnabled(false);
 			
 			mainToolBar.add(toolButton);
@@ -491,7 +561,7 @@ public class MainPanel extends JPanel {
 					break;
 			}
 			
-			if (efo == null)
+			if (mapFile == null)
 				toolButton.setEnabled(false);
 			
 			mainToolBar.add(toolButton);
@@ -511,7 +581,7 @@ public class MainPanel extends JPanel {
 			toolButton = new JButton(viewShort[vt]);
 			toolButton.setToolTipText(viewTip[vt]);
 			
-			if (efo == null) 
+			if (mapFile == null) 
 				toolButton.setEnabled(false);
 			
 			mainToolBar.add(toolButton);
@@ -540,7 +610,7 @@ public class MainPanel extends JPanel {
 					break;
 			}
 			
-			if (efo == null)
+			if (mapFile == null)
 				toolButton.setEnabled(false);
 			
 			mainToolBar.add(toolButton);
@@ -558,7 +628,7 @@ public class MainPanel extends JPanel {
 			toolButton = new JButton(tBarShort[tbt]);
 			toolButton.setToolTipText(tBarTip[tbt]);
 			
-			if (efo == null)
+			if (mapFile == null)
 				toolButton.setEnabled(false);
 			
 			mainToolBar.add(toolButton);
