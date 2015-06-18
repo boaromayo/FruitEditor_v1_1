@@ -211,9 +211,6 @@ public class FruitPanel extends JPanel implements Runnable {
 		toolMenu.setMnemonic(menuName[4].charAt(5)); // Make 'T' menu shortcut
 			
 		subSetup(); // Get the menu event methods.
-		
-		// Set mainBar as main menu bar.
-		setJMenuBar(menuBar);
 	}
 	
 	//==================================================
@@ -700,5 +697,13 @@ public class FruitPanel extends JPanel implements Runnable {
 		// Add panel to frame if there is a file in use.
 		if (mapFile != null)
 			add(mapPanel, BorderLayout.EAST);
+	}
+	
+	//================================
+	// getMenuBar() - Get the JMenuBar.
+	//================================
+	public JMenuBar getMenuBar() {
+		if (menuBar == null) { return null; }
+		return menuBar;
 	}
 }
