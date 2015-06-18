@@ -3,6 +3,7 @@ package Editor;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
@@ -108,7 +109,6 @@ public class FruitPanel extends JPanel implements Runnable {
 	private JButton limeBtn;
 	
 	// MENU COMPS: for other windows
-	private JInternalFrame frame;
 	private JDialog aboutDialog;
 	
 	// OBJECTS.
@@ -175,9 +175,9 @@ public class FruitPanel extends JPanel implements Runnable {
 	//================================
 	public void addNotify() {
 		super.addNotify();
-		if(t == null) {
-			t = new Thread(this);
-			t.start();
+		
+		if (t == null) {
+			threadSetup();
 		}
 	}
 	
@@ -384,6 +384,7 @@ public class FruitPanel extends JPanel implements Runnable {
 		fillItem = new JMenuItem("Flood Fill");
 		drawMenu.add(fillItem);
 	}
+	
 	protected void toolSetup() {
 		// TOOLKIT -> CHERRY DATABASE
 		databaseItem = new JMenuItem("Cherry DataBase");
@@ -611,21 +612,24 @@ public class FruitPanel extends JPanel implements Runnable {
 	
 	public void viewTool() {
 		
-		// Set up the integer for the view for loop.
-		int vt;
-		
-		String [] viewShort = {"M", "EV"};
+		// Setup the ToolTips and images for the buttons.
+		//ImageIcon [] viewTip = {"", ""};
+		//String [] viewShort = {"M", "EV"};
 		String [] viewTip = {"Map Mode", "Event Mode"};
 		
-		for (vt = 0; vt <= 1; vt++) {
-			toolButton = new JButton(viewShort[vt]);
-			toolButton.setToolTipText(viewTip[vt]);
-			
-			if (mapFile == null) 
-				toolButton.setEnabled(false);
-			
-			mainToolBar.add(toolButton);
+		mapModeBtn = new JButton(viewIcon[0]);
+		eventModeBtn = new JButton(viewIcon[1]);
+		
+		//mapModeBtn.setToolTipText(viewTip[0]);
+		//eventModeBtn.setToolTipText(viewTip[1]);
+		
+		if (mapFile == null) {
+			mapModeBtn.setEnabled(false);
+			eventModeBtn.setEnabled(false);
 		}
+		
+		mainToolBar.add(mapModeBtn);
+		mainToolBar.add(eventModeBtn);
 	}
 	
 	public void scaleTool() {
@@ -639,16 +643,6 @@ public class FruitPanel extends JPanel implements Runnable {
 		for (st = 0; st <= 3; st++) {
 			toolButton = new JButton(scaleShort[st]);
 			toolButton.setToolTipText(scaleTip[st]);
-			switch (st) {
-				case 0:
-					break;
-				case 1:
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-			}
 			
 			if (mapFile == null)
 				toolButton.setEnabled(false);
