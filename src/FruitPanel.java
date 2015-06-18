@@ -16,7 +16,7 @@ public class FruitPanel extends JPanel implements Runnable {
 	private static final int EWIDTH = 800;
 	private static final int EHEIGHT = 600;
 	
-	private String[] menuName = {"File", "Edit", "View", "FruitTools", "Run", "Help"};
+	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Run", "Help"};
 	
 	// MENU COMPONENTS: The Main Menu Bar
 	private JMenuBar menuBar;
@@ -24,8 +24,8 @@ public class FruitPanel extends JPanel implements Runnable {
 	// MENU COMPS: The Menus
 	private JMenu fileMenu;
 	private JMenu editMenu;
-	private JMenu drawMenu;
 	private JMenu viewMenu;
+	private JMenu drawMenu;
 	private JMenu toolMenu;
 	private JMenu helpMenu;
 	
@@ -39,6 +39,7 @@ public class FruitPanel extends JPanel implements Runnable {
 	// MENU COMPS: The Menu Groups
 	private ButtonGroup modegrp;
 	private ButtonGroup scalegrp;
+	private ButtonGroup drawgrp;
 	
 	// MENU COMPS: Menu items
 	// MENU: FILE
@@ -98,7 +99,7 @@ public class FruitPanel extends JPanel implements Runnable {
 	private JButton eventModeBtn;
 	// DRAW
 	private JButton pencilBtn;
-	private JButton squareBtn;
+	private JButton rectBtn;
 	private JButton circleBtn;
 	private JButton fillBtn;
 	// FRUITTOOLS
@@ -191,12 +192,14 @@ public class FruitPanel extends JPanel implements Runnable {
 		fileMenu = new JMenu(menuName[0]);
 		editMenu = new JMenu(menuName[1]);
 		viewMenu = new JMenu(menuName[2]);
-		toolMenu = new JMenu(menuName[3]);
+		drawMenu = new JMenu(menuName[3]);
+		toolMenu = new JMenu(menuName[4]);
 		
 		// Disable other menus if no map is loaded.
 		if (mapFile == null) {
 			editMenu.setEnabled(false);
 			viewMenu.setEnabled(false);
+			drawMenu.setEnabled(false);
 			toolMenu.setEnabled(false);
 		}
 		
@@ -204,7 +207,8 @@ public class FruitPanel extends JPanel implements Runnable {
 	  	fileMenu.setMnemonic(menuName[0].charAt(0));
 	  	editMenu.setMnemonic(menuName[1].charAt(0));
 	  	viewMenu.setMnemonic(menuName[2].charAt(0));
-		toolMenu.setMnemonic(menuName[3].charAt(5)); // Make 'T' menu shortcut
+	  	drawMenu.setMnemonic(menuName[3].charAt(0));
+		toolMenu.setMnemonic(menuName[4].charAt(5)); // Make 'T' menu shortcut
 			
 		subSetup(); // Get the menu event methods.
 		
@@ -219,6 +223,7 @@ public class FruitPanel extends JPanel implements Runnable {
 		fileSetup();	
 		editSetup();
 		viewSetup();
+		drawSetup();
 		toolSetup();
 	}
 	
@@ -368,6 +373,20 @@ public class FruitPanel extends JPanel implements Runnable {
 		menuBar.add(viewMenu);
 	}
 	
+	protected void drawSetup() {
+		// DRAW -> PENCIL
+		pencilItem = new JMenuItem("Pencil");
+		drawMenu.add(pencilItem);
+		// DRAW -> RECTANGLE
+		rectItem = new JMenuItem("Rectangle");
+		drawMenu.add(rectItem);
+		// DRAW -> CIRCLE
+		circleItem = new JMenuItem("Circle");
+		drawMenu.add(circleItem);
+		// DRAW -> FILL
+		fillItem = new JMenuItem("Flood Fill");
+		drawMenu.add(fillItem);
+	}
 	protected void toolSetup() {
 		// TOOLKIT -> CHERRY DATABASE
 		databaseItem = new JMenuItem("Cherry DataBase");
@@ -430,9 +449,7 @@ public class FruitPanel extends JPanel implements Runnable {
 	}
 	
 	protected void newAction() {
-		/*dialogFrame = new EditorNew();
-		dialogFrame.setLocationRelativeTo(null);
-		dialogFrame.setVisible(true);*/
+		//FruitPrompt.askNew();
 	}
 	
 	protected void openAction() {
