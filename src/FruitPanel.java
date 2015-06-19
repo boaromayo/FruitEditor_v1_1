@@ -1,4 +1,4 @@
-package Editor;
+package FruitEditor;
 
 import java.awt.*;
 import java.awt.event.*;
