@@ -1,3 +1,5 @@
+package FruitEditor;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
