@@ -12,6 +12,7 @@ public class FruitFrame extends JFrame {
     // PANELS.
     private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
+	// filler.
   
 	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Help"};
 	
