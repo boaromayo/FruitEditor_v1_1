@@ -9,8 +9,8 @@ import javax.swing.event.filechooser.*;
 import java.io.*;
 
 public class FruitFrame extends JFrame {
-    // PANELS.
-    private FruitPanel fruitPanel;
+    // PANELS.	
+	private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
   
 	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Help"};
@@ -113,7 +113,7 @@ public class FruitFrame extends JFrame {
 	private JButton limeBtn;
 	
     public FruitFrame() {
-        setTitle("FruitEditor");
+		setTitle("FruitEditor");
 		setLayout(new BorderLayout());
 		
 		// Setup the editor menu
@@ -133,10 +133,10 @@ public class FruitFrame extends JFrame {
     }
   
     private void panelSetup() {
-        fruitPanel = new FruitPanel();
+		fruitPanel = new FruitPanel();
 		toolbarPanel = new JPanel();
 		
-        add(fruitPanel, BorderLayout.CENTER);
+		add(fruitPanel, BorderLayout.CENTER);
 		add(toolbarPanel, BorderLayout.NORTH);
     }
 	
@@ -164,10 +164,10 @@ public class FruitFrame extends JFrame {
 		}
 		
 		// Create menu shortcuts.	
-	  	fileMenu.setMnemonic(menuName[0].charAt(0));
-	  	editMenu.setMnemonic(menuName[1].charAt(0));
-	  	viewMenu.setMnemonic(menuName[2].charAt(0));
-	  	drawMenu.setMnemonic(menuName[3].charAt(0));
+		fileMenu.setMnemonic(menuName[0].charAt(0));
+		editMenu.setMnemonic(menuName[1].charAt(0));
+		viewMenu.setMnemonic(menuName[2].charAt(0));
+		drawMenu.setMnemonic(menuName[3].charAt(0));
 		toolMenu.setMnemonic(menuName[4].charAt(5)); // Make 'T' menu shortcut
 			
 		subSetup(); // Get and add the menus.
