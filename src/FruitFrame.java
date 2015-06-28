@@ -9,10 +9,9 @@ import javax.swing.event.filechooser.*;
 import java.io.*;
 
 public class FruitFrame extends JFrame {
-    // PANELS.
+	// PANELS.
     private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
-	// filler.
   
 	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Help"};
 	
@@ -134,7 +133,7 @@ public class FruitFrame extends JFrame {
     }
   
     private void panelSetup() {
-        fruitPanel = new FruitPanel();
+    	fruitPanel = new FruitPanel();
 		toolbarPanel = new JPanel();
 		
         add(fruitPanel, BorderLayout.CENTER);
@@ -283,7 +282,7 @@ public class FruitFrame extends JFrame {
 		
 		// Add in VIEW ActionListeners.
 		//gridItem.addActionListener(new FruitListener());
-
+		
 		// Set in default selected buttons.
 		scalegrp.setSelected(oneItem, true);
 		modegrp.setSelected(mapModeItem, true);
