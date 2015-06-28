@@ -12,7 +12,7 @@ public class FruitFrame extends JFrame {
     // PANELS.	
 	private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
-  
+	
 	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Help"};
 	
 	// MENU COMPONENTS: The Main Menu Bar
@@ -282,7 +282,7 @@ public class FruitFrame extends JFrame {
 		
 		// Add in VIEW ActionListeners.
 		//gridItem.addActionListener(new FruitListener());
-
+		
 		// Set in default selected buttons.
 		scalegrp.setSelected(oneItem, true);
 		modegrp.setSelected(mapModeItem, true);
