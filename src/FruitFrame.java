@@ -9,7 +9,7 @@ import javax.swing.event.filechooser.*;
 import java.io.*;
 
 public class FruitFrame extends JFrame {
-    // PANELS.	
+	// PANELS.	
 	private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
 	
@@ -112,7 +112,7 @@ public class FruitFrame extends JFrame {
 	private JButton orangeBtn;
 	private JButton limeBtn;
 	
-    public FruitFrame() {
+	public FruitFrame() {
 		setTitle("FruitEditor");
 		setLayout(new BorderLayout());
 		
@@ -123,22 +123,22 @@ public class FruitFrame extends JFrame {
 		toolbarSetup();
 		
 		// Initialize panels.
-        panelSetup();
+        	panelSetup();
 		
-        pack();
+        	pack();
 		
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
+ 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	setLocationRelativeTo(null);
+        	setVisible(true);
+    	}
   
-    private void panelSetup() {
+    	private void panelSetup() {
 		fruitPanel = new FruitPanel();
 		toolbarPanel = new JPanel();
 		
 		add(fruitPanel, BorderLayout.CENTER);
 		add(toolbarPanel, BorderLayout.NORTH);
-    }
+    	}
 	
 	//================================
 	// menuSetup() - Set up main menu and main panel.
@@ -336,7 +336,7 @@ public class FruitFrame extends JFrame {
 		// VIEW -> MODE BUTTONGROUP
 		modegrp = new ButtonGroup();
 		// VIEW -> MODE
-		mapModeItem = new JRadioButtonMenuItem("Map Mode");			// VIEW -> MODE -> MAP MODE
+		mapModeItem = new JRadioButtonMenuItem("Map Mode");		// VIEW -> MODE -> MAP MODE
 		eventModeItem = new JRadioButtonMenuItem("Event Mode");		// VIEW -> MODE -> EVENT MODE
 		
 		// Add in VIEW -> MODE items to group.
@@ -356,10 +356,10 @@ public class FruitFrame extends JFrame {
 		// DRAW BUTTONGROUP AND MENU ITEMS
 		drawgrp = new ButtonGroup();
 		// DRAW MENU ITEMS
-		pencilItem 	= new JRadioButtonMenuItem("Pencil");			// DRAW -> PENCIL
-		rectItem   	= new JRadioButtonMenuItem("Rectangle");		// DRAW -> RECTANGLE
-		circleItem	= new JRadioButtonMenuItem("Circle");			// DRAW -> CIRCLE
-		fillItem	= new JRadioButtonMenuItem("Flood Fill");		// DRAW -> FILL
+		pencilItem 	= new JRadioButtonMenuItem("Pencil");		// DRAW -> PENCIL
+		rectItem   	= new JRadioButtonMenuItem("Rectangle");	// DRAW -> RECTANGLE
+		circleItem	= new JRadioButtonMenuItem("Circle");		// DRAW -> CIRCLE
+		fillItem	= new JRadioButtonMenuItem("Flood Fill");	// DRAW -> FILL
 		
 		// Add in DRAW ActionListeners.
 		/*pencilItem.addActionListener(new FruitListener());
@@ -384,10 +384,10 @@ public class FruitFrame extends JFrame {
 	
 	private void toolSetup() {
 		// TOOLKIT MENU ITEMS
-		databaseItem	= new JMenuItem("Cherry DataBase");			// TOOLKIT -> CHERRY DATABASE
-		scriptItem		= new JMenuItem("Orange ScriptMaker");		// TOOLKIT -> ORANGE SCRIPTBASE
+		databaseItem	= new JMenuItem("Cherry DataBase");		// TOOLKIT -> CHERRY DATABASE
+		scriptItem	= new JMenuItem("Orange ScriptMaker");		// TOOLKIT -> ORANGE SCRIPTBASE
 		resourceItem	= new JMenuItem("Lime ResourceBase");		// TOOLKIT -> LIME RESOURCEBASE
-		configItem		= new JMenuItem("Settings...");				// TOOLKIT -> SETTINGS
+		configItem	= new JMenuItem("Settings...");			// TOOLKIT -> SETTINGS
 		
 		// Add in TOOLKIT ActionListeners.
 		//databaseItem.addActionListener(new FruitListener());
@@ -532,8 +532,8 @@ public class FruitFrame extends JFrame {
 		// MODE BUTTONGROUP
 		modeBtnGrp = new ButtonGroup();
 		// MODE BUTTONS
-		mapModeBtn	 = makeButton("MAP", "", "Map Mode", true);
-		eventModeBtn = makeButton("EV", "", "Event Mode", true);
+		mapModeBtn	= makeButton("MAP", "", "Map Mode", true);
+		eventModeBtn 	= makeButton("EV", "", "Event Mode", true);
 		
 		// Add in MODE buttons to group.
 		modeBtnGrp.add(mapModeBtn);
