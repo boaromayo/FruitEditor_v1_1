@@ -1,7 +1,6 @@
 package FruitEditor;
 
 import javax.swing.*;
-import java.util.*;
 
 public class FruitEditor implements Runnable {
 	// MAIN FRAME.
