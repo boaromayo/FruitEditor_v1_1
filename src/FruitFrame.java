@@ -156,12 +156,12 @@ public class FruitFrame extends JFrame {
 		helpMenu = new JMenu(menuName[5]);			// HELP
 		
 		// Disable other menus if no map is loaded.
-		if (mapFile == null) {
+		//if (mapFile == null) {
 			editMenu.setEnabled(false);
 			viewMenu.setEnabled(false);
 			drawMenu.setEnabled(false);
 			toolMenu.setEnabled(false);
-		}
+		//}
 		
 		// Create menu shortcuts.	
 		fileMenu.setMnemonic(menuName[0].charAt(0));
@@ -219,9 +219,11 @@ public class FruitFrame extends JFrame {
 		makeShortcut(openItem, KeyEvent.VK_O, "CTRL");
 		makeShortcut(saveItem, KeyEvent.VK_S, "CTRL");*/
 		
-		// Case for FILE -> SAVE AS
-		if (mapFile == null)
+		// Case for FILE -> SAVE and FILE -> SAVE AS
+		//if (mapFile == null) {
+			saveItem.setEnabled(false);
 			saveAsItem.setEnabled(false);
+		//}
 		
 		// Add in components.
 		fileMenu.add(newItem);
@@ -661,7 +663,7 @@ public class FruitFrame extends JFrame {
 	// makeShortcut(menu,key,mask) - Make menu accelerator shortcut + key mask.
 	//=========================================
 	private void makeShortcut(JMenuItem menu, int key, String mask) {
-		// Branch based off of key mask
+		// Branch conditions based off of key mask
 		if (mask.equals("CTRL")) {
 			try {
 				// Get KeyStroke for key and add in accelerator
