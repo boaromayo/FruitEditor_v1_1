@@ -560,7 +560,7 @@ public class FruitFrame extends JFrame {
 		// Add in DRAW buttons to group.
 		drawBtnGrp.add(pencilBtn);
 		drawBtnGrp.add(rectBtn);
-		drawBtnGrp.add(circBtn);
+		drawBtnGrp.add(circleBtn);
 		drawBtnGrp.add(fillBtn);
 		// Set pencil mode to default.
 		drawBtnGrp.setSelected(pencilBtn);
