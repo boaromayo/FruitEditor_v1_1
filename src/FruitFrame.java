@@ -283,9 +283,7 @@ public class FruitFrame extends JFrame {
 		// Add in VIEW ActionListeners.
 		//gridItem.addActionListener(new FruitListener());
 		
-		// Set in default selected buttons.
-		scalegrp.setSelected(oneItem, true);
-		modegrp.setSelected(mapModeItem, true);
+		// Set grid on.
 		gridItem.setState(true);
 		
 		// Add in components.
@@ -328,6 +326,9 @@ public class FruitFrame extends JFrame {
 		scaleMenu.add(twoItem);
 		scaleMenu.add(fourItem);
 		scaleMenu.add(eightItem);
+		
+		// Set 1:1 as default.
+		oneItem.setSelected(true);
 	}
 	
 	private void modeSetup() {
@@ -350,6 +351,9 @@ public class FruitFrame extends JFrame {
 		// Add in sub-menu components.
 		modeMenu.add(mapModeItem);
 		modeMenu.add(eventModeItem);
+		
+		// Set map mode as default.
+		mapModeItem.setSelected(true);
 	}
 	
 	private void drawSetup() {
@@ -380,6 +384,9 @@ public class FruitFrame extends JFrame {
 		drawMenu.add(rectItem);
 		drawMenu.add(circleItem);
 		drawMenu.add(fillItem);
+		
+		// Set pencil mode as default.
+		pencilItem.setSelected(true);
 	}
 	
 	private void toolSetup() {
@@ -516,8 +523,9 @@ public class FruitFrame extends JFrame {
 		scaleBtnGrp.add(twoBtn);
 		scaleBtnGrp.add(fourBtn);
 		scaleBtnGrp.add(eightBtn);
-		// Set 1:1 to default
-		scaleBtnGrp.setSelected(oneBtn);
+		
+		// Set 1:1 as default
+		oneBtn.setSelected(true);
 		
 		// Add in SCALE buttons.
 		mainToolBar.add(oneBtn);
@@ -538,8 +546,9 @@ public class FruitFrame extends JFrame {
 		// Add in MODE buttons to group.
 		modeBtnGrp.add(mapModeBtn);
 		modeBtnGrp.add(eventModeBtn);
-		// Set map mode to default.
-		modeBtnGrp.setSelected(mapModeBtn);
+		
+		// Set map mode as default.
+		mapModeBtn.setSelected(true);
 		
 		// Add in MODE buttons.
 		mainToolBar.add(mapModeBtn);
@@ -562,8 +571,9 @@ public class FruitFrame extends JFrame {
 		drawBtnGrp.add(rectBtn);
 		drawBtnGrp.add(circleBtn);
 		drawBtnGrp.add(fillBtn);
-		// Set pencil mode to default.
-		drawBtnGrp.setSelected(pencilBtn);
+		
+		// Set pencil mode as default.
+		pencilBtn.setSelected(true);
 		
 		// Add in DRAW buttons.
 		mainToolBar.add(pencilBtn);
@@ -574,7 +584,7 @@ public class FruitFrame extends JFrame {
 		mainToolBar.addSeparator();
 	}
 	
-	private void toolkitTools() {
+	private void toolkitToolSetup() {
 		// TOOLKIT BUTTONS
 		cherryBtn	= makeButton("Cherry", "Cherry DataBase");
 		orangeBtn	= makeButton("Orange", "Orange ScriptMaker");
@@ -650,25 +660,30 @@ public class FruitFrame extends JFrame {
 	//=========================================
 	// makeShortcut(menu,key,mask) - Make menu accelerator shortcut + key mask.
 	//=========================================
-	private void makeShortcut(JMenuItem menu, KeyEvent key, String mask) {
-		// Get KeyStroke for key and add in accelerator
-		KeyStroke k = KeyStroke.getKeyStroke(key);
+	private void makeShortcut(JMenuItem menu, int key, String mask) {
+
 		if (mask.equals("CTRL")) {
 			try {
-				menu.setAccelerator(k, ActionEvent.CTRL_MASK);
+				// Get KeyStroke for key and add in accelerator
+				KeyStroke k = KeyStroke.getKeyStroke(key, ActionEvent.CTRL_MASK);
+				menu.setAccelerator(k);
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to add key accelerator.");
 				e.printStackTrace();
 			}
 		} else if (mask.equals("ALT")) {
 			try {
-				menu.setAccelerator(k, ActionEvent.ALT_MASK);
+				// Get KeyStroke for key and add in accelerator
+				KeyStroke k = KeyStroke.getKeyStroke(key, ActionEvent.ALT_MASK);
+				menu.setAccelerator(k);
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to add key accelerator.");
 				e.printStackTrace();
 			}
 		} else {
 			try {
+				// Get KeyStroke for key and add in accelerator
+				KeyStroke k = KeyStroke.getKeyStroke((char)key);
 				menu.setAccelerator(k);
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to add key accelerator.");
