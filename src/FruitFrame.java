@@ -653,7 +653,7 @@ public class FruitFrame extends JFrame {
 	//=========================================
 	// makeShortcut(menu,key) - Make menu accelerator shortcut.
 	//=========================================
-	private void makeShortcut(JMenuItem menu, KeyEvent key) {
+	private void makeShortcut(JMenuItem menu, int key) {
 		makeShortcut(menu, key, "");
 	}
 	
