@@ -52,7 +52,7 @@ public class Map {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = depth;
-		scaleFactor = scale;
+		scaleFactor = 1;
 		
 		tileWidth = 24;
 		tileHeight = 24;
