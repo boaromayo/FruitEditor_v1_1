@@ -33,8 +33,8 @@ public class Tile {
 		this.transparent = false;
 		this.danger = false;
 		
-		imageWidth = img.getWidth(null);
-		imageHeight = img.getHeight(null);
+		imgWidth = img.getWidth(null);
+		imgHeight = img.getHeight(null);
 		scaleWidth = imgWidth;
 		scaleHeight = imgHeight;
 	}
