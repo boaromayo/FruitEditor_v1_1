@@ -661,7 +661,7 @@ public class FruitFrame extends JFrame {
 	// makeShortcut(menu,key,mask) - Make menu accelerator shortcut + key mask.
 	//=========================================
 	private void makeShortcut(JMenuItem menu, int key, String mask) {
-
+		// Branch based off of key mask
 		if (mask.equals("CTRL")) {
 			try {
 				// Get KeyStroke for key and add in accelerator
