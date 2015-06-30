@@ -19,7 +19,7 @@ public class MapPanel extends JPanel {
 		map = m;
 		
 		setLayout(new FlowLayout());
-		setViewport(
+		//setViewport(map.getViewport());
 	}
 	
 	public void drawGrid() {
