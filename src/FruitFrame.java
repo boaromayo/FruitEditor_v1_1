@@ -670,6 +670,7 @@ public class FruitFrame extends JFrame {
 	//=========================================
 	private JButton makeButton(String text, String icon, String tooltip) {
 		JButton btn;
+		// Add in button, make text if icon unavailable. 
 		try {
 			btn = new JButton(FruitImgLoader.loadIconImage(icon));
 		} catch (Exception e) {
@@ -689,6 +690,7 @@ public class FruitFrame extends JFrame {
 	//=========================================
 	private JToggleButton makeButton(String text, String icon, String tooltip, boolean toggle) {
 		JToggleButton btn;
+		// Add in toggle btn, make text if icon unavailable.
 		if (toggle) {
 			try {
 				btn = new JToggleButton(FruitImgLoader.loadIconImage(icon));
