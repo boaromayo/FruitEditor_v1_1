@@ -129,8 +129,9 @@ public class FruitFrame extends JFrame {
 		
  		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         	setLocationRelativeTo(null);
-        	//setIconImage(FruitImgLoader.loadImage(""));
+        	//setIconImage(FruitImgLoader.loadBufferedImage("", 20, 20));
         	setVisible(true);
+        	setResizable(false);
     	}
   
     	private void panelSetup() {
@@ -670,7 +671,7 @@ public class FruitFrame extends JFrame {
 	private JButton makeButton(String text, String icon, String tooltip) {
 		JButton btn;
 		try {
-			//btn = new JButton(new FruitImgLoader(icon));
+			//btn = new JButton(FruitImgLoader.loadIconImage(icon));
 		} catch (Exception e) {
 			//btn = new JButton(text);
 		}
@@ -691,7 +692,7 @@ public class FruitFrame extends JFrame {
 		JToggleButton btn;
 		if (toggle) {
 			try {
-				//btn = new JToggleButton(new FruitImgLoader(icon));
+				//btn = new JToggleButton(FruitImgLoader.loadIconImage(icon));
 			} catch (Exception e) {
 				//btn = new JToggleButton(text);
 			}
