@@ -1,6 +1,7 @@
 package FruitEditor;
 
-import javax.swing.*;
+import java.awt.*;
+//import javax.swing.*;
 
 public class FruitEditor implements Runnable {
 	// MAIN FRAME.
@@ -8,6 +9,7 @@ public class FruitEditor implements Runnable {
   
 	public FruitEditor() {
 		fruitFrame = new FruitFrame();
+		fruitFrame.setPreferredSize(new Dimension(640, 480));
 	}
   
 	public void run() {
