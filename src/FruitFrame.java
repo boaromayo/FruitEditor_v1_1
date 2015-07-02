@@ -93,20 +93,20 @@ public class FruitFrame extends JFrame {
 	private JButton undoBtn;
 	private JButton redoBtn;
 	// VIEW -> SCALE
-	private JButton oneBtn;
-	private JButton twoBtn;
-	private JButton fourBtn;
-	private JButton eightBtn;
+	private JToggleButton oneBtn;
+	private JToggleButton twoBtn;
+	private JToggleButton fourBtn;
+	private JToggleButton eightBtn;
 	// VIEW -> MODE
-	private JButton mapModeBtn;
-	private JButton eventModeBtn;
+	private JToggleButton mapModeBtn;
+	private JToggleButton eventModeBtn;
 	// VIEW
 	private JToggleButton gridBtn;
 	// DRAW
-	private JButton pencilBtn;
-	private JButton rectBtn;
-	private JButton circleBtn;
-	private JButton fillBtn;
+	private JToggleButton pencilBtn;
+	private JToggleButton rectBtn;
+	private JToggleButton circleBtn;
+	private JToggleButton fillBtn;
 	// FRUITTOOLS/TOOLKIT
 	private JButton cherryBtn;
 	private JButton orangeBtn;
@@ -134,10 +134,8 @@ public class FruitFrame extends JFrame {
   
     	private void panelSetup() {
 		fruitPanel = new FruitPanel();
-		toolbarPanel = new JPanel();
 		
 		add(fruitPanel, BorderLayout.CENTER);
-		add(toolbarPanel, BorderLayout.NORTH);
     	}
 	
 	//================================
@@ -157,10 +155,7 @@ public class FruitFrame extends JFrame {
 		
 		// Disable other menus if no map is loaded.
 		//if (mapFile == null) {
-			editMenu.setEnabled(false);
-			viewMenu.setEnabled(false);
-			drawMenu.setEnabled(false);
-			toolMenu.setEnabled(false);
+			disableMenus();
 		//}
 		
 		// Create menu shortcuts.	
@@ -174,6 +169,16 @@ public class FruitFrame extends JFrame {
 		
 		// Set the menuBar for the frame.
 		setJMenuBar(menuBar);
+	}
+	
+	//==================================================
+	// disableMenus() - Disable the menus.
+	//==================================================
+	private void disableMenus() {
+		editMenu.setEnabled(false);
+		viewMenu.setEnabled(false);
+		drawMenu.setEnabled(false);
+		toolMenu.setEnabled(false);
 	}
 	
 	//==================================================
@@ -429,6 +434,9 @@ public class FruitFrame extends JFrame {
 	// Setup the tool buttons for toolbar.
 	//=========================================
 	private void toolbarSetup() {
+		// Initialize toolbarPenl.
+		toolbarPanel = new JPanel();
+		
 		// Initialize toolbar.
 		mainToolBar = new JToolBar();
 		mainToolBar.setRollover(true);		// Make an indication if mouse goes over toolbar buttons
@@ -437,12 +445,54 @@ public class FruitFrame extends JFrame {
 		// Create and add the buttons in toolbar.
 		subToolbarSetup();
 		
+		// Disable tool buttons if no map is loaded.
+		//if (mapFile == null) {
+			disableTools();
+		//}
+		
 		// add toolbar to toolbarPanel.
 		toolbarPanel.add(mainToolBar, BorderLayout.CENTER);
+		
+		// add toolbarPanel to frame.
+		add(toolbarPanel, BorderLayout.NORTH);
 	}
 	
 	//=========================================
-	// Add in the tool buttons for toolbar.
+	// disableTools() - Disable the tool buttons.
+	//=========================================
+	private void disableTools() {
+		saveBtn.setEnabled(false);
+		
+		cutBtn.setEnabled(false);
+		copyBtn.setEnabled(false);
+		pasteBtn.setEnabled(false);
+		deleteBtn.setEnabled(false);
+		
+		undoBtn.setEnabled(false);
+		redoBtn.setEnabled(false);
+		
+		gridBtn.setEnabled(false);
+		
+		oneBtn.setEnabled(false);
+		twoBtn.setEnabled(false);
+		fourBtn.setEnabled(false);
+		eightBtn.setEnabled(false);
+		
+		mapModeBtn.setEnabled(false);
+		eventModeBtn.setEnabled(false);
+		
+		pencilBtn.setEnabled(false);
+		rectBtn.setEnabled(false);
+		circleBtn.setEnabled(false);
+		fillBtn.setEnabled(false);
+		
+		cherryBtn.setEnabled(false);
+		orangeBtn.setEnabled(false);
+		limeBtn.setEnabled(false);
+	}
+	
+	//=========================================
+	// subToolbarSetup() - Add in the tool buttons for toolbar.
 	//=========================================
 	private void subToolbarSetup() {
 		fileToolSetup();
@@ -604,52 +654,54 @@ public class FruitFrame extends JFrame {
 	// HELPER METHODS.
 	//=========================================**/
 	//=========================================
-	// makeButton(text,tooltip) - Make text button for the toolbar.
+	// makeButton(text,tooltip) - Make text button for the toolbar, assume not a toggle btn.
 	//=========================================
-	private AbstractButton makeButton(String text, String tooltip) {
-		return makeButton(text, "", tooltip, false);
+	private JButton makeButton(String text, String tooltip) {
+		return makeButton(text, "", tooltip);
 	}
 	
 	//=========================================
 	// makeButton(text,icon,tooltip) - Make button for the toolbar.
 	//=========================================
-	private AbstractButton makeButton(String text, String icon, String tooltip) {
-		return makeButton(text, icon, tooltip, false);
+	private JButton makeButton(String text, String icon, String tooltip) {
+		JButton btn;
+		try {
+			//btn = new JButton(new FruitImgLoader(icon));
+		} catch (Exception e) {
+			//btn = new JButton(text);
+		}
+		// Add in button.
+		btn = new JButton(text);
+		btn.setToolTipText(tooltip);
+		
+		// Add button ActionListener.
+		//btn.addActionListener(new FruitListener());
+		
+		return btn;
 	}
 	
 	//=========================================
-	// makeButton(text,icon,tooltip,toggle) - Make button for the toolbar.
+	// makeButton(text,icon,tooltip,toggle) - Make toggle button for the toolbar.
 	//=========================================
-	private AbstractButton makeButton(String text, String icon, String tooltip, boolean toggle) {
-		AbstractButton btn = null;
-		// Branch on whether this is a toggle btn or not.
+	private JToggleButton makeButton(String text, String icon, String tooltip, boolean toggle) {
+		JToggleButton btn;
 		if (toggle) {
-			/*try {
+			try {
 				//btn = new JToggleButton(new FruitImgLoader(icon));
 			} catch (Exception e) {
-				btn = new JToggleButton(text);
-			}*/
+				//btn = new JToggleButton(text);
+			}
 			// Add in button.
 			btn = new JToggleButton(text);
 			btn.setToolTipText(tooltip);
 		
 			// Add button ActionListener.
 			//btn.addActionListener(new FruitListener());
-		} else {
-			/*try {
-				//btn = new JButton(new FruitImgLoader(icon));
-			} catch (Exception e) {
-				btn = new JButton(text);
-			}*/
-			// Add in button.
-			btn = new JButton(text);
-			btn.setToolTipText(tooltip);
-		
-			// Add button ActionListener.
-			//btn.addActionListener(new FruitListener());
+			
+			return btn;
 		}
 		
-		return btn;
+		return null;
 	}
 	
 	//=========================================
@@ -685,7 +737,7 @@ public class FruitFrame extends JFrame {
 		} else {
 			try {
 				// Get KeyStroke for key and add in accelerator
-				KeyStroke k = KeyStroke.getKeyStroke((char)key);
+				KeyStroke k = KeyStroke.getKeyStroke(key, 0);
 				menu.setAccelerator(k);
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to add key accelerator.");
