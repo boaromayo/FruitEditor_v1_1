@@ -671,12 +671,11 @@ public class FruitFrame extends JFrame {
 	private JButton makeButton(String text, String icon, String tooltip) {
 		JButton btn;
 		try {
-			//btn = new JButton(FruitImgLoader.loadIconImage(icon));
+			btn = new JButton(FruitImgLoader.loadIconImage(icon));
 		} catch (Exception e) {
-			//btn = new JButton(text);
+			btn = new JButton(text);
 		}
-		// Add in button.
-		btn = new JButton(text);
+		
 		btn.setToolTipText(tooltip);
 		
 		// Add button ActionListener.
@@ -692,12 +691,11 @@ public class FruitFrame extends JFrame {
 		JToggleButton btn;
 		if (toggle) {
 			try {
-				//btn = new JToggleButton(FruitImgLoader.loadIconImage(icon));
+				btn = new JToggleButton(FruitImgLoader.loadIconImage(icon));
 			} catch (Exception e) {
-				//btn = new JToggleButton(text);
+				btn = new JToggleButton(text);
 			}
-			// Add in button.
-			btn = new JToggleButton(text);
+			
 			btn.setToolTipText(tooltip);
 		
 			// Add button ActionListener.
