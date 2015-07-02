@@ -129,6 +129,7 @@ public class FruitFrame extends JFrame {
 		
  		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         	setLocationRelativeTo(null);
+        	//setIconImage(FruitImgLoader.loadImage(""));
         	setVisible(true);
     	}
   
@@ -220,9 +221,9 @@ public class FruitFrame extends JFrame {
 		//closeItem.addActionListener(new FruitListener());
 		
 		// Add in accelerator keys.
-		/*makeShortcut(newItem, KeyEvent.VK_N, "CTRL");
+		makeShortcut(newItem, KeyEvent.VK_N, "CTRL");
 		makeShortcut(openItem, KeyEvent.VK_O, "CTRL");
-		makeShortcut(saveItem, KeyEvent.VK_S, "CTRL");*/
+		makeShortcut(saveItem, KeyEvent.VK_S, "CTRL");
 		
 		// Case for FILE -> SAVE and FILE -> SAVE AS
 		//if (mapFile == null) {
@@ -261,12 +262,12 @@ public class FruitFrame extends JFrame {
 		deleteItem.addActionListener(new FruitListener());*/
 		
 		// Add in accelerator keys.
-		/*makeShortcut(undoItem, KeyEvent.VK_Z, "CTRL");
+		makeShortcut(undoItem, KeyEvent.VK_Z, "CTRL");
 		makeShortcut(redoItem, KeyEvent.VK_Y, "CTRL");
 		makeShortcut(cutItem, KeyEvent.VK_X, "CTRL");
 		makeShortcut(copyItem, KeyEvent.VK_C, "CTRL");
 		makeShortcut(pasteItem, KeyEvent.VK_V, "CTRL");
-		makeShortcut(redoItem, KeyEvent.VK_DELETE);*/
+		makeShortcut(deleteItem, KeyEvent.VK_DELETE);
 		
 		// Add in components.
 		editMenu.add(undoItem);
@@ -431,7 +432,7 @@ public class FruitFrame extends JFrame {
 	}
 	
 	//=========================================
-	// Setup the tool buttons for toolbar.
+	// toolbarSetup() - Setup the tool buttons for toolbar.
 	//=========================================
 	private void toolbarSetup() {
 		// Initialize toolbarPenl.
@@ -555,6 +556,9 @@ public class FruitFrame extends JFrame {
 		// VIEW BUTTONS
 		gridBtn = makeButton("G", "", "Show/Hide Grid", true);
 	
+		// Set VIEW button on.
+		gridBtn.setSelected(true);
+		
 		// Add in VIEW button.
 		mainToolBar.add(gridBtn);
 		// TOOLBAR SEPARATOR.
