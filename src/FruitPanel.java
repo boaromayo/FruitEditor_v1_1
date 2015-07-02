@@ -24,9 +24,7 @@ public class FruitPanel extends JPanel {
 	JPanel rightPanel;
 	
 	public FruitPanel() {
-		leftPanel = new JPanel();
-		rightPanel = new JPanel();
-		
+		setPreferredSize(new Dimension(640, 480));
 		setLayout(new BorderLayout());
 		
 		setupPanels();
@@ -43,6 +41,9 @@ public class FruitPanel extends JPanel {
 	}
 	
 	private void setupPanels() {
+		leftPanel = new JPanel();
+		rightPanel = new JPanel();
+		
 		//mapPanel = new MapPanel();
 		//tilePanel = new TilePanel();
 		//mapListPanel = new MapListPanel();
