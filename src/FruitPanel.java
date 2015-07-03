@@ -38,7 +38,7 @@ public class FruitPanel extends JPanel {
 		add(leftPanel, BorderLayout.WEST);
 		add(rightPanel, BorderLayout.CENTER);
 		
-		setPreferredSize(new Dimension(850, 600));
+		setPreferredSize(new Dimension(840, 600));
 	}
 	
 	private void setupPanels() {
