@@ -117,7 +117,7 @@ public class FruitEditor {
 		fruitFrame = new JFrame();
 		
 		fruitFrame.setTitle("FruitEditor");
-		fruitFrame.setPreferredSize(new Dimension(850, 600));
+		fruitFrame.setPreferredSize(new Dimension(840, 600));
 		fruitFrame.setLayout(new BorderLayout());
 		
 		// Setup the editor menu.
