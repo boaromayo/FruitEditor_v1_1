@@ -6,6 +6,13 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class FruitEditor {
+	// DIMENSION CONSTANTS.
+	public static final int SCREEN_WIDTH = 960;
+	public static final int SCREEN_HEIGHT = 640;
+	
+	// PROPERTIES.
+	private boolean grid;
+	
 	// MAIN FRAME.
 	private JFrame fruitFrame;
 	
@@ -15,6 +22,12 @@ public class FruitEditor {
 	
 	// MENU NAMES.
 	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Help"};
+	
+	// MENU & TOOLBAR LISTENER.
+	private FruitListener fruitListener;
+	
+	// MAP FILE
+	private Map mapFile;
 	
 	// MENU COMPONENTS: The Main Menu Bar
 	private JMenuBar menuBar;
@@ -74,7 +87,7 @@ public class FruitEditor {
 	private JRadioButtonMenuItem fillItem;
 	// MENU: TOOLKIT
 	private JMenuItem databaseItem;
-	private JMenuItem scriptItem;
+	private JMenuItem mapConvertItem;
 	private JMenuItem resourceItem;
 	private JMenuItem configItem;
 	// MENU: HELP
@@ -117,15 +130,20 @@ public class FruitEditor {
 		fruitFrame = new JFrame();
 		
 		fruitFrame.setTitle("FruitEditor");
-		fruitFrame.setPreferredSize(new Dimension(840, 600));
+		fruitFrame.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
 		fruitFrame.setLayout(new BorderLayout());
+		
+		fruitListener = new FruitListener(this);
+		
+		// Set grid on.
+		grid = true;
 		
 		// Setup the editor menu.
 		menuSetup();
 		
 		// Setup the toolbar.
 		toolbarSetup();
-		
+
 		// Initialize panels.
 		panelSetup();
 		
@@ -135,11 +153,10 @@ public class FruitEditor {
 		fruitFrame.setLocationRelativeTo(null);
 		fruitFrame.setIconImage(FruitImgLoader.loadBufferedImage("", 20, 20));
 		fruitFrame.setVisible(true);
-		fruitFrame.setResizable(false);
 	}
 	
 	private void panelSetup() {
-	    fruitPanel = new FruitPanel();
+	    fruitPanel = new FruitPanel(this);
 
 	    fruitFrame.add(fruitPanel, BorderLayout.CENTER);
 	}
@@ -219,11 +236,11 @@ public class FruitEditor {
 		closeItem = new JMenuItem("Close");			// FILE -> CLOSE
 		
 		// Add in FILE ActionListeners
-		//newItem.addActionListener(new FruitListener());
-		//openItem.addActionListener(new FruitListener());
-		//saveItem.addActionListener(new FruitListener());
-		//saveAsItem.addActionListener(new FruitListener());
-		//closeItem.addActionListener(new FruitListener());
+		newItem.addActionListener(fruitListener);
+		openItem.addActionListener(fruitListener);
+		//saveItem.addActionListener(fruitListener);
+		//saveAsItem.addActionListener(fruitListener);
+		closeItem.addActionListener(fruitListener);
 		
 		// Add in accelerator keys.
 		makeShortcut(newItem, KeyEvent.VK_N, "CTRL");
@@ -259,12 +276,12 @@ public class FruitEditor {
 		deleteItem = new JMenuItem("Delete");		// EDIT -> DELETE
 		
 		// Add in EDIT ActionListeners.
-		/*undoItem.addActionListener(new FruitListener());
-		redoItem.addActionListener(new FruitListener());
-		cutItem.addActionListener(new FruitListener());
-		copyItem.addActionListener(new FruitListener());
-		pasteItem.addActionListener(new FruitListener());
-		deleteItem.addActionListener(new FruitListener());*/
+		/*undoItem.addActionListener(fruitListener);
+		redoItem.addActionListener(fruitListener);
+		cutItem.addActionListener(fruitListener);
+		copyItem.addActionListener(fruitListener);
+		pasteItem.addActionListener(fruitListener);
+		deleteItem.addActionListener(fruitListener);*/
 		
 		// Add in accelerator keys.
 		makeShortcut(undoItem, KeyEvent.VK_Z, "CTRL");
@@ -294,7 +311,7 @@ public class FruitEditor {
 		gridItem = new JCheckBoxMenuItem("Show/Hide Grid");			// VIEW -> GRID
 		
 		// Add in VIEW ActionListeners.
-		//gridItem.addActionListener(new FruitListener());
+		//gridItem.addActionListener(fruitListener);
 
 		// Set grid on.
 		gridItem.setState(true);
@@ -329,10 +346,10 @@ public class FruitEditor {
 		scalegrp.add(eightItem);
 		
 		// Add in VIEW -> SCALE ActionListeners.
-		//oneItem.addActionListener(new FruitListener());
-		//twoItem.addActionListener(new FruitListener());
-		//fourItem.addActionListener(new FruitListener());
-		//eightItem.addActionListener(new FruitListener());
+		//oneItem.addActionListener(fruitListener);
+		//twoItem.addActionListener(fruitListener);
+		//fourItem.addActionListener(fruitListener);
+		//eightItem.addActionListener(fruitListener);
 		
 		// Add in sub-menu components.
 		scaleMenu.add(oneItem);
@@ -358,8 +375,8 @@ public class FruitEditor {
 		modegrp.add(eventModeItem);
 		
 		// Add in VIEW -> MODE ActionListeners.
-		//mapModeItem.addActionListener(new FruitListener());
-		//eventModeItem.addActionListener(new FruitListener());
+		//mapModeItem.addActionListener(fruitListener());
+		//eventModeItem.addActionListener(fruitListener());
 		
 		// Add in sub-menu components.
 		modeMenu.add(mapModeItem);
@@ -379,10 +396,10 @@ public class FruitEditor {
 		fillItem	= new JRadioButtonMenuItem("Flood Fill");		// DRAW -> FILL
 		
 		// Add in DRAW ActionListeners.
-		/*pencilItem.addActionListener(new FruitListener());
-		rectItem.addActionListener(new FruitListener());
-		circleItem.addActionListener(new FruitListener());
-		fillItem.addActionListener(new FruitListener());*/
+		/*pencilItem.addActionListener(fruitListener());
+		rectItem.addActionListener(fruitListener());
+		circleItem.addActionListener(fruitListener());
+		fillItem.addActionListener(fruitListener());*/
 		
 		// Add DRAW items to group.
 		drawgrp.add(pencilItem);
@@ -403,19 +420,19 @@ public class FruitEditor {
 	private void toolSetup() {
 		// TOOLKIT MENU ITEMS
 		databaseItem	= new JMenuItem("Cherry DataBase");			// TOOLKIT -> CHERRY DATABASE
-		scriptItem		= new JMenuItem("Orange ScriptMaker");		// TOOLKIT -> ORANGE SCRIPTBASE
+		mapConvertItem	= new JMenuItem("Orange MapConverter");		// TOOLKIT -> ORANGE MAPCONVERT
 		resourceItem 	= new JMenuItem("Lime ResourceBase");		// TOOLKIT -> LIME RESOURCEBASE
 		configItem		= new JMenuItem("Settings...");				// TOOLKIT -> SETTINGS
 		
 		// Add in TOOLKIT ActionListeners.
-		//databaseItem.addActionListener(new FruitListener());
-		//scriptItem.addActionListener(new FruitListener());
-		//resourceItem.addActionListener(new FruitListener());
-		//configItem.addActionListener(new FruitListener());
+		//databaseItem.addActionListener(fruitListener());
+		//mapConvertItem.addActionListener(fruitListener());
+		//resourceItem.addActionListener(fruitListener());
+		//configItem.addActionListener(fruitListener());
 		
 		// Add in menu components.
 		toolMenu.add(databaseItem);
-		toolMenu.add(scriptItem);
+		toolMenu.add(mapConvertItem);
 		toolMenu.add(resourceItem);
 		// MENU SEPARATOR.
 		toolMenu.addSeparator();
@@ -428,7 +445,7 @@ public class FruitEditor {
 		aboutItem = new JMenuItem("About...");			// HELP -> ABOUT
 		
 		// Add in HELP ActionListener.
-		//aboutItem.addActionListener(new FruitListener());
+		aboutItem.addActionListener(fruitListener);
 		
 		// Add in menu components.
 		helpMenu.add(aboutItem);
@@ -445,7 +462,7 @@ public class FruitEditor {
 		// Initialize toolbar.
 		mainToolBar = new JToolBar();
 		mainToolBar.setRollover(true);		// Make an indication if mouse goes over toolbar buttons
-		mainToolBar.setFloatable(false);	//
+		mainToolBar.setFloatable(false);	// Do not let it be movable
 		
 		// Create and add the buttons in toolbar.
 		subToolbarSetup();
@@ -513,24 +530,34 @@ public class FruitEditor {
 	//=========================================
 	private void fileToolSetup() {
 		// FILE BUTTONS
-		newBtn 		= makeButton("N", "New");
-		openBtn 	= makeButton("O", "Open");
-		saveBtn		= makeButton("S", "Save");
+		newBtn 		= makeButton("N", "../img/newfile.png",
+				"New", "newBtn");
+		openBtn 	= makeButton("O", "../img/openfile.png",
+				"Open", "openBtn");
+		saveBtn		= makeButton("S", "../img/savefile.png",
+				"Save", "saveBtn");
 		
 		// Add in FILE buttons.
 		mainToolBar.add(newBtn);						// FILE -> NEW
 		mainToolBar.add(openBtn);						// FILE -> OPEN
 		mainToolBar.add(saveBtn);						// FILE -> SAVE
+
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
+		
+		// Add in FILE ActionListeners.
+		newBtn.addActionListener(fruitListener);
+		openBtn.addActionListener(fruitListener);
+		//saveBtn.addActionListener(fruitListener);
 	}
 	
 	private void editToolSetup() {
 		// EDIT BUTTONS
-		cutBtn		= makeButton("Cut", "Cut");				// EDIT -> CUT
-		copyBtn		= makeButton("Copy", "Copy");			// EDIT -> COPY
-		pasteBtn	= makeButton("Paste", "Paste");			// EDIT -> PASTE
-		deleteBtn	= makeButton("X", "Delete");			// EDIT -> DELETE
+		cutBtn		= makeButton("Cut", "Cut", "cutBtn");			// EDIT -> CUT
+		copyBtn		= makeButton("Copy", "Copy", "copyBtn");		// EDIT -> COPY
+		pasteBtn	= makeButton("Paste", "Paste", "pasteBtn");		// EDIT -> PASTE
+		deleteBtn	= makeButton("X", "../img/delete.png", 
+				"Delete", "deleteBtn");								// EDIT -> DELETE
 		
 		// Add in EDIT buttons.
 		mainToolBar.add(cutBtn);
@@ -543,8 +570,10 @@ public class FruitEditor {
 	
 	private void fixToolSetup() {
 		// EDIT -> FIX BUTTONS
-		undoBtn		= makeButton("U", "Undo");			// EDIT -> FIX -> UNDO
-		redoBtn		= makeButton("R", "Redo");			// EDIT -> FIX -> REDO
+		undoBtn		= makeButton("U", "../img/undo.png", 
+									"Undo", "undoBtn");		// EDIT -> FIX -> UNDO
+		redoBtn		= makeButton("R", "../img/redo.png", 
+									"Redo", "redoBtn");		// EDIT -> FIX -> REDO
 		
 		// Add in EDIT -> FIX buttons.
 		mainToolBar.add(undoBtn);
@@ -558,7 +587,7 @@ public class FruitEditor {
 		scaleToolSetup();
 		modeToolSetup();
 		// VIEW BUTTONS
-		gridBtn = makeButton("G", "", "Show/Hide Grid", true);
+		gridBtn = makeButton("G", "", "Show/Hide Grid", "gridBtn", true);
 	
 		// Set VIEW button on.
 		gridBtn.setSelected(true);
@@ -573,10 +602,10 @@ public class FruitEditor {
 		// SCALE BUTTONGROUP
 		scaleBtnGrp	= new ButtonGroup();
 		// SCALE BUTTONS
-		oneBtn		= makeButton("1:1", "", "Scale 1:1", true);
-		twoBtn		= makeButton("1:2", "", "Scale 1:2", true);
-		fourBtn		= makeButton("1:4", "", "Scale 1:4", true);
-		eightBtn	= makeButton("1:8", "", "Scale 1:8", true);
+		oneBtn		= makeButton("1:1", "", "Scale 1:1", "oneBtn", true);
+		twoBtn		= makeButton("1:2", "", "Scale 1:2", "twoBtn", true);
+		fourBtn		= makeButton("1:4", "", "Scale 1:4", "fourBtn", true);
+		eightBtn	= makeButton("1:8", "", "Scale 1:8", "eightBtn", true);
 		
 		// Add in SCALE buttons to group.
 		scaleBtnGrp.add(oneBtn);
@@ -600,8 +629,8 @@ public class FruitEditor {
 		// MODE BUTTONGROUP
 		modeBtnGrp = new ButtonGroup();
 		// MODE BUTTONS
-		mapModeBtn	 = makeButton("MAP", "", "Map Mode", true);
-		eventModeBtn = makeButton("EV", "", "Event Mode", true);
+		mapModeBtn	 = makeButton("MAP", "", "Map Mode", "mapModeBtn", true);
+		eventModeBtn = makeButton("EV", "", "Event Mode", "eventModeBtn", true);
 		
 		// Add in MODE buttons to group.
 		modeBtnGrp.add(mapModeBtn);
@@ -621,10 +650,10 @@ public class FruitEditor {
 		// DRAW BUTTONGROUP
 		drawBtnGrp	= new ButtonGroup();
 		// DRAW BUTTONS
-		pencilBtn 	= makeButton("Penc", "", "Pencil", true);
-		rectBtn		= makeButton("Rect", "", "Rectangle", true);
-		circleBtn	= makeButton("Circ", "", "Circle", true);
-		fillBtn		= makeButton("Fill", "", "Flood Fill", true);
+		pencilBtn 	= makeButton("Penc", "", "Pencil", "pencilBtn", true);
+		rectBtn		= makeButton("Rect", "", "Rectangle", "rectBtn", true);
+		circleBtn	= makeButton("Circ", "", "Circle", "circleBtn", true);
+		fillBtn		= makeButton("Fill", "", "Flood Fill", "fillBtn", true);
 		
 		// Add in DRAW buttons to group.
 		drawBtnGrp.add(pencilBtn);
@@ -646,9 +675,9 @@ public class FruitEditor {
 	
 	private void toolkitToolSetup() {
 		// TOOLKIT BUTTONS
-		cherryBtn	= makeButton("Cherry", "Cherry DataBase");
-		orangeBtn	= makeButton("Orange", "Orange ScriptMaker");
-		limeBtn		= makeButton("Lime", "Lime ResourceBase");
+		cherryBtn	= makeButton("Cherry", "Cherry DataBase", "cherryBtn");
+		orangeBtn	= makeButton("Orange", "Orange MapConvert", "orangeBtn");
+		limeBtn		= makeButton("Lime", "Lime ResourceBase", "limeBtn");
 		
 		// Add in TOOLKIT buttons.
 		mainToolBar.add(cherryBtn);
@@ -659,39 +688,104 @@ public class FruitEditor {
 	}
 	
 	/**========================================
+	// toggleGrid() - Set grid on/off.
+	//=========================================**/
+	public void toggleGrid() {
+		grid = !grid;
+	}
+	
+	/**========================================
+	// getButton(text) - Get button.
+	//=========================================**/
+	public JButton getButton(String text) {
+		// FILE buttons
+		if (text.equals(newBtn.getName())) {
+			return newBtn;
+		} else if (text.equals(openBtn.getName())) {
+			return openBtn;
+		} else if (text.equals(saveBtn.getName())) {
+			return saveBtn;
+		}
+		
+		// EDIT -> FIX buttons
+		else if (text.equals(undoBtn.getName())) {
+			return undoBtn;
+		} else if (text.equals(redoBtn.getName())) {
+			return redoBtn;
+		}
+		
+		// EDIT buttons
+		else if (text.equals(cutBtn.getName())) {
+			return cutBtn;
+		} else if (text.equals(copyBtn.getName())) {
+			return copyBtn;
+		} else if (text.equals(pasteBtn.getName())) {
+			return pasteBtn;
+		} else if (text.equals(deleteBtn.getName())) {
+			return deleteBtn;
+		}
+		
+		return null;
+	}
+	
+	/**========================================
+	// getFrame() - Get JFrame.
+	//=========================================**/
+	public JFrame getFrame() {
+		return fruitFrame;
+	}
+	
+	/**========================================
+	// getMap() - Get Map file. 
+	//=========================================**/
+	public Map getMap() {
+		return mapFile;
+	}
+	
+	/**=======================================
+	// grid() - Check if grid on.
+	//========================================**/
+	public boolean grid() { return grid; }
+	
+	/**========================================
 	// HELPER METHODS.
 	//=========================================**/
 	/**=========================================
-	// makeButton(text,tooltip) - Make text button for the toolbar, assume not a toggle btn.
+	// makeButton(text,tooltip,varname) - Make text button for the toolbar, assume not a toggle btn.
 	//=========================================**/
-	private JButton makeButton(String text, String tooltip) {
-		return makeButton(text, "", tooltip);
+	private JButton makeButton(String text, String tooltip, String varName) {
+		return makeButton(text, null, tooltip, varName);
 	}
 	
 	/**=========================================
-	// makeButton(text,icon,tooltip) - Make button for the toolbar.
+	// makeButton(text,icon,tooltip,varname) - Make button for the toolbar.
 	//=========================================**/
-	private JButton makeButton(String text, String icon, String tooltip) {
+	private JButton makeButton(String text, String icon, String tooltip, String varName) {
 		JButton btn;
 		// Add in button, make text if icon unavailable.
-		try {
-			//btn = new JButton(FruitImgLoader.loadIconImage(icon));
-		} catch (Exception e) {
-			//btn = new JButton(text);
+		if (icon != null) {
+			btn = new JButton(FruitImgLoader.loadIconImage(icon));
+		} else {
+			btn = new JButton(text);
 		}
-		btn = new JButton(text);
+		
+		//btn = new JButton(text);
+		btn.setName(varName);
 		btn.setToolTipText(tooltip);
 
 		// Add button ActionListener.
-		//btn.addActionListener(new FruitListener());
+		//btn.addActionListener(fruitListener);
+		
+		// Ensure the buttons are added in toolbar.
+		System.out.println(btn.getName() + " added in toolbar");
 		
 		return btn;
 	}
 	
 	/**=========================================
-	// makeButton(text,icon,tooltip,toggle) - Make toggle button for the toolbar.
+	// makeButton(text,icon,tooltip,varname,toggle) - Make toggle button for the toolbar.
 	//=========================================**/
-	private JToggleButton makeButton(String text, String icon, String tooltip, boolean toggle) {
+	private JToggleButton makeButton(String text, String icon, String tooltip, String varName, boolean toggle) {
 		JToggleButton btn;
 		// Add in toggle btn, make text if icon unavailable.
 		if (toggle) {
@@ -702,10 +796,14 @@ public class FruitEditor {
 			}
 			
 			btn = new JToggleButton(text);
+			btn.setName(varName);
 			btn.setToolTipText(tooltip);
 	
 			// Add button ActionListener.
-			//btn.addActionListener(new FruitListener());
+			//btn.addActionListener(fruitListener);
+			
+			// Ensure the buttons are added in toolbar.
+			System.out.println(btn.getName() + " added in toolbar");
 			
 			return btn;
 		}

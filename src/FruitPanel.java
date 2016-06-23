@@ -9,10 +9,13 @@ import java.io.*;
 
 public class FruitPanel extends JPanel {
 	
+	// FILES.
+	private FruitEditor fruitEditor;
+	private Map mapFile;
+	
 	// PANELS.
-	//MapPanel mapPanel;
+	//private MapPanel mapPanel;
 	//TilePanel tilePanel;
-	//MapListPanel mapListPanel;
 	
 	// PANEL PANES.
 	//JScrollPane tileScrollPane;
@@ -23,7 +26,10 @@ public class FruitPanel extends JPanel {
 	JPanel leftPanel;
 	JPanel rightPanel;
 	
-	public FruitPanel() {
+	public FruitPanel(FruitEditor f) {
+		fruitEditor = f;
+		mapFile = f.getMap();
+
 		setLayout(new BorderLayout());
 		
 		setupPanels();
@@ -38,14 +44,16 @@ public class FruitPanel extends JPanel {
 		add(leftPanel, BorderLayout.WEST);
 		add(rightPanel, BorderLayout.CENTER);
 		
-		setPreferredSize(new Dimension(840, 600));
+		setPreferredSize(new Dimension(
+				FruitEditor.SCREEN_WIDTH, 
+				FruitEditor.SCREEN_HEIGHT));
 	}
 	
 	private void setupPanels() {
 		leftPanel = new JPanel();
 		rightPanel = new JPanel();
 		
-		//mapPanel = new MapPanel();
+		//mapPanel = new MapPanel(mapFile);
 		//tilePanel = new TilePanel();
 		//mapListPanel = new MapListPanel();
 	

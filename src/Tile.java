@@ -16,8 +16,8 @@ public class Tile {
 	private int scaleWidth;
 	private int scaleHeight;
 	
-	// TYPE AND NAME.
-	private int type;
+	// ID AND NAME.
+	private int id;
 	private String name;
 	
 	// TILE CONDITIONS.
@@ -27,44 +27,50 @@ public class Tile {
 	
 	public Tile() {
 		this.img = null;
-		this.type = -1;
+		this.id = -1;
 		this.name = "";
 		this.solid = false;
 		this.transparent = false;
 		this.danger = false;
 		
-		imgWidth = img.getWidth(null);
-		imgHeight = img.getHeight(null);
+		imgWidth = img.getWidth();
+		imgHeight = img.getHeight();
 		scaleWidth = imgWidth;
 		scaleHeight = imgHeight;
 	}
 	
-	public Tile(int type, String path, String name) {
+	public Tile(int id, String path, String name) {
 		this();
-		//try {
-		//this.img = new BufferedImage(new FruitImgLoader(path));
-		//} catch (RuntimeException e) {
-			//System.err.println("ERROR: Could not find image in " + path);
-		//}
-		this.type = type;
+		try {
+			this.img = FruitImgLoader.loadBufferedImage(
+					path, imgWidth, imgHeight);
+		} catch (RuntimeException e) {
+			System.err.println(
+					"ERROR: Could not find image in " + path);
+		}
+		this.id = id;
 		this.name = name;
 	}
 	
-	public Tile(int type, String path, String name, boolean solid) {
-		this(type, path, name);
+	public Tile(int id, String path, String name, boolean solid) {
+		this(id, path, name);
 		this.solid = solid;
 	}
 	
-	public Tile(int type, String path, String name, boolean solid, boolean transparent) {
-		this(type, path, name, solid);
+	public Tile(int id, String path, String name, boolean solid, boolean transparent) {
+		this(id, path, name, solid);
 		this.transparent = transparent;
 	}
 	
 	public BufferedImage getImage() { return img; }
 	
-	public int getType() { return type; }
+	public int getID() { return id; }
 	
 	public String getName() { return name; }
+	
+	public int getWidth() { return imgWidth; }
+	
+	public int getHeight() { return imgHeight; }
 	
 	public boolean isSolid() { return solid; }
 	

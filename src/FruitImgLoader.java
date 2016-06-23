@@ -2,11 +2,16 @@ package FruitEditor;
 
 import java.awt.*;
 import java.awt.image.*;
+
+import java.io.*;
+
 import javax.swing.*;
 
 public class FruitImgLoader {
 	// SINGLETON STATIC VARIABLE.
-	static FruitImgLoader singleton = null;
+	private static FruitImgLoader singleton;
+	
+	private FruitImgLoader() {}
 	
 	/**===================================
 	// IMAGE LOADING METHODS.
@@ -17,6 +22,7 @@ public class FruitImgLoader {
 	public static ImageIcon loadIconImage(String path) {
 		ImageIcon img;
 		try {
+			singleton = new FruitImgLoader();
 			img = new ImageIcon(singleton.getClass().getResource(path));
 			return img;
 		} catch (Exception e) {
