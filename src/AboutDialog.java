@@ -34,8 +34,8 @@ public class AboutDialog extends JDialog {
 	private void init() {
 		label1 = makeLabel("FruitEditor v1.1_01", "label1");
 		copyrightlabel = makeLabel("(c) 2016 Nico Poblete", "copyrightlabel");
-		iconlabel = makeLabel("Icons made by ", "iconlabel");
-		//iconlabel = makeLabel("Icons made by http://www.aha-soft.com//", "iconlabel");
+		//iconlabel = makeLabel("Icons made by ", "iconlabel");
+		iconlabel = makeLabel("Icons made by http://www.aha-soft.com//", "iconlabel");
 	}
 	
 	private void addComps() {

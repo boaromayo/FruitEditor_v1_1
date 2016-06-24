@@ -153,6 +153,7 @@ public class FruitEditor {
 		fruitFrame.setLocationRelativeTo(null);
 		fruitFrame.setIconImage(FruitImgLoader.loadBufferedImage("", 20, 20));
 		fruitFrame.setVisible(true);
+		fruitFrame.setResizable(false);
 	}
 	
 	private void panelSetup() {

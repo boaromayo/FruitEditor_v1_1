@@ -14,8 +14,8 @@ public class NewDialog implements ActionListener {
 	private JDialog newdialog;
 	
 	// DIALOG SIZE.
-	private final int WIDTH = 640;
-	private final int HEIGHT = 480;
+	private final int WIDTH = 480;
+	private final int HEIGHT = 200;
 	
 	// COMPONENTS.
 	private JLabel mapLabel;
@@ -46,6 +46,8 @@ public class NewDialog implements ActionListener {
 	private int gridHeight;
 	
 	public NewDialog() {
+		newdialog = new JDialog();
+		
 		init();
 	}
 	
@@ -64,7 +66,7 @@ public class NewDialog implements ActionListener {
 		gridHeightLabel = makeLabel("Grid H:", "gridHeightLabel");
 		
 		// initialize text fields.
-		mapText = makeTextField("mapText");
+		mapText = makeTextField("mapText", 20);
 		tileText = makeTextField("tileText");
 		mapWidthText = makeSpinner(mapWidth, "mapWidthText");
 		mapHeightText = makeSpinner(mapHeight, "mapHeightText");
@@ -102,6 +104,7 @@ public class NewDialog implements ActionListener {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
 		gbc.gridwidth = 2; // make this row 2 cols
+		gbc.weightx = 0.5;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		
@@ -131,7 +134,7 @@ public class NewDialog implements ActionListener {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
 		gbc.gridwidth = 8; // make this row 8 cols
-		gbc.weightx = 1.0;
+		gbc.weightx = 0.2;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		
@@ -168,7 +171,7 @@ public class NewDialog implements ActionListener {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
 		gbc.gridwidth = 2; // make this row 2 cols
-		gbc.ipadx = 10; // Get 10 pixels of padding
+		gbc.weightx = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		
@@ -283,15 +286,17 @@ public class NewDialog implements ActionListener {
 		
 		txtField = new JTextField();
 		txtField.setName(name);
+		txtField.addActionListener(this);
 		
 		return txtField;
 	}
 	
-	private JTextField makeTextField(String text, String name) {
+	private JTextField makeTextField(String name, int width) {
 		JTextField txtField;
 		
-		txtField = new JTextField(text);
+		txtField = new JTextField(width);
 		txtField.setName(name);
+		txtField.addActionListener(this);
 		
 		return txtField;
 	}
@@ -299,9 +304,17 @@ public class NewDialog implements ActionListener {
 	private JSpinner makeSpinner(int num, String name) {
 		JSpinner spinner;
 		
-		spinner = new JSpinner(
-				new SpinnerNumberModel(num, 0, Map.MAP_SIZE, 1));
-		spinner.setName(name);
+		if (name.startsWith("grid")) {
+			spinner = new JSpinner(
+					new SpinnerNumberModel(num, 8, Map.MAP_SIZE, 1));
+			spinner.setName(name);
+			
+		} else {
+			spinner = new JSpinner(
+					new SpinnerNumberModel(num, num, Map.MAP_SIZE, 1));
+			spinner.setName(name);
+			
+		}
 		
 		return spinner;
 	}
@@ -311,6 +324,8 @@ public class NewDialog implements ActionListener {
 		
 		btn = new JButton(text);
 		btn.setName(name);
+		
+		btn.addActionListener(this);
 		
 		return btn;
 	}
@@ -326,6 +341,7 @@ public class NewDialog implements ActionListener {
 		}
 		
 		btn.setName(name);
+		btn.addActionListener(this);
 		
 		return btn;
 	}
