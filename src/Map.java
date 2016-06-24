@@ -69,6 +69,14 @@ public class Map {
 	
 	public void setDepth(int d) { mapDepth = d; }
 	
+	public void setTile(int x, int y, Tile t) {
+		setTile(x,y,0,t); // set first layer by default
+	}
+	
+	public void setTile(int x, int y, int z, Tile t) {
+		fruitTiles[y][x][z] = t;
+	}
+	
 	public int getScale() { return scaleFactor; }
 	
 	public int getRows() { return mapHeight; }
@@ -78,19 +86,11 @@ public class Map {
 	public int getLayers() { return mapDepth; }
 	
 	public Tile getTile(int x, int y) {
-		return fruitTiles[y][x][0];
+		return getTile(x,y,0); // get first layer by default
 	}
 	
 	public Tile getTile(int x, int y, int z) {
 		return fruitTiles[y][x][z];
-	}
-	
-	public void setTile(int x, int y, Tile t) {
-		fruitTiles[y][x][0] = t;
-	}
-	
-	public void setTile(int x, int y, int z, Tile t) {
-		fruitTiles[y][x][z] = t;
 	}
 	
 	public int[][][] getMapIntArray() {
@@ -111,17 +111,7 @@ public class Map {
 	}
 	
 	public int[][] getMapIntArray2() {
-		int[][] sheet = new int[mapHeight][mapWidth];
-		int r = sheet.length;
-		int c = sheet[0].length;
-		
-		for (int i=0; i < r; i++) {
-			for (int j=0; j < c; j++) {
-				sheet[i][j] = fruitTiles[i][j][0].getID();
-			}
-		}
-		
-		return sheet;
+		return getMapIntArray2(0); // Get first layer of map
 	}
 	
 	public int[][] getMapIntArray2(int layer) {
