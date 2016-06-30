@@ -104,15 +104,12 @@ public class NewDialog implements ActionListener {
 		JPanel btn = new JPanel();
 		
 		one.add(mapLabel); // (0,0)
-		
 		one.add(mapText); // (1,0)
 		
 		newdialog.add(one);
 		
 		two.add(tileLabel); // (0,1)
-		
 		two.add(tileText); // (1,1)
-		
 		two.add(browseBtn); // (2,1)
 		
 		newdialog.add(two);
@@ -120,25 +117,17 @@ public class NewDialog implements ActionListener {
 		size.setLayout(new GridLayout(2,4,8,1));
 		
 		size.add(mapWidthLabel); // (0,2)
-		
 		size.add(mapHeightLabel); // (1,2)
-		
 		size.add(gridWidthLabel); // (2,2)
-		
 		size.add(gridHeightLabel); // (3,2)
-		
 		size.add(mapWidthText); // (4,2)
-		
 		size.add(mapHeightText); // (5,2)
-		
 		size.add(gridWidthText); // (6,2)
-		
 		size.add(gridHeightText); // (7,2)
 		
 		newdialog.add(size);
 		
 		btn.add(okBtn); // (0,3)
-		
 		btn.add(cancelBtn); // (1,3)
 		
 		newdialog.add(btn);
