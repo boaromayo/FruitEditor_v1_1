@@ -12,15 +12,16 @@ public class FruitPanel extends JPanel {
 	// FILES.
 	private FruitEditor fruitEditor;
 	private Map mapFile;
+	private FruitPanelListener fruitPanelListener;
 	
 	// PANELS.
 	//private MapPanel mapPanel;
-	//TilePanel tilePanel;
+	//private TilePanel tilePanel;
 	
 	// PANEL PANES.
 	//JScrollPane tileScrollPane;
 	//JTabbedPane tileTabbedPane;
-	//JScrollPane mapScrollPane;
+	//private JScrollPane mapScrollPane;
 	
 	// MAIN PANELS.
 	JPanel leftPanel;
@@ -43,6 +44,9 @@ public class FruitPanel extends JPanel {
 		
 		add(leftPanel, BorderLayout.WEST);
 		add(rightPanel, BorderLayout.CENTER);
+		
+		addMouseListener(fruitPanelListener);
+		addMouseMotionListener(fruitPanelListener);
 		
 		setPreferredSize(new Dimension(
 				FruitEditor.SCREEN_WIDTH, 

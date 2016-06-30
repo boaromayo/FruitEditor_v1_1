@@ -53,8 +53,8 @@ public class NewDialog implements ActionListener {
 	
 	public void init() {
 		// Initialize dimensions.
-		mapWidth = 20;
-		mapHeight = 15;
+		mapWidth = 10;
+		mapHeight = 10;
 		gridWidth = gridHeight = 24;
 		
 		// Initialize labels.
@@ -66,8 +66,8 @@ public class NewDialog implements ActionListener {
 		gridHeightLabel = makeLabel("Grid H:", "gridHeightLabel");
 		
 		// initialize text fields.
-		mapText = makeTextField("mapText", 20);
-		tileText = makeTextField("tileText");
+		mapText = makeTextField("mapText");
+		tileText = makeTextField("tileText", 30);
 		mapWidthText = makeSpinner(mapWidth, "mapWidthText");
 		mapHeightText = makeSpinner(mapHeight, "mapHeightText");
 		gridWidthText = makeSpinner(gridWidth, "gridWidthText");
@@ -97,89 +97,51 @@ public class NewDialog implements ActionListener {
 	// addComps() - Add components
 	//===================================**/
 	private void addComps() {
-		newdialog.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		Container cont = newdialog.getContentPane();
+		newdialog.setLayout(new GridLayout(4,1,2,2));
+		JPanel map = new JPanel();
+		JPanel tile = new JPanel();
+		JPanel size = new JPanel();
+		JPanel btn = new JPanel();
 		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		map.add(mapLabel); // (0,0)
 		
-		gbc.gridwidth = 2; // make this row 2 cols
-		gbc.weightx = 0.5;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+		map.add(mapText); // (1,0)
 		
-		cont.add(mapLabel, gbc); // (0,0)
+		newdialog.add(map);
 		
-		gbc.gridx = 1;
+		tile.add(tileLabel); // (0,1)
 		
-		cont.add(mapText, gbc); // (1,0)
+		tile.add(tileText); // (1,1)
 		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		tile.add(browseBtn); // (2,1)
 		
-		gbc.gridwidth = 3; // make this row 3 cols
-		gbc.weightx = 0.5; // add some space
-		gbc.gridx = 0;
-		gbc.gridy = 1;
+		newdialog.add(tile);
 		
-		cont.add(tileLabel, gbc); // (0,1)
+		size.setLayout(new GridLayout(2,4,8,1));
 		
-		gbc.gridx = 1;
+		size.add(mapWidthLabel); // (0,2)
 		
-		cont.add(tileText, gbc); // (1,1)
+		size.add(mapHeightLabel); // (1,2)
 		
-		gbc.gridx = 2;
+		size.add(gridWidthLabel); // (2,2)
 		
-		cont.add(browseBtn, gbc); // (2,1)
+		size.add(gridHeightLabel); // (3,2)
 		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		size.add(mapWidthText); // (4,2)
 		
-		gbc.gridwidth = 8; // make this row 8 cols
-		gbc.weightx = 0.2;
-		gbc.gridx = 0;
-		gbc.gridy = 2;
+		size.add(mapHeightText); // (5,2)
 		
-		cont.add(mapWidthLabel, gbc); // (0,2)
+		size.add(gridWidthText); // (6,2)
 		
-		gbc.gridx = 1;
+		size.add(gridHeightText); // (7,2)
 		
-		cont.add(mapWidthText, gbc); // (1,2)
+		newdialog.add(size);
 		
-		gbc.gridx = 2;
+		btn.add(okBtn); // (0,3)
 		
-		cont.add(mapHeightLabel, gbc); // (2,2)
+		btn.add(cancelBtn); // (1,3)
 		
-		gbc.gridx = 3;
-		
-		cont.add(mapHeightText, gbc); // (3,2)
-		
-		gbc.gridx = 4;
-		
-		cont.add(gridWidthLabel, gbc); // (4,2)
-		
-		gbc.gridx = 5;
-		
-		cont.add(gridWidthText, gbc); // (5,2)
-		
-		gbc.gridx = 6;
-		
-		cont.add(gridHeightLabel, gbc); // (6,2)
-
-		gbc.gridx = 7;
-		
-		cont.add(gridHeightText, gbc); // (7,2)
-		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		
-		gbc.gridwidth = 2; // make this row 2 cols
-		gbc.weightx = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		
-		cont.add(okBtn, gbc); // (0,3)
-		
-		gbc.gridx = 1;
-		
-		cont.add(cancelBtn, gbc); // (1,3)
+		newdialog.add(btn);
 		
 	}
 	
@@ -282,13 +244,7 @@ public class NewDialog implements ActionListener {
 	}
 	
 	private JTextField makeTextField(String name) {
-		JTextField txtField;
-		
-		txtField = new JTextField();
-		txtField.setName(name);
-		txtField.addActionListener(this);
-		
-		return txtField;
+		return makeTextField(name, 25);
 	}
 	
 	private JTextField makeTextField(String name, int width) {
@@ -346,10 +302,11 @@ public class NewDialog implements ActionListener {
 		return btn;
 	}
 	
+	/**=======================================
+	// actionPerformed(actionEvent)
+	//========================================*/
 	public void actionPerformed(ActionEvent e) {
-		String cmd = e.getActionCommand();
 		Object btn = e.getSource();
-		
 		
 		if (btn == okBtn) {
 			// if map name or tileset name is blank, put warning prompt

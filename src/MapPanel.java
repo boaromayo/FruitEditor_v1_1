@@ -19,13 +19,14 @@ public class MapPanel extends JPanel {
 		map = new Map(20, 15);
 		
 		gridWidth = gridHeight = 24;
+		
 	}
 	
 	public MapPanel(Map m) {
 		map = m;
 		
 		setLayout(new FlowLayout());
-		//setViewport(map.getViewport());
+		//setViewport(/**map.getViewport()*/);
 		
 		gridWidth = gridHeight = 24;
 	}
@@ -43,4 +44,5 @@ public class MapPanel extends JPanel {
 			}
 		}
 	}
+	
 }
