@@ -98,24 +98,24 @@ public class NewDialog implements ActionListener {
 	//===================================**/
 	private void addComps() {
 		newdialog.setLayout(new GridLayout(4,1,2,2));
-		JPanel map = new JPanel();
-		JPanel tile = new JPanel();
+		JPanel one = new JPanel();
+		JPanel two = new JPanel();
 		JPanel size = new JPanel();
 		JPanel btn = new JPanel();
 		
-		map.add(mapLabel); // (0,0)
+		one.add(mapLabel); // (0,0)
 		
-		map.add(mapText); // (1,0)
+		one.add(mapText); // (1,0)
 		
-		newdialog.add(map);
+		newdialog.add(one);
 		
-		tile.add(tileLabel); // (0,1)
+		two.add(tileLabel); // (0,1)
 		
-		tile.add(tileText); // (1,1)
+		two.add(tileText); // (1,1)
 		
-		tile.add(browseBtn); // (2,1)
+		two.add(browseBtn); // (2,1)
 		
-		newdialog.add(tile);
+		newdialog.add(two);
 		
 		size.setLayout(new GridLayout(2,4,8,1));
 		
@@ -142,7 +142,6 @@ public class NewDialog implements ActionListener {
 		btn.add(cancelBtn); // (1,3)
 		
 		newdialog.add(btn);
-		
 	}
 	
 	/**==================================
