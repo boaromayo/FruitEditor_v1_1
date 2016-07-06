@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class FruitEditor {
-	// DIMENSION CONSTANTS.
+	// CONSTANTS.
 	public static final int SCREEN_WIDTH = 960;
 	public static final int SCREEN_HEIGHT = 640;
 	
@@ -17,7 +17,7 @@ public class FruitEditor {
 	private JFrame fruitFrame;
 	
 	// PANELS.
-	private JPanel fruitPanel;
+	private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
 	
 	// MENU NAMES.
@@ -588,7 +588,8 @@ public class FruitEditor {
 		scaleToolSetup();
 		modeToolSetup();
 		// VIEW BUTTONS
-		gridBtn = makeButton("G", "", "Show/Hide Grid", "gridBtn", true);
+		gridBtn = makeButton("G", "", "Show/Hide Grid", 
+				"gridBtn", grid);
 	
 		// Set VIEW button on.
 		gridBtn.setSelected(true);
@@ -689,12 +690,25 @@ public class FruitEditor {
 	}*/
 	
 	/**========================================
-	// toggleGrid() - Set grid on/off.
+	// SET METHODS.
+	//=========================================**/
+	/**========================================
+	// setMap(m) - Set the map.
+	//=========================================**/
+	public void setMap(Map m) {
+		mapFile = m;
+	}
+	
+	/**========================================
+	// toggleGrid() - Toggle grid on/off.
 	//=========================================**/
 	public void toggleGrid() {
 		grid = !grid;
 	}
 	
+	/**========================================
+	// GET METHODS.
+	//=========================================**/
 	/**========================================
 	// getButton(text) - Get button.
 	//=========================================**/
@@ -737,6 +751,13 @@ public class FruitEditor {
 	}
 	
 	/**========================================
+	// getPanel() - Get FruitPanel.
+	//=========================================**/
+	public FruitPanel getPanel() {
+		return fruitPanel;
+	}
+	
+	/**========================================
 	// getMap() - Get Map file. 
 	//=========================================**/
 	public Map getMap() {
@@ -744,9 +765,9 @@ public class FruitEditor {
 	}
 	
 	/**=======================================
-	// grid() - Check if grid on.
+	// gridOn() - Check if grid on.
 	//========================================**/
-	public boolean grid() { return grid; }
+	public boolean gridOn() { return (grid == true); }
 	
 	/**========================================
 	// HELPER METHODS.

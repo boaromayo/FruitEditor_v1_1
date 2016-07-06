@@ -11,17 +11,15 @@ public class FruitPanel extends JPanel {
 	
 	// FILES.
 	private FruitEditor fruitEditor;
-	private Map mapFile;
-	private FruitPanelListener fruitPanelListener;
 	
 	// PANELS.
-	//private MapPanel mapPanel;
+	private MapPanel mapPanel;
 	//private TilePanel tilePanel;
 	
 	// PANEL PANES.
 	//JScrollPane tileScrollPane;
 	//JTabbedPane tileTabbedPane;
-	//private JScrollPane mapScrollPane;
+	private JScrollPane mapScrollPane;
 	
 	// MAIN PANELS.
 	JPanel leftPanel;
@@ -29,8 +27,7 @@ public class FruitPanel extends JPanel {
 	
 	public FruitPanel(FruitEditor f) {
 		fruitEditor = f;
-		mapFile = f.getMap();
-
+		
 		setLayout(new BorderLayout());
 		
 		setupPanels();
@@ -45,9 +42,6 @@ public class FruitPanel extends JPanel {
 		add(leftPanel, BorderLayout.WEST);
 		add(rightPanel, BorderLayout.CENTER);
 		
-		addMouseListener(fruitPanelListener);
-		addMouseMotionListener(fruitPanelListener);
-		
 		setPreferredSize(new Dimension(
 				FruitEditor.SCREEN_WIDTH, 
 				FruitEditor.SCREEN_HEIGHT));
@@ -57,8 +51,8 @@ public class FruitPanel extends JPanel {
 		leftPanel = new JPanel();
 		rightPanel = new JPanel();
 		
-		//mapPanel = new MapPanel(mapFile);
-		//tilePanel = new TilePanel();
+		//mapPanel = new MapPanel(fruitEditor);
+		//tilePanel = new TilePanel(fruitEditor);
 		//mapListPanel = new MapListPanel();
 	
 		//tileScrollPane = new JScrollPane(tilePanel);
@@ -66,5 +60,23 @@ public class FruitPanel extends JPanel {
 		//mapScrollPane = new JScrollPane(mapPanel);
 		
 		//mapPanel.setViewport(mapScrollPane.getViewport());
+		//tilePanel.setViewport(tileScrollPane.getViewport());
+		
+		//add(mapPanel);
+		//add(tilePanel);
 	}
+	
+	public MapPanel getMapPanel() {
+		if (mapPanel != null)
+			return mapPanel;
+		
+		return null;
+	}
+	
+	/*public TilePanel getTilePanel() {
+		if (tilePanel != null)
+			return tilePanel;
+		
+		return null;
+	}*/
 }

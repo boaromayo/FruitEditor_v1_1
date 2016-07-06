@@ -1,6 +1,7 @@
 package FruitEditor;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.*;
 
 import javax.swing.*;
@@ -13,6 +14,8 @@ public class AboutDialog extends JDialog {
 	private JLabel label1;
 	private JLabel copyrightlabel;
 	private JLabel iconlabel;
+	
+	private JButton okBtn;
 	
 	public AboutDialog() {
 		init();
@@ -36,14 +39,18 @@ public class AboutDialog extends JDialog {
 		copyrightlabel = makeLabel("(c) 2016 Nico Poblete", "copyrightlabel");
 		//iconlabel = makeLabel("Icons made by ", "iconlabel");
 		iconlabel = makeLabel("Icons made by http://www.aha-soft.com//", "iconlabel");
+	
+		okBtn = makeOKButton("OK", "okBtn");
 	}
 	
 	private void addComps() {
-		setLayout(new BorderLayout());
+		setLayout(new FlowLayout());
 		
 		add(label1, BorderLayout.NORTH);
 		add(copyrightlabel, BorderLayout.CENTER);
 		add(iconlabel, BorderLayout.SOUTH);
+		
+		add(okBtn);
 	}
 	
 	/**==============================
@@ -56,5 +63,20 @@ public class AboutDialog extends JDialog {
 		lbl.setName(name);
 		
 		return lbl;
+	}
+	
+	private JButton makeOKButton(String text, String name) {
+		JButton btn;
+		
+		btn = new JButton(text);
+		btn.setName(name);
+		
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
+		return btn;
 	}
 }

@@ -6,9 +6,11 @@ import java.awt.event.*;
 import java.io.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.filechooser.*;
 
-public class FruitMenuListener implements ActionListener {
+public class FruitMenuListener implements ActionListener,
+	ChangeListener {
 	
 	private FruitEditor fruitEditor;
 	private Map mapFile;
@@ -239,6 +241,13 @@ public class FruitMenuListener implements ActionListener {
 	
 	private void aboutAction() {
 		AboutDialog a = new AboutDialog();
+	}
+	
+	/**================================
+	// stateChanged(event) - Update any states changed.
+	//=================================**/
+	public void stateChanged(ChangeEvent e) {
+		
 	}
 	
 	/**===========================

@@ -9,6 +9,7 @@ import java.util.*;
 public class Map {
 	// CONSTANTS.
 	public static final int MAP_SIZE = 999;
+	public static final int OFFSET = 10;
 	
 	// DIMENSIONS.
 	private int mapWidth;
@@ -19,6 +20,10 @@ public class Map {
 	private int scaleFactor;
 	private int scaleWidth;
 	private int scaleHeight;
+	
+	// GRID DIMENSIONS.
+	private int gridWidth;
+	private int gridHeight;
 	
 	// TILES.
 	private Tile[][][] fruitTiles;
@@ -53,8 +58,24 @@ public class Map {
 		setScale(scaleFactor);
 	}
 	
+	public Map(int width, int height, int gw, int gh) {
+		mapWidth = width;
+		mapHeight = height;
+		mapDepth = 1;
+		gridWidth = gw;
+		gridHeight = gh;
+		scaleFactor = 1;
+		
+		initTiles();
+		setScale(scaleFactor);
+	}
+	
 	public void initTiles() { 
 		fruitTiles = new Tile[mapHeight][mapWidth][mapDepth];
+	}
+	
+	public void draw(Graphics g) {
+		
 	}
 	
 	public void setScale(int s) { 
@@ -68,6 +89,10 @@ public class Map {
 	public void setHeight(int h) { mapHeight = h; }
 	
 	public void setDepth(int d) { mapDepth = d; }
+	
+	public void setGridWidth(int gw) { gridWidth = gw; }
+	
+	public void setGridHeight(int gh) { gridHeight = gh; }
 	
 	public void setTile(int x, int y, Tile t) {
 		setTile(x,y,0,t); // set first layer by default
@@ -84,6 +109,10 @@ public class Map {
 	public int getCols() { return mapWidth; }
 	
 	public int getLayers() { return mapDepth; }
+	
+	public int getGridWidth() { return gridWidth; }
+	
+	public int getGridHeight() { return gridHeight; }
 	
 	public Tile getTile(int x, int y) {
 		return getTile(x,y,0); // get first layer by default
