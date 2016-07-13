@@ -2,23 +2,25 @@ package FruitEditor;
 
 import java.awt.event.*;
 
-public class FruitPanelListener implements MouseListener, MouseMotionListener, KeyListener 
+public class FruitPanelListener implements MouseListener, 
+MouseMotionListener, KeyListener 
 	{
 	
 	// FILES.
 	private FruitEditor fruitEditor;
 	private FruitPanel fruitPanel;
-	
-	// MOUSE COORDS.
-	private int mx, my;
 
 	public FruitPanelListener(FruitEditor f) {
 		fruitEditor = f;
-		fruitPanel = f.getPanel();
+		fruitPanel = fruitEditor.getPanel();
 	}
 	
 	public void mouseMoved(MouseEvent e) {
+		MapPanel mapPanel = getMapPanel();
+		//TilePanel tilePanel = fruitPanel.getTilePanel();
 		
+		mapPanel.mouseMoved(e);
+		//tilePanel.mouseMoved(e);
 	}
 	
 	public void mouseHovered(MouseEvent e) {
@@ -30,9 +32,9 @@ public class FruitPanelListener implements MouseListener, MouseMotionListener, K
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		MapPanel mp = getMapPanel();
+		MapPanel mapPanel = getMapPanel();
 		
-		mp.mouseClicked(e);
+		mapPanel.mouseClicked(e);
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -67,10 +69,6 @@ public class FruitPanelListener implements MouseListener, MouseMotionListener, K
 	public void keyTyped(KeyEvent e) {
 		
 	}
-
-	public int mouseX() { return mx; }
-	
-	public int mouseY() { return my; }
 	
 	public MapPanel getMapPanel() {
 		return fruitPanel.getMapPanel();

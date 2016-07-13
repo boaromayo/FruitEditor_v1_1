@@ -41,7 +41,8 @@ public class MapPanel extends JPanel {
 		mapWidth = map.getCols();
 		mapHeight = map.getRows();
 		
-		gridWidth = gridHeight = 24;
+		gridWidth = map.getGridWidth();
+		gridHeight = map.getGridHeight();
 		
 		mouseX = mouseY = 0;
 	
@@ -51,6 +52,16 @@ public class MapPanel extends JPanel {
 		addMouseMotionListener(fruitPanelListener);
 	}
 	
+	@Override
+	public void paint(Graphics g) {
+		super.paintComponent(g);
+		
+		Image img = createImage(viewport.getWidth(), viewport.getHeight());
+		Graphics g2 = img.getGraphics();
+		draw(g2);
+		g.drawImage(img, 0, 0, 
+				viewport.getWidth(), viewport.getHeight(), null);	
+	}
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.WHITE);
@@ -61,8 +72,7 @@ public class MapPanel extends JPanel {
 			drawGrid(g);
 		}
 		
-		drawCursor(g);
-		
+		drawCursor(g);	
 	}
 	
 	public void drawGrid(Graphics g) {
@@ -79,13 +89,19 @@ public class MapPanel extends JPanel {
 	
 	public void drawCursor(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
+		int mx = mouseX / gridWidth;
+		int my = mouseY / gridHeight;
 		
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		
-		g2.drawRect((int)mouseX/gridWidth - Map.OFFSET,
-				(int)mouseY/gridHeight - Map.OFFSET,
+		g2.drawRect(mx - Map.OFFSET,
+				my - Map.OFFSET,
 				gridWidth, gridHeight);
+	}
+	
+	public void update() {
+		repaint();
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -100,13 +116,14 @@ public class MapPanel extends JPanel {
 		mapWidth = m.getCols();
 		mapHeight = m.getRows();
 		
-		//gridWidth = m.getGridWidth();
-		//gridHeight = m.getGridHeight();
+		gridWidth = m.getGridWidth();
+		gridHeight = m.getGridHeight();
 		
 	}
 	
 	public void mouseMoved(MouseEvent e) {
-		
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 	
 	public void mouseClicked(MouseEvent e) {
@@ -122,6 +139,9 @@ public class MapPanel extends JPanel {
 	}
 	
 	private Graphics2D convertTo2d(Graphics g) {
-		return (Graphics2D)g;
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		return g2;
 	}
 }

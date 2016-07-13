@@ -45,6 +45,8 @@ public class NewDialog implements ActionListener {
 	private int gridWidth;
 	private int gridHeight;
 	
+	private Map map;
+	
 	public NewDialog() {
 		newdialog = new JDialog();
 		
@@ -136,6 +138,10 @@ public class NewDialog implements ActionListener {
 	/**==================================
 	// PROPERTY SETTER METHODS.
 	//===================================**/
+	public void setName() {
+		mapName = getMapName();
+	}
+	
 	public void setName(String name) {
 		mapName = name;
 	}
@@ -148,30 +154,26 @@ public class NewDialog implements ActionListener {
 		tileFilename = name;
 	}
 	
-	public void setWidth(int w) {
-		mapWidth = w;
+	public void setWidth() {
+		mapWidth = getWidth();
 	}
 	
-	public void setWidth(double w) {
-		mapWidth = (int)w;
+	public void setHeight() {
+		mapHeight = getHeight();
 	}
 	
-	public void setHeight(int h) {
-		mapHeight = h;
+	public void setGridWidth() {
+		gridWidth = getGridWidth();
 	}
 	
-	public void setHeight(double h) {
-		mapHeight = (int)h;
+	public void setGridHeight() {
+		gridHeight = getGridHeight();
 	}
 	
 	/**==================================
 	// PROPERTY GETTER METHODS.
 	//===================================**/
 	public String getMapName() {
-		return mapName;
-	}
-	
-	public String getMapText() {
 		return mapText.getText();
 	}
 	
@@ -183,40 +185,28 @@ public class NewDialog implements ActionListener {
 		return tileFilename;
 	}
 	
-	public String getTilesetText() {
+	public String getTileset() {
 		return tileText.getText();
 	}
 	
 	public int getWidth() {
-		return mapWidth;
-	}
-	
-	public int getWidthText() {
 		return (Integer)mapWidthText.getValue();
 	}
 	
 	public int getHeight() {
-		return mapHeight;
-	}
-	
-	public int getHeightText() {
 		return (Integer)mapHeightText.getValue();
 	}
 	
 	public int getGridWidth() {
-		return gridWidth;
-	}
-	
-	public int getGridWidthText() {
 		return (Integer)gridWidthText.getValue();
 	}
 	
 	public int getGridHeight() {
-		return gridHeight;
+		return (Integer)gridHeightText.getValue();
 	}
 	
-	public int getGridHeightText() {
-		return (Integer)gridHeightText.getValue();
+	public Map getMap() {
+		return map;
 	}
 	
 	/**==================================
@@ -298,11 +288,17 @@ public class NewDialog implements ActionListener {
 		
 		if (btn == okBtn) {
 			// if map name or tileset name is blank, put warning prompt
-			// otherwise, set map name 
-			if (getMapText().equals("\\s+") || getMapText() == null) {
+			// otherwise, set map name and set map dimensions up
+			if (getMapName().equals("\\s+") || getMapName() == null) {
 				
 			} else {
-				setName(getMapText());
+				map = new Map(getWidth(), getHeight());
+				
+				map.setName(getMapName());
+				map.setGridWidth(getGridWidth());
+				map.setGridHeight(getGridHeight());
+				
+				newdialog.dispose();
 			}
 		} else if (btn == cancelBtn) {
 			newdialog.dispose();

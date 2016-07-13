@@ -11,6 +11,9 @@ public class Map {
 	public static final int MAP_SIZE = 999;
 	public static final int OFFSET = 10;
 	
+	// NAME.
+	private String name;
+	
 	// DIMENSIONS.
 	private int mapWidth;
 	private int mapHeight;
@@ -75,13 +78,33 @@ public class Map {
 	}
 	
 	public void draw(Graphics g) {
+		int r = fruitTiles.length;
+		int c = fruitTiles[0].length;
 		
+		for (int i=0; i < r; i++) {
+			for (int j=0; j < c; j++) {
+				if (getTile(j,i) != null) {
+					g.drawImage(getTile(j,i).getImage(), 
+							j*scaleWidth, 
+							i*scaleHeight, 
+							j*scaleWidth + gridWidth, 
+							i*scaleHeight + gridHeight, 
+							null);
+				}
+			}
+		}
+	}
+	
+	public void setName(String n) {
+		name = n;
 	}
 	
 	public void setScale(int s) { 
 		scaleFactor = s;
-		scaleWidth = mapWidth * s;
-		scaleHeight = mapHeight * s;
+		scaleWidth = mapWidth * scaleFactor;
+		scaleHeight = mapHeight * scaleFactor;
+		gridWidth *= scaleFactor;
+		gridHeight *= scaleFactor;
 	}
 	
 	public void setWidth(int w) { mapWidth = w; }
@@ -101,6 +124,8 @@ public class Map {
 	public void setTile(int x, int y, int z, Tile t) {
 		fruitTiles[y][x][z] = t;
 	}
+	
+	public String getName() { return name; }
 	
 	public int getScale() { return scaleFactor; }
 	

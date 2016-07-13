@@ -9,15 +9,21 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
 
+import java.util.*;
+
 public class FruitMenuListener implements ActionListener,
 	ChangeListener {
 	
 	private FruitEditor fruitEditor;
-	private Map mapFile;
+	private Map map;
+	
+	private Stack<ChangeEvent> actions;
 	
 	public FruitMenuListener(FruitEditor f) {
 		fruitEditor = f;
-		mapFile = f.getMap();
+		map = f.getMap();
+		
+		actions = new Stack<ChangeEvent>();
 	}
 	
 	/**==========================
@@ -42,21 +48,21 @@ public class FruitMenuListener implements ActionListener,
 		}
 		
 		// EDIT -> FIX item listeners.
-		else if (cmd.equals("Undo")) {
-			//undoAction();
-		} else if (cmd.equals("Redo")) {
-			//redoAction();
+		else if (cmd.equals("undo")) {
+			undo();
+		} else if (cmd.equals("redo")) {
+			redo();
 		}
 		
 		// EDIT item listeners
 		else if (cmd.equals("Cut")) {
-			//cutAction();
+			cutAction();
 		} else if (cmd.equals("Copy")) {
-			//copyAction();
+			copyAction();
 		} else if (cmd.equals("Paste")) {
-			//pasteAction();
+			pasteAction();
 		} else if (cmd.equals("Delete")) {
-			//deleteAction();
+			deleteAction();
 		}
 		
 		// VIEW -> GRID
@@ -143,15 +149,18 @@ public class FruitMenuListener implements ActionListener,
 	//===============================*/
 	private void newAction() {
 		// Load NEW dialog.
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				NewDialog n = new NewDialog();
-				mapFile = new Map(n.getWidth(), n.getHeight());
-			}
-		});
+		NewDialog n = new NewDialog();
+				
+		if (n.getMap() != null) {
+			map = n.getMap();
+			fruitEditor.setMap(map);
+			
+			fruitEditor.update();
+		}
 	}
 	
 	private void openAction() {
+		// Load OPEN dialog.
 		JFileChooser open = makeFileChooser();
 		
 		int confirm = open.showOpenDialog(null);
@@ -160,7 +169,7 @@ public class FruitMenuListener implements ActionListener,
 			File file = open.getSelectedFile();
 			
 			try {
-				readText(file);
+				readText(file); // read the map file
 				validate();
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to read file.");
@@ -178,10 +187,10 @@ public class FruitMenuListener implements ActionListener,
 			File file = save.getSelectedFile();
 			
 			try {
-				writeText(file);
+				writeText(file); // write onto the file
 				validate();
 				
-				//mapFile = file;
+				//map = file;
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to write file " + file);
 				e.printStackTrace();
@@ -212,11 +221,15 @@ public class FruitMenuListener implements ActionListener,
 	}
 	
 	private void undo() {
+		MapPanel mapPanel = fruitEditor.getMapPanel();
+		mapPanel.repaint();
+		
 		
 	}
 	
 	private void redo() {
-		
+		MapPanel mapPanel = fruitEditor.getMapPanel();
+		mapPanel.repaint();
 	}
 	
 	private void cutAction() {
@@ -247,7 +260,8 @@ public class FruitMenuListener implements ActionListener,
 	// stateChanged(event) - Update any states changed.
 	//=================================**/
 	public void stateChanged(ChangeEvent e) {
-		
+		// For any action taken, place in a stack of actions
+		actions.add(e);
 	}
 	
 	/**===========================
@@ -269,8 +283,7 @@ public class FruitMenuListener implements ActionListener,
 			int cols = Integer.parseInt(lines[0]);
 			int rows = Integer.parseInt(lines[1]);
 			
-			mapFile.setWidth(cols);
-			mapFile.setHeight(rows);
+			map = new Map(cols, rows);
 			
 			// Read the IDs of tiles next and store them in an int array
 			int [][] ids = new int[rows][cols];
@@ -287,8 +300,12 @@ public class FruitMenuListener implements ActionListener,
 				r++;
 			}
 			
-			// Convert id to tiles
 			
+			// Convert id to tiles
+			//Tile t = new Tile(ids[r][c]);
+			
+			fruitEditor.setMap(map);
+			fruitEditor.update();
 			
 			// Close reader to cleanup
 			reader.close();
@@ -305,11 +322,11 @@ public class FruitMenuListener implements ActionListener,
 				new BufferedWriter(new FileWriter(file)));
 		
 			// Write width and height
-			write.print(mapFile.getCols() + " ");
-			write.println(mapFile.getRows());
+			write.print(map.getCols() + " ");
+			write.println(map.getRows());
 			
 			// Write integer reps of tiles in for one layer only
-			int [][] ids = mapFile.getMapIntArray2();
+			int [][] ids = map.getMapIntArray2();
 			
 			for (int r = 0; r < ids.length; r++) {
 				for (int c = 0; c < ids[0].length; c++) {
@@ -358,6 +375,6 @@ public class FruitMenuListener implements ActionListener,
 			return;
 		}
 		
-		fruitEditor.getFrame().validate();
+		fruitEditor.validate();
 	}
 }

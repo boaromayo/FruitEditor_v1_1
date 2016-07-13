@@ -9,6 +9,7 @@ public class FruitEditor {
 	// CONSTANTS.
 	public static final int SCREEN_WIDTH = 960;
 	public static final int SCREEN_HEIGHT = 640;
+	public static final int FPS = 60;
 	
 	// PROPERTIES.
 	private boolean grid;
@@ -27,7 +28,10 @@ public class FruitEditor {
 	private FruitMenuListener fruitMenuListener;
 	
 	// MAP FILE
-	private Map mapFile;
+	private Map map;
+	
+	// TILESET FILE
+	//private Tileset tilesetFile;
 	
 	// MENU COMPONENTS: The Main Menu Bar
 	private JMenuBar menuBar;
@@ -178,9 +182,9 @@ public class FruitEditor {
 		helpMenu = new JMenu(menuName[5]);			// HELP
 			
 		// Disable other menus if no map is loaded.
-		//if (mapFile == null) {
+		if (map == null) {
 			disableMenus();
-		//}
+		}
 			
 		// Create menu shortcuts.
 		fileMenu.setMnemonic(menuName[0].charAt(0));
@@ -239,8 +243,8 @@ public class FruitEditor {
 		// Add in FILE ActionListeners
 		newItem.addActionListener(fruitMenuListener);
 		openItem.addActionListener(fruitMenuListener);
-		//saveItem.addActionListener(fruitMenuListener);
-		//saveAsItem.addActionListener(fruitMenuListener);
+		saveItem.addActionListener(fruitMenuListener);
+		saveAsItem.addActionListener(fruitMenuListener);
 		closeItem.addActionListener(fruitMenuListener);
 		
 		// Add in accelerator keys.
@@ -249,10 +253,10 @@ public class FruitEditor {
 		makeShortcut(saveItem, KeyEvent.VK_S, "CTRL");
 		
 		// Case for FILE -> SAVE and FILE -> SAVE AS
-		//if (mapFile == null) {
+		if (map == null) {
 			saveItem.setEnabled(false);
 			saveAsItem.setEnabled(false);
-		//}
+		}
 		
 		// Add in components.
 		fileMenu.add(newItem);
@@ -312,7 +316,7 @@ public class FruitEditor {
 		gridItem = new JCheckBoxMenuItem("Show/Hide Grid");			// VIEW -> GRID
 		
 		// Add in VIEW ActionListeners.
-		//gridItem.addActionListener(fruitMenuListener);
+		gridItem.addActionListener(fruitMenuListener);
 
 		// Set grid on.
 		gridItem.setState(true);
@@ -469,9 +473,9 @@ public class FruitEditor {
 		subToolbarSetup();
 		
 		// Disable tool buttons if no map is loaded.
-		//if (mapFile == null) {
+		if (map == null) {
 			disableTools();		
-		//}
+		}
 		
 		// add toolbar to toolbarPanel.
 		toolbarPanel.add(mainToolBar, BorderLayout.CENTER);
@@ -696,7 +700,7 @@ public class FruitEditor {
 	// setMap(m) - Set the map.
 	//=========================================**/
 	public void setMap(Map m) {
-		mapFile = m;
+		map = m;
 	}
 	
 	/**========================================
@@ -761,13 +765,41 @@ public class FruitEditor {
 	// getMap() - Get Map file. 
 	//=========================================**/
 	public Map getMap() {
-		return mapFile;
+		return map;
 	}
+	
+	/**========================================
+	// getMapPanel() - Get MapPanel.
+	//=========================================**/
+	public MapPanel getMapPanel() {
+		return fruitPanel.getMapPanel();
+	}
+	
+	/**========================================
+	// getTilePanel() - Get TilePanel.
+	//=========================================**/
+	/*public MapPanel getTilePanel() {
+		return fruitPanel.getTilePanel();
+	}*/
 	
 	/**=======================================
 	// gridOn() - Check if grid on.
 	//========================================**/
 	public boolean gridOn() { return (grid == true); }
+	
+	/**=======================================
+	// UPDATE METHOD. 
+	//========================================**/
+	public void update() {
+		menuBar.updateUI();
+		mainToolBar.updateUI();
+		fruitPanel.update();
+		fruitFrame.repaint();
+	}
+	
+	public void validate() {
+		fruitFrame.validate();
+	}
 	
 	/**========================================
 	// HELPER METHODS.
