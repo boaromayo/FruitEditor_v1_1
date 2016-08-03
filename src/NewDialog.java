@@ -47,10 +47,28 @@ public class NewDialog implements ActionListener {
 	
 	private Map map;
 	
-	public NewDialog() {
-		newdialog = new JDialog();
+	public NewDialog(JFrame frame) {
+		String title = "Create New Map";
+		
+		newdialog = new JDialog(frame);
 		
 		init();
+		
+		// Add components to dialog
+		addComps();
+		
+		// Set specs for new map dialog.
+		newdialog.pack();
+		
+		newdialog.setTitle(title);
+		newdialog.setSize(WIDTH,HEIGHT);
+
+		newdialog.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
+		newdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		newdialog.setLocationRelativeTo(null);
+		newdialog.setVisible(true);
+		newdialog.setFocusable(true);
+		newdialog.setResizable(false);
 	}
 	
 	public void init() {
@@ -79,20 +97,6 @@ public class NewDialog implements ActionListener {
 		browseBtn 	= makeButton("B", "../img/openfile.png", "browseBtn"); // Load open dialog to browse tileset files (*.png, *.jpg)
 		okBtn  	   	= makeButton("OK", "okBtn");
 		cancelBtn  	= makeButton("Cancel", "cancelBtn");
-		
-		// Add components to dialog
-		addComps();
-		
-		// Set specs for new map dialog.
-		newdialog.pack();
-		
-		newdialog.setTitle("Create New Map");
-		newdialog.setSize(WIDTH,HEIGHT);
-		newdialog.setLocationRelativeTo(null);
-		newdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		newdialog.setVisible(true);
-		newdialog.setFocusable(true);
-		newdialog.setResizable(false);
 	}
 	
 	/**==================================
@@ -133,6 +137,13 @@ public class NewDialog implements ActionListener {
 		btn.add(cancelBtn); // (1,3)
 		
 		newdialog.add(btn);
+	}
+	
+	/**==================================
+	// dispose() - Dispose dialog.
+	//===================================**/
+	public void dispose() {
+		newdialog.dispose();
 	}
 	
 	/**==================================
@@ -298,10 +309,10 @@ public class NewDialog implements ActionListener {
 				map.setGridWidth(getGridWidth());
 				map.setGridHeight(getGridHeight());
 				
-				newdialog.dispose();
+				dispose();
 			}
 		} else if (btn == cancelBtn) {
-			newdialog.dispose();
+			dispose();
 		} else if (btn == browseBtn) {
 			JFileChooser open = new JFileChooser();
 			

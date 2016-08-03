@@ -149,14 +149,18 @@ public class FruitMenuListener implements ActionListener,
 	//===============================*/
 	private void newAction() {
 		// Load NEW dialog.
-		NewDialog n = new NewDialog();
+		NewDialog n = new NewDialog(fruitEditor.getFrame());
 				
 		if (n.getMap() != null) {
 			map = n.getMap();
+
 			fruitEditor.setMap(map);
 			
 			fruitEditor.update();
+			
+			n.dispose();
 		}
+		
 	}
 	
 	private void openAction() {
@@ -253,7 +257,7 @@ public class FruitMenuListener implements ActionListener,
 	}
 	
 	private void aboutAction() {
-		AboutDialog a = new AboutDialog();
+		AboutDialog a = new AboutDialog(fruitEditor.getFrame());
 	}
 	
 	/**================================

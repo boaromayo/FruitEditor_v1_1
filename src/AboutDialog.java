@@ -6,32 +6,42 @@ import java.awt.image.*;
 
 import javax.swing.*;
 
-public class AboutDialog extends JDialog {
+public class AboutDialog {
+	// DIALOG.
+	private JDialog aboutdialog;
 	
+	// DIMENSIONS.
 	private final int WIDTH = 256;
 	private final int HEIGHT = 128;
 	
+	// VARIABLES.
 	private JLabel label1;
 	private JLabel copyrightlabel;
 	private JLabel iconlabel;
 	
 	private JButton okBtn;
 	
-	public AboutDialog() {
+	public AboutDialog(JFrame frame) {
+		String title = "About FruitEditor";
+		
+		aboutdialog = new JDialog(frame);
+		
 		init();
 		
 		addComps();
 	
-		pack();
+		aboutdialog.pack();
 		
-		setTitle("About FruitEditor");
-		setSize(WIDTH,HEIGHT);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		setResizable(false);
-		setAlwaysOnTop(true);
-		setFocusable(true);
+		aboutdialog.setTitle(title);
+		aboutdialog.setSize(WIDTH,HEIGHT);
+		
+		aboutdialog.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
+		aboutdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		aboutdialog.setLocationRelativeTo(null);
+		aboutdialog.setVisible(true);
+		aboutdialog.setResizable(false);
+		aboutdialog.setAlwaysOnTop(true);
+		aboutdialog.setFocusable(true);
 	}
 	
 	private void init() {
@@ -44,13 +54,13 @@ public class AboutDialog extends JDialog {
 	}
 	
 	private void addComps() {
-		setLayout(new FlowLayout());
+		aboutdialog.setLayout(new FlowLayout());
 		
-		add(label1, BorderLayout.NORTH);
-		add(copyrightlabel, BorderLayout.CENTER);
-		add(iconlabel, BorderLayout.SOUTH);
+		aboutdialog.add(label1, BorderLayout.NORTH);
+		aboutdialog.add(copyrightlabel, BorderLayout.CENTER);
+		aboutdialog.add(iconlabel, BorderLayout.SOUTH);
 		
-		add(okBtn);
+		aboutdialog.add(okBtn);
 	}
 	
 	/**==============================
@@ -73,7 +83,7 @@ public class AboutDialog extends JDialog {
 		
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				aboutdialog.dispose();
 			}
 		});
 		

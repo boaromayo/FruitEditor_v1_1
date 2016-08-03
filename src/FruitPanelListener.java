@@ -9,16 +9,18 @@ MouseMotionListener, KeyListener
 	// FILES.
 	private FruitEditor fruitEditor;
 	private FruitPanel fruitPanel;
+	
+	// PANELS.
+	MapPanel mapPanel;
 
 	public FruitPanelListener(FruitEditor f) {
 		fruitEditor = f;
 		fruitPanel = fruitEditor.getPanel();
+		
+		mapPanel = getMapPanel();
 	}
 	
 	public void mouseMoved(MouseEvent e) {
-		MapPanel mapPanel = getMapPanel();
-		//TilePanel tilePanel = fruitPanel.getTilePanel();
-		
 		mapPanel.mouseMoved(e);
 		//tilePanel.mouseMoved(e);
 	}
@@ -32,21 +34,15 @@ MouseMotionListener, KeyListener
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		MapPanel mapPanel = getMapPanel();
-		
 		mapPanel.mouseClicked(e);
 	}
 
 	public void mousePressed(MouseEvent e) {
-		MapPanel mp = getMapPanel();
-		
-		mp.mousePressed(e);
+		mapPanel.mousePressed(e);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		MapPanel mp = getMapPanel();
-		
-		mp.mouseReleased(e);
+		mapPanel.mouseReleased(e);
 		
 	}
 	
