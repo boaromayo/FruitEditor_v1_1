@@ -2,9 +2,13 @@ package FruitEditor;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import java.beans.*;
+
 import javax.swing.*;
-import javax.swing.event.*;
+
 import java.io.*;
+
 import java.util.*;
 
 public class MapPanel extends JPanel {
@@ -14,8 +18,11 @@ public class MapPanel extends JPanel {
 	// MAP.
 	private Map map;
 	
-	// LISTENER.
+	// EVENT LISTENER.
 	private FruitPanelListener fruitPanelListener;
+	
+	// VIEWPORT.
+	private JViewport viewport;
 	
 	// DIMENSIONS.
 	private int mapWidth;
@@ -28,9 +35,8 @@ public class MapPanel extends JPanel {
 	// MOUSE COORDS.
 	private int mouseX;
 	private int mouseY;
-	
-	// VIEWPORT.
-	private JViewport viewport;
+	private int oldmouseX;
+	private int oldmouseY;
 	
 	
 	public MapPanel(FruitEditor f) {
@@ -50,6 +56,7 @@ public class MapPanel extends JPanel {
 		
 		addMouseListener(fruitPanelListener);
 		addMouseMotionListener(fruitPanelListener);
+		addPropertyChangeListener(fruitPanelListener);
 	}
 	
 	@Override
@@ -75,8 +82,8 @@ public class MapPanel extends JPanel {
 		drawCursor(g);	
 	}
 	
-	public void drawGrid(Graphics g) {
-		g.setColor(Color.LIGHT_GRAY);
+	private void drawGrid(Graphics g) {
+		g.setColor(Color.GRAY);
 		
 		for (int r=0; r < mapHeight; r++) {
 			g.drawLine(0, r*mapHeight, mapWidth*map.getScale(), r*mapHeight);
@@ -87,7 +94,7 @@ public class MapPanel extends JPanel {
 		}
 	}
 	
-	public void drawCursor(Graphics g) {
+	private void drawCursor(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
 		int mx = mouseX / gridWidth;
 		int my = mouseY / gridHeight;
@@ -101,7 +108,7 @@ public class MapPanel extends JPanel {
 	}
 	
 	public void update() {
-		repaint();
+		
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -121,12 +128,27 @@ public class MapPanel extends JPanel {
 		
 	}
 	
+	public void propertyChange(PropertyChangeEvent e) {
+		
+	}
+	
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
+		
 	}
 	
 	public void mouseClicked(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+		int mx = mouseX / gridWidth;
+		int my = mouseY / gridHeight;
+		
+		
+		
+	}
+	
+	public void mouseDragged(MouseEvent e) {
 		
 	}
 	
@@ -135,7 +157,8 @@ public class MapPanel extends JPanel {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		
+		oldmouseX = e.getX();
+		oldmouseY = e.getY();
 	}
 	
 	private Graphics2D convertTo2d(Graphics g) {

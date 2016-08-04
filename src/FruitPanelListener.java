@@ -1,9 +1,11 @@
 package FruitEditor;
 
+import java.beans.*;
+
 import java.awt.event.*;
 
 public class FruitPanelListener implements MouseListener, 
-MouseMotionListener, KeyListener 
+MouseMotionListener, KeyListener, PropertyChangeListener 
 	{
 	
 	// FILES.
@@ -30,7 +32,7 @@ MouseMotionListener, KeyListener
 	}
 	
 	public void mouseDragged(MouseEvent e) {
-
+		mapPanel.mouseDragged(e);
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -64,6 +66,10 @@ MouseMotionListener, KeyListener
 	
 	public void keyTyped(KeyEvent e) {
 		
+	}
+	
+	public void propertyChange(PropertyChangeEvent e) {
+		mapPanel.propertyChange(e);
 	}
 	
 	public MapPanel getMapPanel() {

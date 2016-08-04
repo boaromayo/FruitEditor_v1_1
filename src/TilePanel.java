@@ -2,13 +2,136 @@ package FruitEditor;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import java.beans.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
+import java.io.*;
+
 public class TilePanel extends JPanel {
+	// FILES.
+	private FruitEditor fruitEditor;
 	
-	public TilePanel() {
+	// EVENT LISTENER.
+	private FruitPanelListener fruitPanelListener;
+	
+	// VIEWPORT.
+	private JViewport viewport;
+	
+	// DIMENSIONS.
+	private int gridWidth;
+	private int gridHeight;
+	
+	// MOUSE COORDS.
+	private int mouseX;
+	private int mouseY;
+	private int oldmouseX;
+	private int oldmouseY;
+	
+	public TilePanel(FruitEditor f) {
+		fruitEditor = f;
+	}
+	
+	public void openTileset() {
+		try {
+			
+		} catch (Exception e) {
+			System.err.println("ERROR: Cannot load tileset. Reason: " + e.getMessage());
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paintComponent(g);
+		
+		Image img = createImage(viewport.getWidth(), viewport.getHeight());
+		Graphics g2 = img.getGraphics();
+		draw(g2);
+		g.drawImage(img, 0, 0,
+				viewport.getWidth(), viewport.getHeight(), null);
+		
+	}
+	
+	public void draw(Graphics g) {
+		
+		
+		drawGrid(g);
+	
+		drawCursor(g);
+	}
+	
+	private void drawGrid(Graphics g) {
+		int viewWidth = viewport.getWidth();
+		int viewHeight = viewport.getHeight();
+		
+		g.setColor(Color.GRAY);
+		
+		
+		for (int r=0; r < viewHeight; r++) {
+			g.drawLine(0, r*viewHeight, gridWidth, r*viewHeight);
+		}
+		
+		for (int c=0; c < viewWidth; c++) {
+			g.drawLine(c*viewWidth, 0, c*viewWidth, gridHeight);
+		}
+	}
+	
+	private void drawCursor(Graphics g) {
+		int mx = mouseX / gridWidth;
+		int my = mouseY / gridHeight;
+		
+		Graphics2D g2 = convertTo2D(g);
+		
+		g2.setStroke(new BasicStroke(2));
+		g2.setColor(Color.BLACK);
+		
+		g2.drawRect(mx, my, gridWidth, gridHeight);
+	}
+	
+	public void update() {
+		
+	}
+	
+	public void setViewport(JViewport vp) {
+		viewport = vp;
+	}
+	
+	public void propertyChange(PropertyChangeEvent e) {
+		
+	}
+	
+	public void mouseMoved(MouseEvent e) {
+		
+	}
+	
+	public void mouseHovered(MouseEvent e) {
+		
+	}
+	
+	public void mouseClicked(MouseEvent e) {
+		
+	}
+	
+	public void mouseDragged(MouseEvent e) {
+		
+	}
+	
+	public void mousePressed(MouseEvent e) {
+		
+	}
+
+	public void mouseReleased(MouseEvent e) {
 	
 	}
 	
+	public Graphics2D convertTo2D(Graphics g) {
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		return g2;
+	}
 }
