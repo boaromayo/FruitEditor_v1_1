@@ -14,17 +14,19 @@ MouseMotionListener, KeyListener, PropertyChangeListener
 	
 	// PANELS.
 	MapPanel mapPanel;
+	TilePanel tilePanel;
 
 	public FruitPanelListener(FruitEditor f) {
 		fruitEditor = f;
 		fruitPanel = fruitEditor.getPanel();
 		
 		mapPanel = getMapPanel();
+		tilePanel = getTilePanel();
 	}
 	
 	public void mouseMoved(MouseEvent e) {
 		mapPanel.mouseMoved(e);
-		//tilePanel.mouseMoved(e);
+		tilePanel.mouseMoved(e);
 	}
 	
 	public void mouseHovered(MouseEvent e) {
@@ -74,5 +76,9 @@ MouseMotionListener, KeyListener, PropertyChangeListener
 	
 	public MapPanel getMapPanel() {
 		return fruitPanel.getMapPanel();
+	}
+	
+	public TilePanel getTilePanel() {
+		return fruitPanel.getTilePanel();
 	}
 }

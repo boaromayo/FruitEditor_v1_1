@@ -70,16 +70,20 @@ public class MapPanel extends JPanel {
 				viewport.getWidth(), viewport.getHeight(), null);	
 	}
 	
-	public void draw(Graphics g) {
-		g.setColor(Color.WHITE);
+	public void draw(Graphics g) {	
+		if (map == null) {
+			g.setColor(Color.WHITE);
 		
-		map.draw(g);
+			map.draw(g);
 		
-		if (fruitEditor.gridOn()) {
-			drawGrid(g);
+			if (fruitEditor.gridOn()) {
+				drawGrid(g);
+			}
+		
+			drawCursor(g);	
+		} else {
+			g.setColor(Color.GRAY);
 		}
-		
-		drawCursor(g);	
 	}
 	
 	private void drawGrid(Graphics g) {

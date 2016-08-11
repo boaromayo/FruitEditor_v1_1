@@ -160,6 +160,9 @@ public class FruitEditor {
 		fruitFrame.setResizable(false);
 	}
 	
+	/**================================
+	// panelSetup() - Set up main panels.
+	//================================**/
 	private void panelSetup() {
 	    fruitPanel = new FruitPanel(this);
 	    
@@ -167,7 +170,7 @@ public class FruitEditor {
 	}
 	
 	/**================================
-	// menuSetup() - Set up main menu and main panel.
+	// menuSetup() - Set up main menus and menu toolbar.
 	//================================**/
 	private void menuSetup() {
 		// Assign main menu bar.
@@ -457,7 +460,7 @@ public class FruitEditor {
 	}
 	
 	/**=========================================
-	// toolbarSetup() - Setup the tool buttons for toolbar.
+	// toolbarSetup() - Setup the toolbar buttons.
 	//=========================================**/
 	private void toolbarSetup() {
 		// Initialize toolbar panel.

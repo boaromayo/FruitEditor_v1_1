@@ -57,8 +57,6 @@ public class TilePanel extends JPanel {
 	}
 	
 	public void draw(Graphics g) {
-		
-		
 		drawGrid(g);
 	
 		drawCursor(g);

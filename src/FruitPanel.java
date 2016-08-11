@@ -14,10 +14,10 @@ public class FruitPanel extends JPanel implements Runnable {
 	
 	// PANELS.
 	private MapPanel mapPanel;
-	//private TilePanel tilePanel;
+	private TilePanel tilePanel;
 	
 	// PANEL PANES.
-	//JScrollPane tileScrollPane;
+	JScrollPane tileScrollPane;
 	//JTabbedPane tileTabbedPane;
 	private JScrollPane mapScrollPane;
 	
@@ -39,25 +39,23 @@ public class FruitPanel extends JPanel implements Runnable {
 		
 		if (fruitEditor.getMap() != null) {
 			mapPanel = new MapPanel(fruitEditor);
-			//tilePanel = new TilePanel(fruitEditor);
+			tilePanel = new TilePanel(fruitEditor);
 			//mapListPanel = new MapListPanel();
 	
-			//tileScrollPane = new JScrollPane(tilePanel);
+			tileScrollPane = new JScrollPane(tilePanel);
 			//tileTabbedPane = new JTabbedPane();
 			mapScrollPane = new JScrollPane(mapPanel);
 		
 			mapPanel.setViewport(mapScrollPane.getViewport());
-			//tilePanel.setViewport(tileScrollPane.getViewport());
-			
+			tilePanel.setViewport(tileScrollPane.getViewport());
 			
 			//leftPanel.setLayout(new FlowLayout());
 			
 			//rightPanel.setLayout(new BorderLayout());
 		
-			//leftPanel.add(tilePanel);
+			leftPanel.add(tilePanel);
 			//leftPanel.add(mapListPanel);
 			rightPanel.add(mapPanel);
-			
 			
 			add(leftPanel, BorderLayout.WEST);
 			add(rightPanel, BorderLayout.CENTER);
@@ -121,15 +119,15 @@ public class FruitPanel extends JPanel implements Runnable {
 		return null;
 	}
 	
-	/*public TilePanel getTilePanel() {
+	public TilePanel getTilePanel() {
 		if (tilePanel != null)
 			return tilePanel;
 		
 		return null;
-	}*/
+	}
 	
 	public void update() {
 		mapPanel.update();
-		//tilePanel.update();
+		tilePanel.update();
 	}
 }
