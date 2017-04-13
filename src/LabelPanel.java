@@ -43,7 +43,7 @@ public class LabelPanel extends JPanel {
 			mapWidth = fruitEditor.getMap().getCols();
 			mapHeight = fruitEditor.getMap().getRows();
 			
-			currentMap.setText(mapName + "(" + mapWidth + "x" + mapHeight + ")");
+			currentMap.setText(mapName + " (" + mapWidth + "x" + mapHeight + ")");
 			//cursorPosition.setText("(" + mapX + "," + mapY + ")");
 		} else {
 			currentMap.setText("No map selected");
