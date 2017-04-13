@@ -20,6 +20,7 @@ public class FruitEditor {
 	// PANELS.
 	private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
+	private LabelPanel labelPanel;
 	
 	// MENU NAMES.
 	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Help"};
@@ -155,7 +156,7 @@ public class FruitEditor {
 		
 		fruitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fruitFrame.setLocationRelativeTo(null);
-		fruitFrame.setIconImage(FruitImgLoader.loadBufferedImage("", 20, 20));
+		fruitFrame.setIconImage(FruitImgLoader.get().loadBufferedImage("", 20, 20));
 		fruitFrame.setVisible(true);
 		fruitFrame.setResizable(false);
 	}
@@ -165,8 +166,10 @@ public class FruitEditor {
 	//================================**/
 	private void panelSetup() {
 	    fruitPanel = new FruitPanel(this);
+	    labelPanel = new LabelPanel(this);
 	    
 	    fruitFrame.add(fruitPanel, BorderLayout.CENTER);
+	    fruitFrame.add(labelPanel, BorderLayout.SOUTH);
 	}
 	
 	/**================================
@@ -491,30 +494,32 @@ public class FruitEditor {
 	// disableTools() - Disable tool buttons.
 	//=========================================**/
 	private void disableTools() {
-		saveBtn.setEnabled(false);
+		if (map == null) {
+			saveBtn.setEnabled(false);
 		
-		cutBtn.setEnabled(false);
-		copyBtn.setEnabled(false);
-		pasteBtn.setEnabled(false);
-		deleteBtn.setEnabled(false);
+			cutBtn.setEnabled(false);
+			copyBtn.setEnabled(false);
+			pasteBtn.setEnabled(false);
+			deleteBtn.setEnabled(false);
 		
-		undoBtn.setEnabled(false);
-		redoBtn.setEnabled(false);
+			undoBtn.setEnabled(false);
+			redoBtn.setEnabled(false);
 		
-		gridBtn.setEnabled(false);
+			gridBtn.setEnabled(false);
 		
-		oneBtn.setEnabled(false);
-		twoBtn.setEnabled(false);
-		fourBtn.setEnabled(false);
-		eightBtn.setEnabled(false);
+			oneBtn.setEnabled(false);
+			twoBtn.setEnabled(false);
+			fourBtn.setEnabled(false);
+			eightBtn.setEnabled(false);
 		
-		mapModeBtn.setEnabled(false);
-		eventModeBtn.setEnabled(false);
+			mapModeBtn.setEnabled(false);
+			eventModeBtn.setEnabled(false);
 		
-		pencilBtn.setEnabled(false);
-		rectBtn.setEnabled(false);
-		circleBtn.setEnabled(false);
-		fillBtn.setEnabled(false);
+			pencilBtn.setEnabled(false);
+			rectBtn.setEnabled(false);
+			circleBtn.setEnabled(false);
+			fillBtn.setEnabled(false);
+		}
 		
 		//cherryBtn.setEnabled(false);
 		//orangeBtn.setEnabled(false);
@@ -797,6 +802,7 @@ public class FruitEditor {
 		menuBar.updateUI();
 		mainToolBar.updateUI();
 		fruitPanel.update();
+		labelPanel.update();
 		fruitFrame.repaint();
 	}
 	
@@ -821,7 +827,7 @@ public class FruitEditor {
 		JButton btn;
 		// Add in button, make text if icon unavailable.
 		if (icon != null) {
-			btn = new JButton(FruitImgLoader.loadIconImage(icon));
+			btn = new JButton(FruitImgLoader.get().loadIconImage(icon));
 		} else {
 			btn = new JButton(text);
 		}
@@ -847,7 +853,7 @@ public class FruitEditor {
 		// Add in toggle btn, make text if icon unavailable.
 		if (toggle) {
 			try {
-				//btn = new JToggleButton(FruitImgLoader.loadIconImage(icon));
+				//btn = new JToggleButton(FruitImgLoader.get().loadIconImage(icon));
 			} catch (Exception e) {
 				//btn = new JToggleButton(text);
 			}

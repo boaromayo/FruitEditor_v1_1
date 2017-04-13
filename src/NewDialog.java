@@ -73,8 +73,8 @@ public class NewDialog implements ActionListener {
 	
 	public void init() {
 		// Initialize dimensions.
-		mapWidth = 10;
-		mapHeight = 10;
+		mapWidth = 12;
+		mapHeight = 12;
 		gridWidth = gridHeight = 24;
 		
 		// Initialize labels.
@@ -280,7 +280,7 @@ public class NewDialog implements ActionListener {
 		
 		// Add button, load text if unable to load icon.
 		try {
-			btn = new JButton(FruitImgLoader.loadIconImage(icon));
+			btn = new JButton(FruitImgLoader.get().loadIconImage(icon));
 		} catch (Exception e) {
 			btn = new JButton(text);
 		}
