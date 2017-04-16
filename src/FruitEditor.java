@@ -639,11 +639,6 @@ public class FruitEditor {
 		newBtn.addActionListener(fruitListener);
 		openBtn.addActionListener(fruitListener);
 		//saveBtn.addActionListener(fruitListener);
-		
-		// Add components to hashmap.
-		hash.put(newBtn.getName(), newBtn);
-		hash.put(openBtn.getName(), openBtn);
-		hash.put(saveBtn.getName(), saveBtn);
 	}
 	
 	private void editToolSetup() {
@@ -661,12 +656,6 @@ public class FruitEditor {
 		mainToolBar.add(deleteBtn);
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
-		
-		// Add components to hashmap.
-		hash.put(cutBtn.getName(), cutBtn);
-		hash.put(copyBtn.getName(), copyBtn);
-		hash.put(pasteBtn.getName(), pasteBtn);
-		hash.put(deleteBtn.getName(), deleteBtn);
 	}
 	
 	private void fixToolSetup() {
@@ -681,14 +670,6 @@ public class FruitEditor {
 		mainToolBar.add(redoBtn);
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
-		
-		// Add components to hashmap.
-		hash.put(undoBtn.getName(), undoBtn);
-		hash.put(redoBtn.getName(), redoBtn);
-		
-		// Print out data.
-		System.out.println(undoBtn.getName() + " in hash");
-		System.out.println(redoBtn.getName() + " in hash");
 	}
 	
 	private void viewToolSetup() {
@@ -707,9 +688,6 @@ public class FruitEditor {
 		mainToolBar.add(gridBtn);
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
-		
-		// Add component to hashmap.
-		hash.put(gridBtn.getName(), gridBtn);
 	}
 	
 	private void scaleToolSetup() {
@@ -737,18 +715,6 @@ public class FruitEditor {
 		mainToolBar.add(eightBtn);
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
-		
-		// Add components to hashmap.
-		hash.put(oneBtn.getName(), oneBtn);
-		hash.put(twoBtn.getName(), twoBtn);
-		hash.put(fourBtn.getName(), fourBtn);
-		hash.put(eightBtn.getName(), eightBtn);
-		
-		// Print out data.
-		System.out.println(oneBtn.getName() + " in hash");
-		System.out.println(twoBtn.getName() + " in hash");
-		System.out.println(fourBtn.getName() + " in hash");
-		System.out.println(eightBtn.getName() + " in hash");
 	}
 	
 	private void modeToolSetup() {
@@ -770,10 +736,6 @@ public class FruitEditor {
 		mainToolBar.add(eventModeBtn);
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
-		
-		// Add components to hashmap.
-		hash.put(mapModeBtn.getName(), mapModeBtn);
-		hash.put(eventModeBtn.getName(), eventModeBtn);
 	}
 	
 	private void drawToolSetup() {
@@ -801,12 +763,6 @@ public class FruitEditor {
 		mainToolBar.add(fillBtn);
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
-		
-		// Add components to hashmap.
-		hash.put(pencilBtn.getName(), pencilBtn);
-		hash.put(rectBtn.getName(), rectBtn);
-		hash.put(circleBtn.getName(), circleBtn);
-		hash.put(fillBtn.getName(), fillBtn);
 	}
 	
 	/*private void toolkitToolSetup() {
@@ -842,7 +798,10 @@ public class FruitEditor {
 	public JComponent getComponent(String text) {
 		JComponent comp = hash.get(text);
 		
-		return comp;
+		if (comp != null)
+			return comp;
+	
+		return null;
 	}
 	
 	/**========================================
@@ -863,14 +822,20 @@ public class FruitEditor {
 	// getMap() - Get Map file. 
 	//=========================================**/
 	public Map getMap() {
-		return map;
+		if (map != null)
+			return map;
+		
+		return null;
 	}
 	
 	/**========================================
 	// getMapPanel() - Get MapPanel.
 	//=========================================**/
 	public MapPanel getMapPanel() {
-		return fruitPanel.getMapPanel();
+		if (fruitPanel.getMapPanel() != null)
+			return fruitPanel.getMapPanel();
+		
+		return null;
 	}
 	
 	/**========================================
@@ -924,6 +889,13 @@ public class FruitEditor {
 		// Add button ActionListener.
 		//btn.addActionListener(fruitListener);
 		
+		// Add button to hashmap.
+		hash.put(btn.getName(), btn);
+		
+		// Print to see if button is in hashmap.
+		if (hash.containsValue(btn))
+			System.out.println(btn.getName() + " is in hash");
+		
 		// Ensure the buttons are added in toolbar.
 		System.out.println(btn.getName() + " added in toolbar");
 		
@@ -949,6 +921,13 @@ public class FruitEditor {
 	
 			// Add button ActionListener.
 			btn.addActionListener(fruitListener);
+			
+			// Add button to hashmap.
+			hash.put(btn.getName(), btn);
+			
+			// Print to see if button is in hashmap.
+			if (hash.containsValue(btn))
+				System.out.println(btn.getName() + " is in hash");
 			
 			// Ensure the buttons are added in toolbar.
 			System.out.println(btn.getName() + " added in toolbar");
