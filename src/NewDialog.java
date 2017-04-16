@@ -45,7 +45,7 @@ public class NewDialog implements ActionListener {
 	private int gridWidth;
 	private int gridHeight;
 	
-	private Map map;
+	private MapPanel mapPanel;
 	
 	public NewDialog(JFrame frame) {
 		String title = "Create New Map";
@@ -216,10 +216,6 @@ public class NewDialog implements ActionListener {
 		return (Integer)gridHeightText.getValue();
 	}
 	
-	public Map getMap() {
-		return map;
-	}
-	
 	/**==================================
 	// HELPER METHODS.
 	//===================================**/
@@ -303,11 +299,8 @@ public class NewDialog implements ActionListener {
 			if (getMapName().equals("\\s+") || getMapName() == null) {
 				
 			} else {
-				map = new Map(getWidth(), getHeight());
-				
-				map.setName(getMapName());
-				map.setGridWidth(getGridWidth());
-				map.setGridHeight(getGridHeight());
+				mapPanel.setMap(new Map(getWidth(), getHeight(), 
+						getGridWidth(), getGridHeight()));
 				
 				dispose();
 			}

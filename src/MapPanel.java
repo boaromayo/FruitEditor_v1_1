@@ -19,7 +19,7 @@ public class MapPanel extends JPanel {
 	private Map map;
 	
 	// EVENT LISTENER.
-	private FruitPanelListener fruitPanelListener;
+	private FruitListener fruitListener;
 	
 	// VIEWPORT.
 	private JViewport viewport;
@@ -32,6 +32,9 @@ public class MapPanel extends JPanel {
 	private int gridWidth;
 	private int gridHeight;
 	
+	// GRID ON/OFF.
+	private boolean grid = true;
+	
 	// MOUSE COORDS.
 	private int mouseX;
 	private int mouseY;
@@ -43,7 +46,7 @@ public class MapPanel extends JPanel {
 		fruitEditor = f;
 		map = f.getMap();
 		
-		fruitPanelListener = new FruitPanelListener(fruitEditor);
+		fruitListener = new FruitListener(fruitEditor);
 		mapWidth = map.getCols();
 		mapHeight = map.getRows();
 		
@@ -54,9 +57,9 @@ public class MapPanel extends JPanel {
 	
 		setLayout(new FlowLayout());
 		
-		addMouseListener(fruitPanelListener);
-		addMouseMotionListener(fruitPanelListener);
-		addPropertyChangeListener(fruitPanelListener);
+		addMouseListener(fruitListener);
+		addMouseMotionListener(fruitListener);
+		addPropertyChangeListener(fruitListener);
 	}
 	
 	@Override
@@ -76,7 +79,7 @@ public class MapPanel extends JPanel {
 		
 			map.draw(g);
 		
-			if (fruitEditor.gridOn()) {
+			if (grid) {
 				drawGrid(g);
 			}
 		
@@ -88,13 +91,15 @@ public class MapPanel extends JPanel {
 	
 	private void drawGrid(Graphics g) {
 		g.setColor(Color.GRAY);
+		int r, c; // Init counters for grid drawing. 
+		int scale = map.getScale(); // Scale factor based on zoom view.
 		
-		for (int r=0; r < mapHeight; r++) {
-			g.drawLine(0, r*mapHeight, mapWidth*map.getScale(), r*mapHeight);
+		for (r=0; r < mapHeight; r++) {
+			g.drawLine(0, r*mapHeight*map.getScale(), mapWidth*map.getScale(), r*mapHeight*map.getScale());
 		}
 		
-		for (int c=0; c < mapWidth; c++) {
-			g.drawLine(c*mapWidth, 0, c*mapWidth, mapHeight*map.getScale());
+		for (c=0; c < mapWidth; c++) {
+			g.drawLine(c*mapWidth*map.getScale(), 0, c*mapWidth*map.getScale(), mapHeight*map.getScale());
 		}
 	}
 	
@@ -112,14 +117,14 @@ public class MapPanel extends JPanel {
 	}
 	
 	public void update() {
-		
+		repaint();
 	}
 	
 	public void setViewport(JViewport vp) {
 		viewport = vp;
 	}
 	
-	public void setMap(Map m) {
+	public synchronized void setMap(Map m) {
 		fruitEditor.setMap(m);
 		
 		map = m;
@@ -130,6 +135,13 @@ public class MapPanel extends JPanel {
 		gridWidth = m.getGridWidth();
 		gridHeight = m.getGridHeight();
 		
+	}
+	
+	/**========================================
+	// setGrid() - Set grid on/off.
+	//=========================================**/
+	public synchronized void setGrid(boolean gr) {
+		grid = gr;
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
@@ -148,8 +160,8 @@ public class MapPanel extends JPanel {
 		int mx = mouseX / gridWidth;
 		int my = mouseY / gridHeight;
 		
-		
-		
+		//map.setTile(mx, my, );
+		update();
 	}
 	
 	public void mouseDragged(MouseEvent e) {
@@ -163,6 +175,18 @@ public class MapPanel extends JPanel {
 	public void mouseReleased(MouseEvent e) {
 		oldmouseX = e.getX();
 		oldmouseY = e.getY();
+	}
+	
+	public boolean gridOn() {
+		return grid;
+	}
+	
+	public int getMapX() {
+		return (int)mouseX / gridWidth;
+	}
+	
+	public int getMapY() {
+		return (int)mouseY / gridHeight;
 	}
 	
 	private Graphics2D convertTo2d(Graphics g) {

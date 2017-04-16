@@ -15,7 +15,7 @@ public class TilePanel extends JPanel {
 	private FruitEditor fruitEditor;
 	
 	// EVENT LISTENER.
-	private FruitPanelListener fruitPanelListener;
+	//private FruitPanelListener fruitPanelListener;
 	
 	// VIEWPORT.
 	private JViewport viewport;
@@ -63,18 +63,19 @@ public class TilePanel extends JPanel {
 	}
 	
 	private void drawGrid(Graphics g) {
+		int r, c; // Init counter for grid lines.
 		int viewWidth = viewport.getWidth();
 		int viewHeight = viewport.getHeight();
 		
 		g.setColor(Color.GRAY);
 		
 		
-		for (int r=0; r < viewHeight; r++) {
-			g.drawLine(0, r*viewHeight, gridWidth, r*viewHeight);
+		for (r=0; r < viewHeight; r++) {
+			g.drawLine(0, r*gridHeight, viewWidth, r*gridHeight);
 		}
 		
-		for (int c=0; c < viewWidth; c++) {
-			g.drawLine(c*viewWidth, 0, c*viewWidth, gridHeight);
+		for (c=0; c < viewWidth; c++) {
+			g.drawLine(c*gridWidth, 0, c*gridWidth, viewHeight);
 		}
 	}
 	
@@ -91,7 +92,7 @@ public class TilePanel extends JPanel {
 	}
 	
 	public void update() {
-		
+		repaint();
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -123,7 +124,8 @@ public class TilePanel extends JPanel {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-	
+		oldmouseX = e.getX();
+		oldmouseY = e.getY();
 	}
 	
 	public Graphics2D convertTo2D(Graphics g) {

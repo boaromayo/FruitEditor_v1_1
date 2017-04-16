@@ -9,6 +9,10 @@ public class LabelPanel extends JPanel {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
+	// INSTANCES.
+	private Map map;
+	private MapPanel mapPanel;
+	
 	// COMPONENTS.
 	private JLabel currentMap;
 	private JLabel cursorPosition;
@@ -22,6 +26,9 @@ public class LabelPanel extends JPanel {
 	
 	public LabelPanel(FruitEditor f) {
 		fruitEditor = f;
+		
+		map = fruitEditor.getMap();
+		mapPanel = fruitEditor.getMapPanel();
 		
 		setLayout(new BorderLayout());
 		
@@ -39,12 +46,14 @@ public class LabelPanel extends JPanel {
 	
 	public void update() {
 		if (fruitEditor.getMap() != null) {
-			mapName = fruitEditor.getMap().getName();
-			mapWidth = fruitEditor.getMap().getCols();
-			mapHeight = fruitEditor.getMap().getRows();
+			mapName = map.getName();
+			mapWidth = map.getCols();
+			mapHeight = map.getRows();
+			mapX = mapPanel.getMapX();
+			mapY = mapPanel.getMapY();
 			
 			currentMap.setText(mapName + " (" + mapWidth + "x" + mapHeight + ")");
-			//cursorPosition.setText("(" + mapX + "," + mapY + ")");
+			cursorPosition.setText("(" + mapX + "," + mapY + ")");
 		} else {
 			currentMap.setText("No map selected");
 			cursorPosition.setText("(0,0)");

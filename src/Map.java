@@ -31,6 +31,9 @@ public class Map {
 	// TILES.
 	private Tile[][][] fruitTiles;
 	
+	// CURSOR.
+	private Cursor cursor;
+	
 	public Map() {
 		mapWidth = 20;
 		mapHeight = 15;
@@ -101,10 +104,10 @@ public class Map {
 	
 	public void setScale(int s) { 
 		scaleFactor = s;
-		scaleWidth = mapWidth * scaleFactor;
-		scaleHeight = mapHeight * scaleFactor;
-		gridWidth *= scaleFactor;
-		gridHeight *= scaleFactor;
+		scaleWidth = (int)(mapWidth / (scaleFactor > 0 ? scaleFactor : 1));
+		scaleHeight = (int)(mapHeight / (scaleFactor > 0 ? scaleFactor : 1));
+		gridWidth /= scaleFactor;
+		gridHeight /= scaleFactor;
 	}
 	
 	public void setWidth(int w) { mapWidth = w; }
@@ -128,6 +131,10 @@ public class Map {
 	public String getName() { return name; }
 	
 	public int getScale() { return scaleFactor; }
+	
+	public int getScaleWidth() { return scaleWidth; }
+	
+	public int getScaleHeight() { return scaleHeight; }
 	
 	public int getRows() { return mapHeight; }
 	
