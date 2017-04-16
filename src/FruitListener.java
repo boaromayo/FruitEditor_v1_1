@@ -27,9 +27,9 @@ public class FruitListener implements ActionListener,
 	
 	public FruitListener(FruitEditor f) {
 		fruitEditor = f;
-		map = f.getMap();
+		//map = fruitEditor.getMap();
 		
-		mapPanel = f.getMapPanel();
+		//mapPanel = fruitEditor.getMapPanel();
 		//tilePanel = f.getTilePanel();
 		
 		actions = new Stack<PropertyChangeEvent>();

@@ -52,8 +52,8 @@ public class FruitPanel extends JPanel implements Runnable {
 			//leftPanel.setLayout(new FlowLayout());
 			
 			//rightPanel.setLayout(new BorderLayout());
-		
-			leftPanel.add(tilePanel);
+			
+			//leftPanel.add(tilePanel);
 			//leftPanel.add(mapListPanel);
 			rightPanel.add(mapPanel);
 			

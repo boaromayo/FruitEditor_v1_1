@@ -356,7 +356,8 @@ public class FruitEditor {
 		gridItem.addActionListener(fruitListener);
 
 		// Set grid item if grid is on.
-		gridItem.setState(getMapPanel().gridOn());
+		//gridItem.setState(getMapPanel().gridOn());
+		gridItem.setState(true);
 		
 		// Add in components.
 		viewMenu.add(scaleMenu);
@@ -699,7 +700,8 @@ public class FruitEditor {
 				"gridBtn", true);
 	
 		// Set VIEW button if grid is on.
-		gridBtn.setSelected(getMapPanel().gridOn());
+		//gridBtn.setSelected(getMapPanel().gridOn());
+		gridBtn.setSelected(true);
 		
 		// Add in VIEW button.
 		mainToolBar.add(gridBtn);
