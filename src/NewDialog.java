@@ -103,7 +103,7 @@ public class NewDialog implements ActionListener {
 	// addComps() - Add components
 	//===================================**/
 	private void addComps() {
-		newdialog.setLayout(new GridLayout(2,1,2,2));
+		newdialog.setLayout(new GridLayout(3,1,2,2));
 		JPanel one = new JPanel();
 		//JPanel two = new JPanel();
 		JPanel size = new JPanel();
