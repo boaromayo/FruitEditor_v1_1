@@ -19,27 +19,27 @@ public class NewDialog implements ActionListener {
 	
 	// COMPONENTS.
 	private JLabel mapLabel;
-	private JLabel tileLabel;
+	//private JLabel tileLabel;
 	private JLabel mapWidthLabel;
 	private JLabel mapHeightLabel;
 	private JLabel gridWidthLabel;
 	private JLabel gridHeightLabel;
 	
 	private JTextField mapText;
-	private JTextField tileText;
+	//private JTextField tileText;
 	private JSpinner mapWidthText;
 	private JSpinner mapHeightText;
 	private JSpinner gridWidthText;
 	private JSpinner gridHeightText;
 	
-	private JButton browseBtn;
+	//private JButton browseBtn;
 	private JButton okBtn;
 	private JButton cancelBtn;
 	
 	// PROPERTIES.
 	private String mapName;
 	private String mapFilename;
-	private String tileFilename;
+	//private String tileFilename;
 	private int mapWidth;
 	private int mapHeight;
 	private int gridWidth;
@@ -79,7 +79,7 @@ public class NewDialog implements ActionListener {
 		
 		// Initialize labels.
 		mapLabel = makeLabel("Map Name", "mapLabel");
-		tileLabel = makeLabel("Tileset", "tileLabel");
+		//tileLabel = makeLabel("Tileset", "tileLabel");
 		mapWidthLabel = makeLabel("Width:", "mapWidthLabel");
 		mapHeightLabel = makeLabel("Height:", "mapHeightLabel");
 		gridWidthLabel = makeLabel("Grid W:", "gridWidthLabel");
@@ -87,14 +87,14 @@ public class NewDialog implements ActionListener {
 		
 		// initialize text fields.
 		mapText = makeTextField("mapText");
-		tileText = makeTextField("tileText", 30);
+		//tileText = makeTextField("tileText", 30);
 		mapWidthText = makeSpinner(mapWidth, "mapWidthText");
 		mapHeightText = makeSpinner(mapHeight, "mapHeightText");
 		gridWidthText = makeSpinner(gridWidth, "gridWidthText");
 		gridHeightText = makeSpinner(gridHeight, "gridHeightText");
 		
 		// initialize buttons.
-		browseBtn 	= makeButton("B", "../img/openfile.png", "browseBtn"); // Load open dialog to browse tileset files (*.png, *.jpg)
+		//browseBtn 	= makeButton("B", "../img/openfile.png", "browseBtn"); // Load open dialog to browse tileset files (*.png, *.jpg)
 		okBtn  	   	= makeButton("OK", "okBtn");
 		cancelBtn  	= makeButton("Cancel", "cancelBtn");
 	}
@@ -103,9 +103,9 @@ public class NewDialog implements ActionListener {
 	// addComps() - Add components
 	//===================================**/
 	private void addComps() {
-		newdialog.setLayout(new GridLayout(4,1,2,2));
+		newdialog.setLayout(new GridLayout(2,1,2,2));
 		JPanel one = new JPanel();
-		JPanel two = new JPanel();
+		//JPanel two = new JPanel();
 		JPanel size = new JPanel();
 		JPanel btn = new JPanel();
 		
@@ -114,11 +114,11 @@ public class NewDialog implements ActionListener {
 		
 		newdialog.add(one);
 		
-		two.add(tileLabel); // (0,1)
-		two.add(tileText); // (1,1)
-		two.add(browseBtn); // (2,1)
+		//two.add(tileLabel); // (0,1)
+		//two.add(tileText); // (1,1)
+		//two.add(browseBtn); // (2,1)
 		
-		newdialog.add(two);
+		//newdialog.add(two);
 		
 		size.setLayout(new GridLayout(2,4,8,1));
 		
@@ -161,9 +161,9 @@ public class NewDialog implements ActionListener {
 		mapFilename = name;
 	}
 	
-	public void setTilesetFilename(String name) {
+	/*public void setTilesetFilename(String name) {
 		tileFilename = name;
-	}
+	}*/
 	
 	public void setWidth() {
 		mapWidth = getWidth();
@@ -192,13 +192,13 @@ public class NewDialog implements ActionListener {
 		return mapFilename;
 	}
 	
-	public String getTilesetFilename() {
+	/*public String getTilesetFilename() {
 		return tileFilename;
-	}
+	}*/
 	
-	public String getTileset() {
+	/*public String getTileset() {
 		return tileText.getText();
-	}
+	}*/
 	
 	public int getWidth() {
 		return (Integer)mapWidthText.getValue();
@@ -306,7 +306,7 @@ public class NewDialog implements ActionListener {
 			}
 		} else if (btn == cancelBtn) {
 			dispose();
-		} else if (btn == browseBtn) {
+		} /*else if (btn == browseBtn) {
 			JFileChooser open = new JFileChooser();
 			
 			int confirm = open.showOpenDialog(null);
@@ -325,6 +325,6 @@ public class NewDialog implements ActionListener {
 					exc.printStackTrace();
 				}
 			}
-		}
+		}*/
 	}
 }
