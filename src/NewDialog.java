@@ -73,8 +73,8 @@ public class NewDialog implements ActionListener {
 	
 	public void init() {
 		// Initialize dimensions.
-		mapWidth = 12;
-		mapHeight = 12;
+		mapWidth = 8;
+		mapHeight = 8;
 		gridWidth = gridHeight = 24;
 		
 		// Initialize labels.
@@ -229,7 +229,7 @@ public class NewDialog implements ActionListener {
 	}
 	
 	private JTextField makeTextField(String name) {
-		return makeTextField(name, 25);
+		return makeTextField(name, 40);
 	}
 	
 	private JTextField makeTextField(String name, int width) {
