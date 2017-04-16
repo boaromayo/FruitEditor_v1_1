@@ -142,8 +142,6 @@ public class FruitEditor {
 		
 		hash = new HashMap<String, JComponent>();
 		
-		fruitListener = new FruitListener(this);
-		
 		// Setup the editor menu.
 		menuSetup();
 		
@@ -152,6 +150,9 @@ public class FruitEditor {
 
 		// Initialize panels.
 		panelSetup();
+		
+		// Initialize event listener.
+		fruitListener = new FruitListener(this);
 		
 		fruitFrame.pack();
 		
