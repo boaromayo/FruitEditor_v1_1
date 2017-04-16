@@ -1,3 +1,7 @@
+/**
+ * This class is obsolete due to
+ * a newer modified event listener.
+
 package FruitEditor;
 
 import java.beans.*;
@@ -81,4 +85,4 @@ MouseMotionListener, KeyListener, PropertyChangeListener
 	public TilePanel getTilePanel() {
 		return fruitPanel.getTilePanel();
 	}
-}
+}**/
