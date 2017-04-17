@@ -42,7 +42,7 @@ public class Tile {
 	public Tile(int id, String path, String name) {
 		this();
 		try {
-			this.img = FruitImgLoader.get().loadBufferedImage(
+			this.img = FruitImgBank.get().loadBufferedImage(
 					path, imgWidth, imgHeight);
 		} catch (RuntimeException e) {
 			System.err.println(
