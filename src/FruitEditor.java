@@ -160,7 +160,7 @@ public class FruitEditor {
 		
 		fruitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fruitFrame.setLocationRelativeTo(null);
-		fruitFrame.setIconImage(FruitImgLoader.get().loadBufferedImage("", 20, 20));
+		fruitFrame.setIconImage(FruitImgBank.get().loadBufferedImage("", 20, 20));
 		fruitFrame.setVisible(true);
 		fruitFrame.setResizable(false);
 	}
@@ -890,7 +890,7 @@ public class FruitEditor {
 		JButton btn;
 		// Add in button, make text if icon unavailable.
 		if (icon != null) {
-			btn = new JButton(FruitImgLoader.get().loadIconImage(icon));
+			btn = new JButton(FruitImgBank.get().loadIconImage(icon));
 		} else {
 			btn = new JButton(text);
 		}
@@ -923,7 +923,7 @@ public class FruitEditor {
 		// Add in toggle btn, make text if icon unavailable.
 		if (toggle) {
 			try {
-				//btn = new JToggleButton(FruitImgLoader.get().loadIconImage(icon));
+				//btn = new JToggleButton(FruitImgBank.get().loadIconImage(icon));
 			} catch (Exception e) {
 				btn = new JToggleButton(text);
 			}
