@@ -41,8 +41,10 @@ public class Map {
 	//private Cursor cursor;
 	
 	public Map() {
-		mapWidth = 20;
-		mapHeight = 15;
+		mapWidth = 8;
+		mapHeight = 8;
+		gridWidth = 24;
+		gridHeight = 24;
 		mapDepth = 1;
 		scaleFactor = 1;
 
@@ -166,10 +168,15 @@ public class Map {
 		int w = sheet[0].length;
 		int d = sheet[0][0].length;
 		
-		for (int i=0; i < h; i++) {
-			for (int j=0; j < w; j++) {
-				for (int k=0; k < d; k++) {
-					sheet[i][j][k] = fruitTiles[i][j][k].getID();
+		int i, j, k; // loop counters
+		
+		for (i=0; i < h; i++) {
+			for (j=0; j < w; j++) {
+				for (k=0; k < d; k++) {
+					if (fruitTiles[i][j][k] == null)
+						sheet[i][j][k] = -1;
+					else
+						sheet[i][j][k] = fruitTiles[i][j][k].getID();
 				}
 			}
 		}
@@ -186,9 +193,14 @@ public class Map {
 		int r = sheet.length;
 		int c = sheet[0].length;
 		
-		for (int i=0; i < r; i++) {
-			for (int j=0; j < c; j++) {
-				sheet[i][j] = fruitTiles[i][j][layer].getID();
+		int i, j; // loop counters
+		
+		for (i=0; i < r; i++) {
+			for (j=0; j < c; j++) {
+				if (fruitTiles[i][j][layer] == null)
+					sheet[i][j] = -1;
+				else
+					sheet[i][j] = fruitTiles[i][j][layer].getID();
 			}
 		}
 		

@@ -19,7 +19,7 @@ public class FruitEditor {
 	// PANELS.
 	private FruitPanel fruitPanel;
 	private JPanel toolbarPanel;
-	private LabelPanel labelPanel;
+	private StatusPanel statusPanel;
 	
 	// MENU NAMES.
 	private String[] menuName = {"File", "Edit", "View", "Draw", "FruitTools", "Help"};
@@ -142,6 +142,11 @@ public class FruitEditor {
 		
 		hash = new HashMap<String, JComponent>();
 		
+		map = new Map();
+		
+		// Initialize panels.
+		panelSetup();
+				
 		// Initialize event listener.
 		fruitListener = new FruitListener(this);
 				
@@ -150,9 +155,6 @@ public class FruitEditor {
 		
 		// Setup the toolbar.
 		toolbarSetup();
-
-		// Initialize panels.
-		panelSetup();
 		
 		fruitFrame.pack();
 		
@@ -168,10 +170,10 @@ public class FruitEditor {
 	//================================**/
 	private void panelSetup() {
 	    fruitPanel = new FruitPanel(this);
-	    labelPanel = new LabelPanel(this);
+	    statusPanel = new StatusPanel(this);
 	    
 	    fruitFrame.add(fruitPanel, BorderLayout.CENTER);
-	    fruitFrame.add(labelPanel, BorderLayout.SOUTH);
+	    fruitFrame.add(statusPanel, BorderLayout.SOUTH);
 	}
 	
 	/**================================
@@ -853,7 +855,7 @@ public class FruitEditor {
 		menuBar.updateUI();
 		mainToolBar.updateUI();
 		fruitPanel.update();
-		labelPanel.update();
+		statusPanel.update();
 		fruitFrame.repaint();
 	}
 	
