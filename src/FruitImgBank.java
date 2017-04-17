@@ -7,16 +7,16 @@ import java.io.*;
 
 import javax.swing.*;
 
-public class FruitImgLoader {
+public class FruitImgBank {
 	// SINGLETON STATIC VARIABLE.
-	private static FruitImgLoader singleton = null;
+	private static FruitImgBank singleton = null;
 	
-	private FruitImgLoader() {}
+	private FruitImgBank() {}
 	
 	/**====================================
 	// Call instance to ensure only one object is made for this class.
 	//=====================================**/
-	public static FruitImgLoader get() {
+	public static FruitImgBank get() {
 		// Deal with thread concurrency issues with this block.
 		if (singleton == null) {
 			synchronized (FruitImgLoader.class) {
