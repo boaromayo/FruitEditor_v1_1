@@ -276,7 +276,7 @@ public class NewDialog implements ActionListener {
 		
 		// Add button, load text if unable to load icon.
 		try {
-			btn = new JButton(FruitImgLoader.get().loadIconImage(icon));
+			btn = new JButton(FruitImgBank.get().loadIconImage(icon));
 		} catch (Exception e) {
 			btn = new JButton(text);
 		}
