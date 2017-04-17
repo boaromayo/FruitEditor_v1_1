@@ -815,6 +815,16 @@ public class FruitEditor {
 	}
 	
 	/**========================================
+	// getFruitListener() - Get FruitListener.
+	//=========================================**/
+	public FruitListener getFruitListener() {
+		if (fruitListener != null)
+			return fruitListener;
+		
+		return null;
+	}
+	
+	/**========================================
 	// getPanel() - Get FruitPanel.
 	//=========================================**/
 	/*public FruitPanel getPanel() {

@@ -46,7 +46,7 @@ public class MapPanel extends JPanel {
 		fruitEditor = f;
 		map = f.getMap();
 		
-		fruitListener = new FruitListener(fruitEditor);
+		fruitListener = fruitEditor.getFruitListener();
 		mapWidth = map.getCols();
 		mapHeight = map.getRows();
 		
