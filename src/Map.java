@@ -11,6 +11,12 @@ public class Map {
 	public static final int MAP_SIZE = 999;
 	public static final int OFFSET = 10;
 	
+	// SCALE CONSTANTS.
+	public static final int SCALE_ONE = 1;
+	public static final int SCALE_TWO = 2;
+	public static final int SCALE_FOUR = 4;
+	public static final int SCALE_EIGHT = 8;
+	
 	// NAME.
 	private String name;
 	
@@ -32,7 +38,7 @@ public class Map {
 	private Tile[][][] fruitTiles;
 	
 	// CURSOR.
-	private Cursor cursor;
+	//private Cursor cursor;
 	
 	public Map() {
 		mapWidth = 20;

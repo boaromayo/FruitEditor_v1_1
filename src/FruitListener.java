@@ -39,90 +39,90 @@ public class FruitListener implements ActionListener,
 	// actionPerformed(event) - Event listener
 	//===========================**/
 	public void actionPerformed(ActionEvent e) {
-		Object btn = e.getSource();
+		Object src = e.getSource();
 		
 		// FILE listeners.
-		if (btn == getComponent("newBtn") || 
-				btn == getComponent("newItem")) {
+		if (src == getComponent("newBtn") || 
+				src == getComponent("newItem")) {
 			newAction();
-		} else if (btn == getComponent("openBtn") ||
-				btn == getComponent("openItem")) {
+		} else if (src == getComponent("openBtn") ||
+				src == getComponent("openItem")) {
 			openAction();
-		} else if (btn == getComponent("saveBtn") ||
-				btn == getComponent("saveItem")) {
+		} else if (src == getComponent("saveBtn") ||
+				src == getComponent("saveItem")) {
 			saveAction();
-		} else if (btn == getComponent("saveAsItem")) {
+		} else if (src == getComponent("saveAsItem")) {
 			saveAsAction();
-		} else if (btn == getComponent("closeItem")) {
+		} else if (src == getComponent("closeItem")) {
 			closeAction();
 		}
 		
 		// EDIT -> FIX
-		else if (btn == getComponent("undoItem") ||
-				btn == getComponent("undoBtn")) {
+		else if (src == getComponent("undoItem") ||
+				src == getComponent("undoBtn")) {
 			undo();
-		} else if (btn == getComponent("redoItem") ||
-				btn == getComponent("redoBtn")) {
+		} else if (src == getComponent("redoItem") ||
+				src == getComponent("redoBtn")) {
 			redo();
 		}
 		
 		// EDIT listeners
-		else if (btn == getComponent("cutItem") ||
-				btn == getComponent("cutBtn")) {
+		else if (src == getComponent("cutItem") ||
+				src == getComponent("cutBtn")) {
 			cutAction();
-		} else if (btn == getComponent("copyItem") ||
-				btn == getComponent("copyBtn")) {
+		} else if (src == getComponent("copyItem") ||
+				src == getComponent("copyBtn")) {
 			copyAction();
-		} else if (btn == getComponent("pasteItem") ||
-				btn == getComponent("pasteBtn")) {
+		} else if (src == getComponent("pasteItem") ||
+				src == getComponent("pasteBtn")) {
 			pasteAction();
-		} else if (btn == getComponent("deleteItem") ||
-				btn == getComponent("deleteBtn")) {
+		} else if (src == getComponent("deleteItem") ||
+				src == getComponent("deleteBtn")) {
 			deleteAction();
 		}
 		
 		// VIEW -> GRID
-		else if (btn == getComponent("gridItem") || 
-				btn == getComponent("gridBtn")) {
+		else if (src == getComponent("gridItem") || 
+				src == getComponent("gridBtn")) {
 			gridAction();
 		}
 		
 		// VIEW -> SCALE item listeners
-		else if (btn == getComponent("oneItem") ||
-				btn == getComponent("oneBtn")) {
-			
-		} else if (btn == getComponent("twoItem") ||
-				btn == getComponent("twoBtn")) {
-			
-		} else if (btn == getComponent("fourItem") ||
-				btn == getComponent("fourBtn")) {
-			
-		} else if (btn == getComponent("eightItem") ||
-				btn == getComponent("eightBtn")) {
-			
+		else if (src == getComponent("oneItem") ||
+				src == getComponent("oneBtn")) {
+			//map.setScale(Map.SCALE_ONE);
+		} else if (src == getComponent("twoItem") ||
+				src == getComponent("twoBtn")) {
+			//map.setScale(Map.SCALE_TWO);
+		} else if (src == getComponent("fourItem") ||
+				src == getComponent("fourBtn")) {
+			//map.setScale(Map.SCALE_FOUR);
+		} else if (src == getComponent("eightItem") ||
+				src == getComponent("eightBtn")) {
+			//map.setScale(Map.SCALE_EIGHT);
 		}
 		
 		// VIEW -> MODE item listeners
-		else if (btn == getComponent("mapModeItem") ||
-				btn == getComponent("mapModeBtn")) {
+		else if (src == getComponent("mapModeItem") ||
+				src == getComponent("mapModeBtn")) {
 			
-		} else if (btn == getComponent("eventModeItem") ||
-				btn == getComponent("eventModeBtn")) {
+		} else if (src == getComponent("eventModeItem") ||
+				src == getComponent("eventModeBtn")) {
 			
 		}
 		
 		// DRAW item listeners
-		else if (btn == getComponent("pencilItem") ||
-				btn == getComponent("pencilBtn")) {
+		else if (src == getComponent("pencilItem") ||
+				src == getComponent("pencilBtn")) {
 			
-		} else if (btn == getComponent("rectItem") ||
-				btn == getComponent("rectBtn")) {
+		} else if (src == getComponent("rectItem") ||
+				src == getComponent("rectBtn")) {
 			
-		} else if (btn == getComponent("circleItem") ||
-				btn == getComponent("circleBtn")) {
+		} else if (src == getComponent("circleItem") ||
+				src == getComponent("circleBtn")) {
 			
-		} else if (btn == getComponent("fillItem") ||
-				btn == getComponent("fillBtn")) {
+		} else if (src == getComponent("fillItem") ||
+				src == getComponent("fillBtn")) {
 			
 		}
 		
@@ -138,7 +138,7 @@ public class FruitListener implements ActionListener,
 		}*/
 		
 		// HELP item listener
-		else if (btn == getComponent("aboutItem")) {
+		else if (src == getComponent("aboutItem")) {
 			aboutAction();
 		}
 	}
@@ -390,25 +390,26 @@ public class FruitListener implements ActionListener,
 	private void writeText(File file) {
 		try {
 			// Load writer
-			PrintWriter write = new PrintWriter(
+			PrintWriter writer = new PrintWriter(
 				new BufferedWriter(new FileWriter(file)));
 		
 			// Write width and height
-			write.print(map.getCols() + " ");
-			write.println(map.getRows());
+			writer.print(map.getCols() + " ");
+			writer.println(map.getRows());
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();
 			
 			for (int r = 0; r < ids.length; r++) {
 				for (int c = 0; c < ids[0].length; c++) {
-					write.print(ids[r][c] + " ");
+					writer.print(ids[r][c] + " ");
 				}
+				writer.println();
 			}
 			
 			// Flush and close writer as cleanup
-			write.flush();
-			write.close();
+			writer.flush();
+			writer.close();
 		} catch (Exception e) {
 			System.err.println("ERROR: Unable to write file " + file);
 			e.printStackTrace();
