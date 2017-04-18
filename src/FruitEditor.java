@@ -709,7 +709,7 @@ public class FruitEditor {
 		scaleBtnGrp.add(eightBtn);
 		
 		// Set 1:1 as default
-		scaleBtnGrp.setSelected(oneItem.getModel(), true);
+		scaleBtnGrp.setSelected(oneBtn.getModel(), true);
 		
 		// Add in SCALE buttons.
 		mainToolBar.add(oneBtn);
