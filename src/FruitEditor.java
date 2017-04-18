@@ -195,7 +195,7 @@ public class FruitEditor {
 		helpMenu = new JMenu(menuName[5]);			// HELP
 			
 		// Disable other menus if no map is loaded.
-		if (map == null | !mapActive) {
+		if (map == null || !mapActive) {
 			disableMenus();
 		}
 			
