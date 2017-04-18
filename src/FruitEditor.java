@@ -13,6 +13,9 @@ public class FruitEditor {
 	public static final int SCREEN_HEIGHT = 640;
 	public static final int FPS = 60;
 	
+	// MAP ACTIVE.
+	private boolean mapActive = false;
+	
 	// MAIN FRAME.
 	private JFrame fruitFrame;
 	
@@ -142,7 +145,7 @@ public class FruitEditor {
 		
 		hash = new HashMap<String, JComponent>();
 		
-		//map = new Map();
+		map = new Map();
 		
 		// Initialize panels.
 		panelSetup();
@@ -192,7 +195,7 @@ public class FruitEditor {
 		helpMenu = new JMenu(menuName[5]);			// HELP
 			
 		// Disable other menus if no map is loaded.
-		if (map == null) {
+		if (map == null | !mapActive) {
 			disableMenus();
 		}
 			
@@ -270,7 +273,7 @@ public class FruitEditor {
 		closeItem.setName("closeItem");
 		
 		// Case for FILE -> SAVE and FILE -> SAVE AS
-		if (map == null) {
+		if (map == null || !mapActive) {
 			saveItem.setEnabled(false);
 			saveAsItem.setEnabled(false);
 		}
@@ -559,7 +562,7 @@ public class FruitEditor {
 		subToolbarSetup();
 		
 		// Disable tool buttons if no map is loaded.
-		if (map == null) {
+		if (map == null || !mapActive) {
 			disableTools();		
 		}
 		
@@ -574,32 +577,30 @@ public class FruitEditor {
 	// disableTools() - Disable tool buttons.
 	//=========================================**/
 	private void disableTools() {
-		if (map == null) {
-			saveBtn.setEnabled(false);
+		saveBtn.setEnabled(false);
 		
-			cutBtn.setEnabled(false);
-			copyBtn.setEnabled(false);
-			pasteBtn.setEnabled(false);
-			deleteBtn.setEnabled(false);
-		
-			undoBtn.setEnabled(false);
-			redoBtn.setEnabled(false);
-		
-			gridBtn.setEnabled(false);
-		
-			oneBtn.setEnabled(false);
-			twoBtn.setEnabled(false);
-			fourBtn.setEnabled(false);
-			eightBtn.setEnabled(false);
-		
-			mapModeBtn.setEnabled(false);
-			eventModeBtn.setEnabled(false);
-		
-			pencilBtn.setEnabled(false);
-			rectBtn.setEnabled(false);
-			circleBtn.setEnabled(false);
-			fillBtn.setEnabled(false);
-		}
+		cutBtn.setEnabled(false);
+		copyBtn.setEnabled(false);
+		pasteBtn.setEnabled(false);
+		deleteBtn.setEnabled(false);
+	
+		undoBtn.setEnabled(false);
+		redoBtn.setEnabled(false);
+	
+		gridBtn.setEnabled(false);
+	
+		oneBtn.setEnabled(false);
+		twoBtn.setEnabled(false);
+		fourBtn.setEnabled(false);
+		eightBtn.setEnabled(false);
+	
+		mapModeBtn.setEnabled(false);
+		eventModeBtn.setEnabled(false);
+	
+		pencilBtn.setEnabled(false);
+		rectBtn.setEnabled(false);
+		circleBtn.setEnabled(false);
+		fillBtn.setEnabled(false);
 		
 		//cherryBtn.setEnabled(false);
 		//orangeBtn.setEnabled(false);

@@ -41,15 +41,7 @@ public class Map {
 	//private Cursor cursor;
 	
 	public Map() {
-		mapWidth = 8;
-		mapHeight = 8;
-		gridWidth = 24;
-		gridHeight = 24;
-		mapDepth = 1;
-		scaleFactor = 1;
-
-		initTiles();
-		setScale(scaleFactor);
+		this(8, 8, 24, 24);
 	}
 	
 	public Map(int width, int height) {
