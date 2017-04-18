@@ -142,7 +142,7 @@ public class FruitEditor {
 		
 		hash = new HashMap<String, JComponent>();
 		
-		map = new Map();
+		//map = new Map();
 		
 		// Initialize panels.
 		panelSetup();
