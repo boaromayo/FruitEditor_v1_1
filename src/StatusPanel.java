@@ -61,6 +61,8 @@ public class StatusPanel extends JPanel {
 			currentMap.setText("");
 			cursorPosition.setText("(0,0)");
 		}
+		
+		repaint();
 	}
 	
 	public void setStatus(String text) {

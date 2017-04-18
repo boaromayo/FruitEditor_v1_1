@@ -20,6 +20,7 @@ public class FruitListener implements ActionListener,
 	
 	private MapPanel mapPanel;
 	private TilePanel tilePanel;
+	private StatusPanel statusPanel;
 	
 	private Map map;
 	
@@ -31,6 +32,7 @@ public class FruitListener implements ActionListener,
 		
 		//mapPanel = fruitEditor.getMapPanel();
 		//tilePanel = f.getTilePanel();
+		statusPanel = fruitEditor.getStatusPanel();
 		
 		actions = new Stack<PropertyChangeEvent>();
 	}
@@ -159,9 +161,11 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = open.getSelectedFile();
+			String confirmStr = "Map load complete.";
 			
 			try {
 				readText(file); // read the map file
+				statusPanel.setStatus(confirmStr);
 				validate();
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to read file.");
@@ -177,9 +181,11 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = save.getSelectedFile();
+			String confirmStr = "Map saved.";
 			
 			try {
 				writeText(file); // write onto the file
+				statusPanel.setStatus(confirmStr);
 				validate();
 				
 				//map = file;
@@ -201,6 +207,7 @@ public class FruitListener implements ActionListener,
 			try {
 				writeText(file);
 				validate();
+				
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to write file " + file);
 				e.printStackTrace();
@@ -279,7 +286,11 @@ public class FruitListener implements ActionListener,
 	// mouseClicked(event) - Update if mouse clicked.
 	//=================================**/
 	public void mouseClicked(MouseEvent e) {
+		Object src = e.getSource();
 		
+		// Get mouseClicked methods from main panels.
+		mapPanel.mouseClicked(e);
+		tilePanel.mouseClicked(e);
 	}
 	
 	/**================================

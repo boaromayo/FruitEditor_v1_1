@@ -858,6 +858,16 @@ public class FruitEditor {
 		return fruitPanel.getTilePanel();
 	}*/
 	
+	/**========================================
+	// getStatusPanel() - Get StatusPanel.
+	//=========================================**/
+	public StatusPanel getStatusPanel() {
+		if (statusPanel != null)
+			return statusPanel;
+		
+		return null;
+	}
+	
 	/**=======================================
 	// UPDATE METHOD. 
 	//========================================**/
