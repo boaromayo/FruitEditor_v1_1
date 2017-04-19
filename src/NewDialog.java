@@ -11,7 +11,7 @@ import javax.swing.filechooser.*;
 
 public class NewDialog implements ActionListener {
 	// DIALOG.
-	private JDialog newdialog;
+	private JDialog newDialog;
 	
 	// DIALOG SIZE.
 	private final int WIDTH = 480;
@@ -50,7 +50,7 @@ public class NewDialog implements ActionListener {
 	public NewDialog(JFrame frame) {
 		String title = "Create New Map";
 		
-		newdialog = new JDialog(frame);
+		newDialog = new JDialog(frame);
 		
 		init();
 		
@@ -58,17 +58,17 @@ public class NewDialog implements ActionListener {
 		addComps();
 		
 		// Set specs for new map dialog.
-		newdialog.pack();
+		newDialog.pack();
 		
-		newdialog.setTitle(title);
-		newdialog.setSize(WIDTH,HEIGHT);
+		newDialog.setTitle(title);
+		newDialog.setSize(WIDTH,HEIGHT);
 
-		newdialog.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
-		newdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		newdialog.setLocationRelativeTo(null);
-		newdialog.setVisible(true);
-		newdialog.setFocusable(true);
-		newdialog.setResizable(false);
+		newDialog.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
+		newDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		newDialog.setLocationRelativeTo(null);
+		newDialog.setVisible(true);
+		newDialog.setFocusable(true);
+		newDialog.setResizable(false);
 	}
 	
 	public void init() {
@@ -103,7 +103,7 @@ public class NewDialog implements ActionListener {
 	// addComps() - Add components
 	//===================================**/
 	private void addComps() {
-		newdialog.setLayout(new GridLayout(3,1,2,2));
+		newDialog.setLayout(new GridLayout(3,1,2,2));
 		JPanel one = new JPanel();
 		//JPanel two = new JPanel();
 		JPanel size = new JPanel();
@@ -112,7 +112,7 @@ public class NewDialog implements ActionListener {
 		one.add(mapLabel); // (0,0)
 		one.add(mapText); // (1,0)
 		
-		newdialog.add(one);
+		newDialog.add(one);
 		
 		//two.add(tileLabel); // (0,1)
 		//two.add(tileText); // (1,1)
@@ -131,19 +131,19 @@ public class NewDialog implements ActionListener {
 		size.add(gridWidthText); // (6,2)
 		size.add(gridHeightText); // (7,2)
 		
-		newdialog.add(size);
+		newDialog.add(size);
 		
 		btn.add(okBtn); // (0,3)
 		btn.add(cancelBtn); // (1,3)
 		
-		newdialog.add(btn);
+		newDialog.add(btn);
 	}
 	
 	/**==================================
 	// dispose() - Dispose dialog.
 	//===================================**/
 	public void dispose() {
-		newdialog.dispose();
+		newDialog.dispose();
 	}
 	
 	/**==================================
@@ -229,7 +229,7 @@ public class NewDialog implements ActionListener {
 	}
 	
 	private JTextField makeTextField(String name) {
-		return makeTextField(name, 40);
+		return makeTextField(name, 30);
 	}
 	
 	private JTextField makeTextField(String name, int width) {
@@ -271,7 +271,7 @@ public class NewDialog implements ActionListener {
 		return btn;
 	}
 	
-	private JButton makeButton(String text, String icon, String name) {
+	/*private JButton makeButton(String text, String icon, String name) {
 		JButton btn;
 		
 		// Add button, load text if unable to load icon.
@@ -285,7 +285,7 @@ public class NewDialog implements ActionListener {
 		btn.addActionListener(this);
 		
 		return btn;
-	}
+	}*/
 	
 	/**=======================================
 	// actionPerformed(actionEvent)
@@ -293,38 +293,45 @@ public class NewDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object btn = e.getSource();
 		
-		if (btn == okBtn) {
-			// if map name or tileset name is blank, put warning prompt
-			// otherwise, set map name and set map dimensions up
-			if (getMapName().equals("\\s+") || getMapName() == null) {
-				
-			} else {
-				mapPanel.setMap(new Map(getWidth(), getHeight(), 
-						getGridWidth(), getGridHeight()));
-				
-				dispose();
-			}
-		} else if (btn == cancelBtn) {
-			dispose();
-		} /*else if (btn == browseBtn) {
-			JFileChooser open = new JFileChooser();
-			
-			int confirm = open.showOpenDialog(null);
-			
-			if (confirm == JFileChooser.APPROVE_OPTION) {
-				try {
-					// the file to be opened
-					File openfile = open.getSelectedFile();
+		if (newDialog.isVisible()) {
+			if (btn == okBtn) {
+				// if map name or tileset name is blank, put warning prompt
+				// otherwise, set map name and set map dimensions up
+				if (getMapName().equals("\\s+") || getMapName() == null) {
+					JOptionPane.showMessageDialog(null, 
+							"Enter a name for this map.", 
+							"Map Name Blank", 
+							JOptionPane.WARNING_MESSAGE);
+				} else {
+					mapPanel.setMap(new Map(getWidth(), getHeight(), 
+							getGridWidth(), getGridHeight()));
 					
-					// set tileset filename and text to the pathname
-					setTilesetFilename(openfile.getAbsolutePath());
-					tileText.setText(openfile.getAbsolutePath());
-				} catch (Exception exc) {
-					System.err.println("ERROR: Cannot load file. " +
-							"Reason: " + exc.getMessage() + "\n");
-					exc.printStackTrace();
+					mapText.setText(null);
+					
+					dispose();
 				}
-			}
-		}*/
+			} else if (btn == cancelBtn) {
+				dispose();
+			} /*else if (btn == browseBtn) {
+				JFileChooser open = new JFileChooser();
+				
+				int confirm = open.showOpenDialog(null);
+				
+				if (confirm == JFileChooser.APPROVE_OPTION) {
+					try {
+						// the file to be opened
+						File openfile = open.getSelectedFile();
+						
+						// set tileset filename and text to the pathname
+						setTilesetFilename(openfile.getAbsolutePath());
+						tileText.setText(openfile.getAbsolutePath());
+					} catch (Exception exc) {
+						System.err.println("ERROR: Cannot load file. " +
+								"Reason: " + exc.getMessage() + "\n");
+						exc.printStackTrace();
+					}
+				}
+			}*/
+		}
 	}
 }
