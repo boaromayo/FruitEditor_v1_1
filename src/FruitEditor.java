@@ -14,7 +14,7 @@ public class FruitEditor {
 	public static final int FPS = 60;
 	
 	// MAP ACTIVE.
-	private boolean mapActive = false;
+	private boolean panelActive = false;
 	
 	// MAIN FRAME.
 	private JFrame fruitFrame;
@@ -195,7 +195,7 @@ public class FruitEditor {
 		helpMenu = new JMenu(menuName[5]);			// HELP
 			
 		// Disable other menus if no map is loaded.
-		if (map == null || !mapActive) {
+		if (map == null || !panelActive) {
 			disableMenus();
 		}
 			
@@ -273,7 +273,7 @@ public class FruitEditor {
 		closeItem.setName("closeItem");
 		
 		// Case for FILE -> SAVE and FILE -> SAVE AS
-		if (map == null || !mapActive) {
+		if (map == null || !panelActive) {
 			saveItem.setEnabled(false);
 			saveAsItem.setEnabled(false);
 		}
@@ -562,7 +562,7 @@ public class FruitEditor {
 		subToolbarSetup();
 		
 		// Disable tool buttons if no map is loaded.
-		if (map == null || !mapActive) {
+		if (map == null || !panelActive) {
 			disableTools();		
 		}
 		
@@ -794,10 +794,10 @@ public class FruitEditor {
 	}
 	
 	/**========================================
-	// setMapActive(act) - Turn on/off fruitPanel. 
+	// setPanelActive(act) - Activate/deactivate fruitPanel. 
 	//=========================================**/
-	public void setMapActive(boolean act) {
-		mapActive = act;
+	public void setPanelActive(boolean act) {
+		panelActive = act;
 	}
 	
 	/**========================================
