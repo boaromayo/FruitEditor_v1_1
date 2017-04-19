@@ -876,6 +876,13 @@ public class FruitEditor {
 		return null;
 	}
 	
+	/**========================================
+	// isPanelActive() - Check if FruitPanel active.
+	//=========================================**/
+	public boolean isPanelActive() {
+		return panelActive;
+	}
+	
 	/**=======================================
 	// UPDATE METHOD. 
 	//========================================**/
