@@ -74,8 +74,9 @@ public class MapPanel extends JPanel {
 	}
 	
 	public void draw(Graphics g) {	
-		if (map == null) {
+		if (fruitEditor.isPanelActive()) {
 			g.setColor(Color.WHITE);
+			setBackground(g.getColor());
 		
 			map.draw(g);
 		
@@ -86,6 +87,7 @@ public class MapPanel extends JPanel {
 			drawCursor(g);	
 		} else {
 			g.setColor(Color.GRAY);
+			setBackground(g.getColor());
 		}
 	}
 	
@@ -135,6 +137,10 @@ public class MapPanel extends JPanel {
 		gridWidth = m.getGridWidth();
 		gridHeight = m.getGridHeight();
 		
+	}
+	
+	public void setMapName(String n) {
+		map.setName(n);
 	}
 	
 	/**========================================

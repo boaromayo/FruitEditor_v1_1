@@ -37,7 +37,6 @@ public class NewDialog implements ActionListener {
 	private JButton cancelBtn;
 	
 	// PROPERTIES.
-	private String mapName;
 	private String mapFilename;
 	//private String tileFilename;
 	private int mapWidth;
@@ -149,12 +148,8 @@ public class NewDialog implements ActionListener {
 	/**==================================
 	// PROPERTY SETTER METHODS.
 	//===================================**/
-	public void setName() {
-		mapName = getMapName();
-	}
-	
-	public void setName(String name) {
-		mapName = name;
+	public void setMapText(String name) {
+		mapText.setText(name);
 	}
 	
 	public void setMapFilename(String name) {
@@ -184,7 +179,7 @@ public class NewDialog implements ActionListener {
 	/**==================================
 	// PROPERTY GETTER METHODS.
 	//===================================**/
-	public String getMapName() {
+	public String getMapText() {
 		return mapText.getText();
 	}
 	
@@ -297,18 +292,20 @@ public class NewDialog implements ActionListener {
 			if (btn == okBtn) {
 				// if map name or tileset name is blank, put warning prompt
 				// otherwise, set map name and set map dimensions up
-				if (getMapName().equals("\\s+") || getMapName() == null) {
+				if (getMapText().equals("\\s+") || getMapText() == null) {
 					JOptionPane.showMessageDialog(null, 
 							"Enter a name for this map.", 
 							"Map Name Blank", 
 							JOptionPane.WARNING_MESSAGE);
 				} else {
+					// prep the new map
 					mapPanel.setMap(new Map(getWidth(), getHeight(), 
 							getGridWidth(), getGridHeight()));
+					mapPanel.setMapName(getMapText());
 					
-					mapText.setText(null);
+					setMapText(null); // Leave map text field blank.
 					
-					dispose();
+					dispose(); // Remove new map dialog.
 				}
 			} else if (btn == cancelBtn) {
 				dispose();
