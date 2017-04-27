@@ -89,10 +89,10 @@ public class TilePanel extends JPanel {
 		gridTileItem.setName("gridTileItem");
 		closeTileItem.setName("closeTileItem");
 		
-		// Add to hashmap.
-		fruitEditor.putHash("openTileItem", openTileItem);
-		fruitEditor.putHash("gridTileItem", gridTileItem);
-		fruitEditor.putHash("closeTileItem", closeTileItem);
+		// Add component into hashmap.
+		fruitEditor.putComponent("openTileItem", openTileItem);
+		fruitEditor.putComponent("gridTileItem", gridTileItem);
+		fruitEditor.putComponent("closeTileItem", closeTileItem);
 	}
 	
 	private void disableItems() {

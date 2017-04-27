@@ -802,9 +802,9 @@ public class FruitEditor {
 	}
 	
 	/**========================================
-	// putHash(key, value) - Place JComponent into hashmap. 
+	// putComponent(key, value) - Place JComponent into hashmap. 
 	//=========================================*/
-	public void putHash(String key, JComponent value) {
+	public void putComponent(String key, JComponent value) {
 		hash.put(key, value);
 	}
 	
