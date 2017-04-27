@@ -143,6 +143,18 @@ public class FruitListener implements ActionListener,
 		else if (src == getComponent("aboutItem")) {
 			aboutAction();
 		}
+		
+		// RIGHT CLICK MENUS.
+		// MapPanel item listeners
+		
+		// TilePanel item listeners
+		else if (src == getComponent("openTileItem")) {
+			openTileAction();
+		} else if (src == getComponent("gridTileItem")) {
+			gridTileAction();
+		} else if (src == getComponent("closeTileItem")) {
+			closeTileAction();
+		}
 	}
 	
 	/**==============================
@@ -256,6 +268,18 @@ public class FruitListener implements ActionListener,
 		new AboutDialog(fruitEditor.getFrame());
 	}
 	
+	private void openTileAction() {
+		
+	}
+	
+	private void gridTileAction() {
+		
+	}
+	
+	private void closeTileAction() {
+		
+	}
+	
 	/**================================
 	// MOUSE MOTION LISTENER METHODS.
 	//=================================**/
@@ -283,6 +307,20 @@ public class FruitListener implements ActionListener,
 	// MOUSE LISTENER METHODS.
 	//=================================**/
 	/**================================
+	// mousePressed(event) - Update if mouse pressed.
+	//=================================**/
+	public void mousePressed(MouseEvent e) {
+		tilePanel.mousePressed(e);
+	}
+	
+	/**================================
+	// mouseReleased(event) - Update if mouse released.
+	//=================================**/
+	public void mouseReleased(MouseEvent e) {
+		tilePanel.mouseReleased(e);
+	}
+	
+	/**================================
 	// mouseClicked(event) - Update if mouse clicked.
 	//=================================**/
 	public void mouseClicked(MouseEvent e) {
@@ -291,20 +329,6 @@ public class FruitListener implements ActionListener,
 		// Get mouseClicked methods from main panels.
 		mapPanel.mouseClicked(e);
 		tilePanel.mouseClicked(e);
-	}
-	
-	/**================================
-	// mousePressed(event) - Update if mouse pressed.
-	//=================================**/
-	public void mousePressed(MouseEvent e) {
-		
-	}
-	
-	/**================================
-	// mouseReleased(event) - Update if mouse released.
-	//=================================**/
-	public void mouseReleased(MouseEvent e) {
-		
 	}
 	
 	public void mouseEntered(MouseEvent e) {
