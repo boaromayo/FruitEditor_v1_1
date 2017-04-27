@@ -150,7 +150,7 @@ public class FruitListener implements ActionListener,
 	//===============================*/
 	private void newAction() {
 		// Load NEW dialog.
-		NewDialog n = new NewDialog(fruitEditor.getFrame());
+		new NewDialog(fruitEditor.getFrame());
 	}
 	
 	private void openAction() {
@@ -220,11 +220,11 @@ public class FruitListener implements ActionListener,
 	}
 	
 	private void undo() {
-		mapPanel.update();
+		fruitEditor.update();
 	}
 	
 	private void redo() {
-		mapPanel.update();
+		fruitEditor.update();
 	}
 	
 	private void cutAction() {
@@ -253,7 +253,7 @@ public class FruitListener implements ActionListener,
 	}
 	
 	private void aboutAction() {
-		AboutDialog a = new AboutDialog(fruitEditor.getFrame());
+		new AboutDialog(fruitEditor.getFrame());
 	}
 	
 	/**================================

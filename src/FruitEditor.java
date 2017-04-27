@@ -194,7 +194,8 @@ public class FruitEditor {
 		toolMenu = new JMenu(menuName[4]);			// TOOLKIT
 		helpMenu = new JMenu(menuName[5]);			// HELP
 			
-		// Disable other menus if no map is loaded.
+		// Disable other menus if no map is loaded
+		// or if panel is inactive.
 		if (map == null || !panelActive) {
 			disableMenus();
 		}
@@ -798,6 +799,13 @@ public class FruitEditor {
 	//=========================================**/
 	public void setPanelActive(boolean act) {
 		panelActive = act;
+	}
+	
+	/**========================================
+	// putHash(key, value) - Place JComponent into hashmap. 
+	//=========================================*/
+	public void putHash(String key, JComponent value) {
+		hash.put(key, value);
 	}
 	
 	/**========================================

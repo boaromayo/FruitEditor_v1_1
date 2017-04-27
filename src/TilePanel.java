@@ -15,7 +15,17 @@ public class TilePanel extends JPanel {
 	private FruitEditor fruitEditor;
 	
 	// EVENT LISTENER.
-	//private FruitPanelListener fruitPanelListener;
+	private FruitListener fruitListener;
+	
+	// POPUP (or RIGHT-CLICK) MENU.
+	private JPopupMenu popupMenu;
+	
+	// POPUP (or RIGHT-CLICK) MENU COMPS.
+	//private JMenuItem newTileItem;
+	private JMenuItem openTileItem;
+	private JMenuItem gridTileItem;
+	//private JMenuItem saveTileItem;
+	private JMenuItem closeTileItem;
 	
 	// VIEWPORT.
 	private JViewport viewport;
@@ -32,6 +42,64 @@ public class TilePanel extends JPanel {
 	
 	public TilePanel(FruitEditor f) {
 		fruitEditor = f;
+		
+		fruitListener = fruitEditor.getFruitListener();
+		
+		// Setup popup menu.
+		popupSetup();
+	}
+	
+	private void popupSetup() {
+		// Assign popup menu.
+		popupMenu = new JPopupMenu();
+		
+		disableItems();
+		
+		subSetup(); // setup items.
+		
+		// Add items to popup menu.
+		//popupMenu.add(newTileItem);
+		popupMenu.add(openTileItem);
+		
+		popupMenu.addSeparator();
+		
+		popupMenu.add(gridTileItem);
+		
+		popupMenu.addSeparator();
+		
+		popupMenu.add(closeTileItem);
+	}
+	
+	private void subSetup() {
+		// RIGHT CLICK MENU ITEMS
+		//newTileItem = new JMenuItem("New Tileset");		// NEW
+		openTileItem = new JMenuItem("Open Tileset");	// OPEN
+		gridTileItem = new JMenuItem("Grid Settings");  // GRID
+		closeTileItem = new JMenuItem("Close Tileset"); // CLOSE
+		
+		// Add in event listeners.
+		//newTileItem.addActionListener(fruitListener);
+		openTileItem.addActionListener(fruitListener);
+		gridTileItem.addActionListener(fruitListener);
+		closeTileItem.addActionListener(fruitListener);
+		
+		// Set names for components.
+		//newTileItem.setName("newTileItem");
+		openTileItem.setName("openTileItem");
+		gridTileItem.setName("gridTileItem");
+		closeTileItem.setName("closeTileItem");
+		
+		// Add to hashmap.
+		fruitEditor.putHash("openTileItem", openTileItem);
+		fruitEditor.putHash("gridTileItem", gridTileItem);
+		fruitEditor.putHash("closeTileItem", closeTileItem);
+	}
+	
+	private void disableItems() {
+		//newTileItem.setEnabled(false);
+		openTileItem.setEnabled(false);
+		gridTileItem.setEnabled(false);
+		closeTileItem.setEnabled(false);
 	}
 	
 	public void openTileset() {
@@ -111,21 +179,31 @@ public class TilePanel extends JPanel {
 		
 	}
 	
-	public void mouseClicked(MouseEvent e) {
-		
-	}
 	
 	public void mouseDragged(MouseEvent e) {
 		
 	}
 	
 	public void mousePressed(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
 		
+		if (e.isPopupTrigger()) {
+			popupMenu.show(this, mouseX, mouseY);
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
 		oldmouseX = e.getX();
 		oldmouseY = e.getY();
+		
+		if (e.isPopupTrigger()) {
+			popupMenu.show(this, oldmouseX, oldmouseY);
+		}
+	}
+	
+	public void mouseClicked(MouseEvent e) {
+		
 	}
 	
 	public Graphics2D convertTo2D(Graphics g) {
