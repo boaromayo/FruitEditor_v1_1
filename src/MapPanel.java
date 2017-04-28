@@ -76,9 +76,9 @@ public class MapPanel extends JPanel {
 		// Assign popup menu.
 		popupMenu = new JPopupMenu();
 		
-		disableItems();
-		
 		subSetup(); // Setup menu items.
+		
+		disableItems();
 		
 		popupMenu.add(renameItem);
 		

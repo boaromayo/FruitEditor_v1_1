@@ -55,9 +55,9 @@ public class TilePanel extends JPanel {
 		// Assign popup menu.
 		popupMenu = new JPopupMenu();
 		
-		disableItems();
+		subSetup(); // setup items
 		
-		subSetup(); // setup items.
+		disableItems(); // disable menu items
 		
 		// Add items to popup menu.
 		//popupMenu.add(newTileItem);

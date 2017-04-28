@@ -37,31 +37,38 @@ public class FruitPanel extends JPanel implements Runnable {
 		leftPanel = new JPanel();
 		rightPanel = new JPanel();
 		
-		if (fruitEditor.getMap() != null) {
-			mapPanel = new MapPanel(fruitEditor);
-			tilePanel = new TilePanel(fruitEditor);
-			//mapListPanel = new MapListPanel();
+		mapPanel = new MapPanel(fruitEditor);
+		tilePanel = new TilePanel(fruitEditor);
+		//mapListPanel = new MapListPanel();
+
+		tileScrollPane = new JScrollPane(tilePanel);
+		//tileTabbedPane = new JTabbedPane();
+		mapScrollPane = new JScrollPane(mapPanel);
 	
-			tileScrollPane = new JScrollPane(tilePanel);
-			//tileTabbedPane = new JTabbedPane();
-			mapScrollPane = new JScrollPane(mapPanel);
+		mapPanel.setViewport(mapScrollPane.getViewport());
+		tilePanel.setViewport(tileScrollPane.getViewport());
 		
-			mapPanel.setViewport(mapScrollPane.getViewport());
-			tilePanel.setViewport(tileScrollPane.getViewport());
-			
-			//leftPanel.setLayout(new FlowLayout());
-			
-			//rightPanel.setLayout(new BorderLayout());
-			
-			//leftPanel.add(tilePanel);
-			//leftPanel.add(mapListPanel);
-			rightPanel.add(mapPanel);
-			
-			add(leftPanel, BorderLayout.WEST);
-			add(rightPanel, BorderLayout.CENTER);
+		//leftPanel.setLayout(new FlowLayout());
+		
+		//rightPanel.setLayout(new BorderLayout());
+		
+		//leftPanel.add(tilePanel);
+		//leftPanel.add(mapListPanel);
+		rightPanel.add(mapPanel);
+		
+		if (!fruitEditor.isPanelActive() || fruitEditor.getMap() == null) {
+			disablePanels();
 		}
 		
+		add(leftPanel, BorderLayout.WEST);
+		add(rightPanel, BorderLayout.CENTER);
+		
 		repaint();
+	}
+	
+	private void disablePanels() {
+		leftPanel.setEnabled(false);
+		rightPanel.setEnabled(false);
 	}
 	
 	public void run() {
