@@ -47,6 +47,8 @@ public class TilePanel extends JPanel {
 		
 		// Setup popup menu.
 		popupSetup();
+		
+		addMouseListener(fruitListener);
 	}
 	
 	private void popupSetup() {
@@ -85,14 +87,14 @@ public class TilePanel extends JPanel {
 		
 		// Set names for components.
 		//newTileItem.setName("newTileItem");
-		openTileItem.setName("openTileItem");
-		gridTileItem.setName("gridTileItem");
-		closeTileItem.setName("closeTileItem");
+		openTileItem.setName("openTile");
+		gridTileItem.setName("gridTile");
+		closeTileItem.setName("closeTile");
 		
 		// Add component into hashmap.
-		fruitEditor.putComponent("openTileItem", openTileItem);
-		fruitEditor.putComponent("gridTileItem", gridTileItem);
-		fruitEditor.putComponent("closeTileItem", closeTileItem);
+		fruitEditor.putComponent(openTileItem.getName(), openTileItem);
+		fruitEditor.putComponent(gridTileItem.getName(), gridTileItem);
+		fruitEditor.putComponent(closeTileItem.getName(), closeTileItem);
 	}
 	
 	private void disableItems() {

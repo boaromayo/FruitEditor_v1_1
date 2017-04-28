@@ -21,6 +21,13 @@ public class MapPanel extends JPanel {
 	// EVENT LISTENER.
 	private FruitListener fruitListener;
 	
+	// POPUP (RIGHT-CLICK) MENU.
+	private JPopupMenu popupMenu;
+	
+	// POPUP MENU COMPS.
+	private JMenuItem renameItem;
+	private JMenuItem shiftItem;
+	
 	// VIEWPORT.
 	private JViewport viewport;
 	
@@ -54,12 +61,53 @@ public class MapPanel extends JPanel {
 		gridHeight = map.getGridHeight();
 		
 		mouseX = mouseY = 0;
+		
+		// Setup right-click menu.
+		popupSetup();
 	
 		setLayout(new FlowLayout());
 		
 		addMouseListener(fruitListener);
 		addMouseMotionListener(fruitListener);
 		addPropertyChangeListener(fruitListener);
+	}
+	
+	private void popupSetup() {
+		// Assign popup menu.
+		popupMenu = new JPopupMenu();
+		
+		disableItems();
+		
+		subSetup(); // Setup menu items.
+		
+		popupMenu.add(renameItem);
+		
+		popupMenu.addSeparator();
+		
+		popupMenu.add(shiftItem);
+	}
+	
+	private void subSetup() {
+		// RIGHT CLICK MENU ITEMS.
+		renameItem = new JMenuItem("Rename...");	// RENAME
+		shiftItem = new JMenuItem("Shift Map...");  // SHIFT MAP
+		
+		// Add in event listeners.
+		renameItem.addActionListener(fruitListener);
+		shiftItem.addActionListener(fruitListener);
+		
+		// Set names for components.
+		renameItem.setName("rename");
+		shiftItem.setName("shift");
+		
+		// Put comps in hashmap.
+		fruitEditor.putComponent(renameItem.getName(), renameItem);
+		fruitEditor.putComponent(shiftItem.getName(), shiftItem);
+	}
+	
+	private void disableItems() {
+		renameItem.setEnabled(false);
+		shiftItem.setEnabled(false);
 	}
 	
 	@Override
@@ -151,13 +199,25 @@ public class MapPanel extends JPanel {
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
-		
+		fruitListener.propertyChange(e);
 	}
 	
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
 		
+	}
+	
+	public void mousePressed(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+		
+		
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		oldmouseX = e.getX();
+		oldmouseY = e.getY();
 	}
 	
 	public void mouseClicked(MouseEvent e) {
@@ -172,15 +232,6 @@ public class MapPanel extends JPanel {
 	
 	public void mouseDragged(MouseEvent e) {
 		
-	}
-	
-	public void mousePressed(MouseEvent e) {
-		
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		oldmouseX = e.getX();
-		oldmouseY = e.getY();
 	}
 	
 	public boolean gridOn() {

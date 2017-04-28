@@ -146,13 +146,18 @@ public class FruitListener implements ActionListener,
 		
 		// RIGHT CLICK MENUS.
 		// MapPanel item listeners
+		else if (src == getComponent("rename")) {
+			
+		} else if (src == getComponent("shift")) {
+			
+		}
 		
 		// TilePanel item listeners
-		else if (src == getComponent("openTileItem")) {
+		else if (src == getComponent("openTile")) {
 			openTileAction();
-		} else if (src == getComponent("gridTileItem")) {
+		} else if (src == getComponent("gridTile")) {
 			gridTileAction();
-		} else if (src == getComponent("closeTileItem")) {
+		} else if (src == getComponent("closeTile")) {
 			closeTileAction();
 		}
 	}
