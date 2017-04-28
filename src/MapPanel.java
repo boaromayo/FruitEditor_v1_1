@@ -90,7 +90,7 @@ public class MapPanel extends JPanel {
 	private void subSetup() {
 		// RIGHT CLICK MENU ITEMS.
 		renameItem = new JMenuItem("Rename...");	// RENAME
-		shiftItem = new JMenuItem("Shift Map...");  // SHIFT MAP
+		shiftItem = new JMenuItem("Shift...");  // SHIFT MAP
 		
 		// Add in event listeners.
 		renameItem.addActionListener(fruitListener);
