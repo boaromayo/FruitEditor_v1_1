@@ -145,11 +145,11 @@ public class MapPanel extends JPanel {
 		int scale = map.getScale(); // Scale factor based on zoom view.
 		
 		for (r=0; r < mapHeight; r++) {
-			g.drawLine(0, r*mapHeight*map.getScale(), mapWidth*map.getScale(), r*mapHeight*map.getScale());
+			g.drawLine(0, r*mapHeight*scale, mapWidth*scale, r*mapHeight*scale);
 		}
 		
 		for (c=0; c < mapWidth; c++) {
-			g.drawLine(c*mapWidth*map.getScale(), 0, c*mapWidth*map.getScale(), mapHeight*map.getScale());
+			g.drawLine(c*mapWidth*scale, 0, c*mapWidth*scale, mapHeight*scale);
 		}
 	}
 	
@@ -209,15 +209,23 @@ public class MapPanel extends JPanel {
 	}
 	
 	public void mousePressed(MouseEvent e) {
+		int btn = e.getButton();
 		mouseX = e.getX();
 		mouseY = e.getY();
 		
-		
+		if (btn == MouseEvent.BUTTON2) {
+			popupMenu.show(this, mouseX, mouseY);
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		int btn = e.getButton();
 		oldmouseX = e.getX();
 		oldmouseY = e.getY();
+		
+		if (btn == MouseEvent.BUTTON2) {
+			popupMenu.show(this, oldmouseX, oldmouseY);
+		}
 	}
 	
 	public void mouseClicked(MouseEvent e) {

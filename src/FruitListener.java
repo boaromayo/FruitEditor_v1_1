@@ -129,13 +129,13 @@ public class FruitListener implements ActionListener,
 		}
 		
 		// TOOLKIT item listeners
-		/*else if (cmd.equals("Cherry DataBase")) {
+		/*else if (src == getComponent("")) {
 			
-		} else if (cmd.equals("Orange ScriptMaker")) {
+		} else if (src == getComponent("")) {
 			
-		} else if (cmd.equals("Lime ResourceBase")) {
+		} else if (src == getComponent("")) {
 			
-		} else if (cmd.equals("Settings...")) {
+		} else if (src == getComponent("")) {
 			
 		}*/
 		
