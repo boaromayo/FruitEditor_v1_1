@@ -55,8 +55,6 @@ public class MapPanel extends JPanel {
 		
 		fruitListener = fruitEditor.getFruitListener();
 		
-		setBounds(FruitEditor.SCREEN_WIDTH / 4, 0, 3 * FruitEditor.SCREEN_WIDTH / 4, FruitEditor.SCREEN_HEIGHT);
-		
 		mapWidth = map.getCols();
 		mapHeight = map.getRows();
 		
@@ -117,11 +115,11 @@ public class MapPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		
-		Image img = createImage(viewport.getWidth(), viewport.getHeight());
+		Image img = createImage(getWidth(), getHeight());
 		Graphics g2 = img.getGraphics();
 		draw(g2);
 		g.drawImage(img, 0, 0, 
-				viewport.getWidth(), viewport.getHeight(), null);	
+				getWidth(), getHeight(), null);
 	}
 	
 	public void draw(Graphics g) {	
