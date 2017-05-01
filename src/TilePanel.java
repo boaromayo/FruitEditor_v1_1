@@ -174,15 +174,16 @@ public class TilePanel extends JPanel {
 	}
 	
 	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
 		
 	}
 	
 	public void mouseHovered(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
 		
-	}
-	
-	
-	public void mouseDragged(MouseEvent e) {
+		// Make a tool tip text of the hovered over tile.
 		
 	}
 	
@@ -205,6 +206,10 @@ public class TilePanel extends JPanel {
 	}
 	
 	public void mouseClicked(MouseEvent e) {
+		
+	}
+	
+	public void mouseDragged(MouseEvent e) {
 		
 	}
 	

@@ -54,10 +54,10 @@ public class StatusPanel extends JPanel {
 			mapX = mapPanel.getMapX();
 			mapY = mapPanel.getMapY();
 			
-			currentMap.setText(mapName + " (" + mapWidth + "x" + mapHeight + ")");
-			cursorPosition.setText("(" + mapX + "," + mapY + ")");
+			setCurrentMap(mapName, mapWidth, mapHeight);
+			setLocation(mapX, mapY);
 		} else {
-			status.setText("No map selected");
+			setStatus("No map selected");
 			currentMap.setText("");
 			cursorPosition.setText("(0,0)");
 		}
@@ -67,6 +67,14 @@ public class StatusPanel extends JPanel {
 	
 	public void setStatus(String text) {
 		status.setText(text);
+	}
+	
+	public void setCurrentMap(String name, int width, int height) {
+		currentMap.setText(mapName + " (" + mapWidth + " x " + mapHeight + ")");
+	}
+	
+	public void setCursorLocation(int x, int y) {
+		cursorPosition.setText("(" + x + "," + y + ")");
 	}
 	
 	private void setupPanel() {

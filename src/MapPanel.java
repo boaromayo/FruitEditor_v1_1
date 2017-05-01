@@ -205,7 +205,11 @@ public class MapPanel extends JPanel {
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
-		
+	}
+	
+	public void mouseHovered(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 	
 	public void mousePressed(MouseEvent e) {
