@@ -1,11 +1,9 @@
 package FruitEditor;
 
-import java.awt.*;
 import java.awt.image.*;
 
-import java.io.*;
-
 import javax.swing.*;
+import javax.imageio.*;
 
 public class FruitImgBank {
 	// SINGLETON STATIC VARIABLE.
@@ -19,9 +17,9 @@ public class FruitImgBank {
 	public static FruitImgBank get() {
 		// Deal with thread concurrency issues with this block.
 		if (singleton == null) {
-			synchronized (FruitImgLoader.class) {
+			synchronized (FruitImgBank.class) {
 				if (singleton == null) {
-					singleton = new FruitImgLoader();
+					singleton = new FruitImgBank();
 				}
 			}
 		}
@@ -56,7 +54,7 @@ public class FruitImgBank {
 		BufferedImage img;
 		try {
 			System.out.println("Loading image...");
-			img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			img = ImageIO.read(this.getClass().getResource(path));
 			return img;
 		} catch (Exception e) {
 			System.err.println("ERROR: Unable to load buffered image " + path);
