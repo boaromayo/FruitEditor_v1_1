@@ -11,7 +11,7 @@ import javax.swing.filechooser.*;
 
 public class NewDialog implements ActionListener {
 	// DIALOG.
-	private JDialog newDialog;
+	protected JDialog newDialog;
 	
 	// DIALOG SIZE.
 	private final int WIDTH = 480;
@@ -25,16 +25,16 @@ public class NewDialog implements ActionListener {
 	private JLabel gridWidthLabel;
 	private JLabel gridHeightLabel;
 	
-	private JTextField mapText;
+	protected JTextField mapText;
 	//private JTextField tileText;
-	private JSpinner mapWidthText;
-	private JSpinner mapHeightText;
-	private JSpinner gridWidthText;
-	private JSpinner gridHeightText;
+	protected JSpinner mapWidthText;
+	protected JSpinner mapHeightText;
+	protected JSpinner gridWidthText;
+	protected JSpinner gridHeightText;
 	
 	//private JButton browseBtn;
-	private JButton okBtn;
-	private JButton cancelBtn;
+	protected JButton okBtn;
+	protected JButton cancelBtn;
 	
 	// PROPERTIES.
 	private String mapFilename;
@@ -44,7 +44,7 @@ public class NewDialog implements ActionListener {
 	private int gridWidth;
 	private int gridHeight;
 	
-	private MapPanel mapPanel;
+	protected MapPanel mapPanel;
 	
 	public NewDialog(JFrame frame) {
 		String title = "Create New Map";
