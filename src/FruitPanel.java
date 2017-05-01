@@ -48,11 +48,11 @@ public class FruitPanel extends JPanel implements Runnable {
 		mapPanel.setViewport(mapScrollPane.getViewport());
 		tilePanel.setViewport(tileScrollPane.getViewport());
 		
-		leftPanel.setLayout(new FlowLayout());
+		//leftPanel.setLayout(new FlowLayout());
 		
 		rightPanel.setLayout(new BorderLayout());
 		
-		leftPanel.add(tilePanel);
+		//leftPanel.add(tilePanel);
 		//leftPanel.add(mapListPanel);
 		rightPanel.add(mapPanel);
 		
@@ -60,7 +60,7 @@ public class FruitPanel extends JPanel implements Runnable {
 			disablePanels();
 		}
 		
-		add(leftPanel, BorderLayout.WEST);
+		//add(leftPanel, BorderLayout.WEST);
 		add(rightPanel, BorderLayout.CENTER);
 		
 		repaint();
