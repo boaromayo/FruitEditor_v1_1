@@ -139,7 +139,10 @@ public class FruitEditor {
 	public FruitEditor() {
 		fruitFrame = new JFrame();
 		
-		fruitFrame.setTitle("FruitEditor");
+		if (isPanelActive())
+			fruitFrame.setTitle("FruitEditor - " + map.getName() + ".fmp");
+		else
+			fruitFrame.setTitle("FruitEditor");
 		fruitFrame.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
 		fruitFrame.setLayout(new BorderLayout());
 		
