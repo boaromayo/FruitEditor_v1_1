@@ -54,6 +54,9 @@ public class MapPanel extends JPanel {
 		map = f.getMap();
 		
 		fruitListener = fruitEditor.getFruitListener();
+		
+		setBounds(FruitEditor.SCREEN_WIDTH / 4, 0, 3 * FruitEditor.SCREEN_WIDTH / 4, FruitEditor.SCREEN_HEIGHT);
+		
 		mapWidth = map.getCols();
 		mapHeight = map.getRows();
 		

@@ -18,12 +18,12 @@ public class NewDialog implements ActionListener {
 	private final int HEIGHT = 200;
 	
 	// COMPONENTS.
-	private JLabel mapLabel;
+	protected JLabel mapLabel;
 	//private JLabel tileLabel;
-	private JLabel mapWidthLabel;
-	private JLabel mapHeightLabel;
-	private JLabel gridWidthLabel;
-	private JLabel gridHeightLabel;
+	protected JLabel mapWidthLabel;
+	protected JLabel mapHeightLabel;
+	protected JLabel gridWidthLabel;
+	protected JLabel gridHeightLabel;
 	
 	protected JTextField mapText;
 	//private JTextField tileText;
@@ -101,7 +101,7 @@ public class NewDialog implements ActionListener {
 	/**==================================
 	// addComps() - Add components
 	//===================================**/
-	private void addComps() {
+	protected void addComps() {
 		newDialog.setLayout(new GridLayout(3,1,2,2));
 		JPanel one = new JPanel();
 		//JPanel two = new JPanel();
@@ -160,20 +160,28 @@ public class NewDialog implements ActionListener {
 		tileFilename = name;
 	}*/
 	
-	public void setWidth() {
-		mapWidth = getWidth();
+	public void setWidthFromText() {
+		mapWidth = getMapWidth();
 	}
 	
-	public void setHeight() {
-		mapHeight = getHeight();
+	public void setHeightFromText() {
+		mapHeight = getMapHeight();
 	}
 	
-	public void setGridWidth() {
+	public void setGridWidthFromText() {
 		gridWidth = getGridWidth();
 	}
 	
-	public void setGridHeight() {
+	public void setGridHeightFromText() {
 		gridHeight = getGridHeight();
+	}
+	
+	public void setMapWidth(int mw) {
+		mapWidth = mw;
+	}
+	
+	public void setMapHeight(int mh) {
+		mapHeight = mh;
 	}
 	
 	/**==================================
@@ -195,11 +203,11 @@ public class NewDialog implements ActionListener {
 		return tileText.getText();
 	}*/
 	
-	public int getWidth() {
+	public int getMapWidth() {
 		return (Integer)mapWidthText.getValue();
 	}
 	
-	public int getHeight() {
+	public int getMapHeight() {
 		return (Integer)mapHeightText.getValue();
 	}
 	
@@ -214,7 +222,7 @@ public class NewDialog implements ActionListener {
 	/**==================================
 	// HELPER METHODS.
 	//===================================**/
-	private JLabel makeLabel(String text, String name) {
+	protected JLabel makeLabel(String text, String name) {
 		JLabel lbl;
 		
 		lbl = new JLabel(text);
@@ -223,7 +231,7 @@ public class NewDialog implements ActionListener {
 		return lbl;
 	}
 	
-	private JTextField makeTextField(String name) {
+	protected JTextField makeTextField(String name) {
 		return makeTextField(name, 30);
 	}
 	
@@ -237,7 +245,7 @@ public class NewDialog implements ActionListener {
 		return txtField;
 	}
 	
-	private JSpinner makeSpinner(int num, String name) {
+	protected JSpinner makeSpinner(int num, String name) {
 		JSpinner spinner;
 		
 		if (name.startsWith("grid")) {
@@ -255,7 +263,7 @@ public class NewDialog implements ActionListener {
 		return spinner;
 	}
 	 
-	private JButton makeButton(String text, String name) {
+	protected JButton makeButton(String text, String name) {
 		JButton btn;
 		
 		btn = new JButton(text);
@@ -292,14 +300,14 @@ public class NewDialog implements ActionListener {
 			if (btn == okBtn) {
 				// if map name or tileset name is blank, put warning prompt
 				// otherwise, set map name and set map dimensions up
-				if (getMapText().equals("\\s+") || getMapText() == null) {
-					JOptionPane.showMessageDialog(null, 
+				if (getMapText().startsWith("\\s+") || getMapText().contains(null)) {
+					JOptionPane.showMessageDialog(newDialog, 
 							"Enter a name for this map.", 
 							"Map Name Blank", 
 							JOptionPane.WARNING_MESSAGE);
 				} else {
 					// prep the new map
-					mapPanel.setMap(new Map(getWidth(), getHeight(), 
+					mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
 							getGridWidth(), getGridHeight()));
 					mapPanel.setMapName(getMapText());
 					

@@ -45,6 +45,8 @@ public class TilePanel extends JPanel {
 		
 		fruitListener = fruitEditor.getFruitListener();
 		
+		setBounds(0, 0, FruitEditor.SCREEN_WIDTH / 4, FruitEditor.SCREEN_HEIGHT);
+		
 		// Setup popup menu.
 		popupSetup();
 		
