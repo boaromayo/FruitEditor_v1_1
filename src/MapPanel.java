@@ -112,7 +112,7 @@ public class MapPanel extends JPanel {
 	}
 	
 	@Override
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 		super.paintComponent(g);
 		
 		Image img = createImage(getWidth(), getHeight());
@@ -122,10 +122,10 @@ public class MapPanel extends JPanel {
 				getWidth(), getHeight(), null);
 	}
 	
-	public void draw(Graphics g) {	
+	public synchronized void draw(Graphics g) {	
 		if (fruitEditor.isPanelActive()) {
 			g.setColor(Color.WHITE);
-			viewport.setBackground(g.getColor());
+			setBackground(g.getColor());
 		
 			map.draw(g);
 		
@@ -136,7 +136,7 @@ public class MapPanel extends JPanel {
 			drawCursor(g);	
 		} else {
 			g.setColor(Color.GRAY);
-			viewport.setBackground(g.getColor());
+			setBackground(g.getColor());
 		}
 	}
 	
@@ -168,6 +168,7 @@ public class MapPanel extends JPanel {
 	}
 	
 	public void update() {
+		revalidate();
 		repaint();
 	}
 	
@@ -195,6 +196,8 @@ public class MapPanel extends JPanel {
 	public synchronized void setMapSize(int w, int h) {
 		map.setWidth(w);
 		map.setHeight(h);
+		
+		update();
 	}
 	
 	/**========================================
@@ -220,27 +223,37 @@ public class MapPanel extends JPanel {
 	
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
-		mouseX = e.getX();
-		mouseY = e.getY();
-		
-		if (btn == MouseEvent.BUTTON2) {
+
+		if (btn == MouseEvent.BUTTON1) {
+			mouseX = e.getX();
+			mouseY = e.getY();
+		} else if (btn == MouseEvent.BUTTON2) {
+			mouseX = e.getX();
+			mouseY = e.getY();
 			popupMenu.show(this, mouseX, mouseY);
 		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
 		int btn = e.getButton();
-		oldmouseX = e.getX();
-		oldmouseY = e.getY();
 		
-		if (btn == MouseEvent.BUTTON2) {
+		if (btn == MouseEvent.BUTTON1) {
+			oldmouseX = e.getX();
+			oldmouseY = e.getY();
+		} else if (btn == MouseEvent.BUTTON2) {
+			oldmouseX = e.getX();
+			oldmouseY = e.getY();
 			popupMenu.show(this, oldmouseX, oldmouseY);
 		}
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
+		int btn = e.getButton();
+		
+		if (btn == MouseEvent.BUTTON1) {
+			mouseX = e.getX();
+			mouseY = e.getY();
+		}
 		int mx = mouseX / gridWidth;
 		int my = mouseY / gridHeight;
 		

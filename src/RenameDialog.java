@@ -43,7 +43,6 @@ public class RenameDialog extends NewDialog {
 	protected void addComps() {
 		newDialog.setLayout(new GridLayout(3,1,2,2));
 		JPanel one = new JPanel();
-		//JPanel two = new JPanel();
 		JPanel size = new JPanel();
 		JPanel btn = new JPanel();
 		
@@ -51,12 +50,6 @@ public class RenameDialog extends NewDialog {
 		one.add(mapText); // (1,0)
 		
 		newDialog.add(one);
-		
-		//two.add(tileLabel); // (0,1)
-		//two.add(tileText); // (1,1)
-		//two.add(browseBtn); // (2,1)
-		
-		//newdialog.add(two);
 		
 		size.setLayout(new GridLayout(2,2,8,1));
 		
@@ -89,6 +82,9 @@ public class RenameDialog extends NewDialog {
 							"Map Name Blank", 
 							JOptionPane.WARNING_MESSAGE);
 				} else if (getMapWidth() < 0 || getMapHeight() < 0) {
+					// put an error prompt if width and height are less than 0,
+					// though this might not be necessary since the size text fields
+					// don't take in sizes less than 8.
 					JOptionPane.showMessageDialog(null, 
 							"Cannot take in values less than 0.", 
 							"Integer error", 
