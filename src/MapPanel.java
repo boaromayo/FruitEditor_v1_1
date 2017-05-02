@@ -187,6 +187,7 @@ public class MapPanel extends JPanel {
 		gridWidth = m.getGridWidth();
 		gridHeight = m.getGridHeight();
 		
+		update();
 	}
 	
 	public void setMapName(String n) {
@@ -205,6 +206,8 @@ public class MapPanel extends JPanel {
 	//=========================================**/
 	public synchronized void setGrid(boolean gr) {
 		grid = gr;
+		
+		update();
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
