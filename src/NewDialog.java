@@ -2,12 +2,8 @@ package FruitEditor;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
-
-import java.io.*;
 
 import javax.swing.*;
-import javax.swing.filechooser.*;
 
 public class NewDialog implements ActionListener {
 	// DIALOG.
@@ -37,7 +33,6 @@ public class NewDialog implements ActionListener {
 	protected JButton cancelBtn;
 	
 	// PROPERTIES.
-	private String mapFilename;
 	//private String tileFilename;
 	private int mapWidth;
 	private int mapHeight;
@@ -152,10 +147,6 @@ public class NewDialog implements ActionListener {
 		mapText.setText(name);
 	}
 	
-	public void setMapFilename(String name) {
-		mapFilename = name;
-	}
-	
 	/*public void setTilesetFilename(String name) {
 		tileFilename = name;
 	}*/
@@ -178,10 +169,12 @@ public class NewDialog implements ActionListener {
 	
 	public void setMapWidth(int mw) {
 		mapWidth = mw;
+		mapWidthText.setValue(mapWidth);
 	}
 	
 	public void setMapHeight(int mh) {
 		mapHeight = mh;
+		mapHeightText.setValue(mapHeight);
 	}
 	
 	/**==================================
@@ -189,10 +182,6 @@ public class NewDialog implements ActionListener {
 	//===================================**/
 	public String getMapText() {
 		return mapText.getText();
-	}
-	
-	public String getMapFilename() {
-		return mapFilename;
 	}
 	
 	/*public String getTilesetFilename() {
@@ -251,15 +240,12 @@ public class NewDialog implements ActionListener {
 		if (name.startsWith("grid")) {
 			spinner = new JSpinner(
 					new SpinnerNumberModel(num, 8, Map.MAP_SIZE, 1));
-			spinner.setName(name);
-			
 		} else {
 			spinner = new JSpinner(
 					new SpinnerNumberModel(num, num, Map.MAP_SIZE, 1));
-			spinner.setName(name);
-			
 		}
 		
+		spinner.setName(name);
 		return spinner;
 	}
 	 
@@ -317,26 +303,7 @@ public class NewDialog implements ActionListener {
 				}
 			} else if (btn == cancelBtn) {
 				dispose();
-			} /*else if (btn == browseBtn) {
-				JFileChooser open = new JFileChooser();
-				
-				int confirm = open.showOpenDialog(null);
-				
-				if (confirm == JFileChooser.APPROVE_OPTION) {
-					try {
-						// the file to be opened
-						File openfile = open.getSelectedFile();
-						
-						// set tileset filename and text to the pathname
-						setTilesetFilename(openfile.getAbsolutePath());
-						tileText.setText(openfile.getAbsolutePath());
-					} catch (Exception exc) {
-						System.err.println("ERROR: Cannot load file. " +
-								"Reason: " + exc.getMessage() + "\n");
-						exc.printStackTrace();
-					}
-				}
-			}*/
+			}
 		}
 	}
 }
