@@ -84,8 +84,35 @@ public class NewTileDialog implements ActionListener {
 	
 	private void addComps() {
 		tileDialog.setLayout(new GridLayout(4,1,2,2));
+		JPanel one = new JPanel();
+		JPanel two = new JPanel();
+		JPanel sizePanel = new JPanel();
+		JPanel btnPanel = new JPanel();
 		
+		one.add(tileLabel); // (0,0)
+		one.add(tilesetText); // (1,0)
 		
+		tileDialog.add(one);
+	
+		two.add(tileFileLabel); // (0,1)
+		two.add(tilesetFileText); // (1,1)
+		two.add(browseBtn); // (2,1)
+		
+		tileDialog.add(two);
+		
+		sizePanel.setLayout(new GridLayout(2,2,8,1));
+		
+		sizePanel.add(gridWidthLabel); // (0,2)
+		sizePanel.add(gridHeightLabel); // (1,2)
+		sizePanel.add(gridWidthText); // (2,2)
+		sizePanel.add(gridHeightText); //(3,2)
+		
+		tileDialog.add(sizePanel);
+		
+		btnPanel.add(okBtn); // (0,3)
+		btnPanel.add(cancelBtn); // (1,3)
+		
+		tileDialog.add(btnPanel);
 	}
 	
 	/**==================================
