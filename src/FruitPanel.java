@@ -25,6 +25,9 @@ public class FruitPanel extends JPanel implements Runnable {
 	JPanel leftPanel;
 	JPanel rightPanel;
 	
+	// SPLIT PANE.
+	JSplitPane splitPane;
+	
 	public FruitPanel(FruitEditor f) {
 		fruitEditor = f;
 		
@@ -34,6 +37,8 @@ public class FruitPanel extends JPanel implements Runnable {
 	}
 	
 	private void setupPanels() {
+		splitPane = new JSplitPane();
+		
 		leftPanel = new JPanel();
 		rightPanel = new JPanel();
 		
@@ -46,28 +51,31 @@ public class FruitPanel extends JPanel implements Runnable {
 		mapScrollPane = new JScrollPane(mapPanel);
 	
 		mapPanel.setViewport(mapScrollPane.getViewport());
-		tilePanel.setViewport(tileScrollPane.getViewport());
+		//tilePanel.setViewport(tileScrollPane.getViewport());
 		
 		//leftPanel.setLayout(new FlowLayout());	
 		rightPanel.setLayout(new BorderLayout());
 		
-		//leftPanel.add(tilePanel);
-		//leftPanel.add(mapListPanel);
-		rightPanel.add(mapPanel);
+		//leftPanel.add(tileScrollPane);
+		//leftPanel.add(tileTabbedPane);
+		rightPanel.add(mapScrollPane);
 		
 		if (!fruitEditor.isPanelActive() || fruitEditor.getMap() == null) {
 			disablePanels();
 		}
 		
-		//add(leftPanel, BorderLayout.WEST);
-		add(rightPanel, BorderLayout.CENTER);
+		splitPane.setDividerLocation(FruitEditor.SCREEN_WIDTH / 4);
+		//splitPane.setLeftComponent(leftPanel);
+		splitPane.setRightComponent(rightPanel);
 		
-		repaint();
+		add(splitPane, BorderLayout.CENTER);
+		
+		//repaint();
 	}
 	
 	private void disablePanels() {
 		leftPanel.setEnabled(false);
-		//rightPanel.setEnabled(false);
+		rightPanel.setEnabled(false);
 	}
 	
 	public void run() {
@@ -82,15 +90,14 @@ public class FruitPanel extends JPanel implements Runnable {
 		long waitTime;
 		//long elapsedTime = 0;
 		
-		int frameCount = 0;
-		int maxFrameCount = FruitEditor.FPS;
+		//int frameCount = 0;
+		//int maxFrameCount = FruitEditor.FPS;
 		
 		try {
 			while (true) {
 				startTime = System.nanoTime();
 				
 				update();
-				repaint();
 				
 				diffTime = (System.nanoTime() - startTime) / 1000000;
 				waitTime = targetTime - diffTime;
@@ -103,12 +110,12 @@ public class FruitPanel extends JPanel implements Runnable {
 				
 				//elapsedTime += System.nanoTime() - startTime;
 				
-				frameCount++;
+				//frameCount++;
 				
-				if (frameCount == maxFrameCount) {
-					frameCount = 0;
+				//if (frameCount == maxFrameCount) {
+					//frameCount = 0;
 					//elapsedTime = 0;
-				}
+				//}
 			}
 		} catch (Exception e) {
 			System.err.println("ERROR: Cannot open the panels properly. Reason: " +
@@ -131,6 +138,13 @@ public class FruitPanel extends JPanel implements Runnable {
 		
 		return null;
 	}
+	
+	/*public MapListPanel getMapListPanel() {
+		if (mapListPanel != null)
+			return mapListPanel;
+		
+		return null;
+	}*/
 	
 	public void update() {
 		mapPanel.update();
