@@ -11,7 +11,7 @@ public class AboutDialog {
 	private JDialog aboutdialog;
 	
 	// DIMENSIONS.
-	private final int WIDTH = 256;
+	private final int WIDTH = 300;
 	private final int HEIGHT = 128;
 	
 	// VARIABLES.
@@ -46,7 +46,7 @@ public class AboutDialog {
 	
 	private void init() {
 		label1 = makeLabel("FruitEditor v1.1_01", "label1");
-		copyrightlabel = makeLabel("(c) 2016 Nico Poblete", "copyrightlabel");
+		copyrightlabel = makeLabel("(c) 2016-2017 Nico Poblete", "copyrightlabel");
 		//iconlabel = makeLabel("Icons made by ", "iconlabel");
 		iconlabel = makeLabel("Icons made by http://www.aha-soft.com//", "iconlabel");
 	
