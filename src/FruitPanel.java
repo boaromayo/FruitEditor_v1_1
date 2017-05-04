@@ -65,7 +65,8 @@ public class FruitPanel extends JPanel implements Runnable {
 		}
 		
 		splitPane.setDividerLocation(FruitEditor.SCREEN_WIDTH / 4);
-		//splitPane.setLeftComponent(leftPanel);
+		splitPane.setEnabled(false); // Prevents resizing of splitpane.
+		splitPane.setLeftComponent(leftPanel);
 		splitPane.setRightComponent(rightPanel);
 		
 		add(splitPane, BorderLayout.CENTER);
