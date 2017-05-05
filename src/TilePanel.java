@@ -195,20 +195,29 @@ public class TilePanel extends JPanel {
 	}
 	
 	public void mousePressed(MouseEvent e) {
+		int btn = e.getButton();
 		mouseX = e.getX();
 		mouseY = e.getY();
 		
-		if (e.isPopupTrigger()) {
-			popupMenu.show(this, mouseX, mouseY);
+		if (btn == MouseEvent.BUTTON1) {
+			
+		} else if (btn == MouseEvent.BUTTON2) {
+			if (e.isPopupTrigger())
+				popupMenu.show(this, mouseX, mouseY);
 		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		int btn = e.getButton();
 		oldmouseX = e.getX();
 		oldmouseY = e.getY();
 		
-		if (e.isPopupTrigger()) {
-			popupMenu.show(this, oldmouseX, oldmouseY);
+		if (btn == MouseEvent.BUTTON1) {
+			
+		} else if (btn == MouseEvent.BUTTON2) {
+			if (e.isPopupTrigger()) {
+				popupMenu.show(this, oldmouseX, oldmouseY);
+			}
 		}
 	}
 	
