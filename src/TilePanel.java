@@ -40,6 +40,9 @@ public class TilePanel extends JPanel {
 	private int oldmouseX;
 	private int oldmouseY;
 	
+	// SELECTED TILE.
+	private Tile selectedTile;
+	
 	public TilePanel(FruitEditor f) {
 		fruitEditor = f;
 		
@@ -49,6 +52,8 @@ public class TilePanel extends JPanel {
 		
 		// Setup popup menu.
 		popupSetup();
+		
+		selectedTile = new Tile();
 		
 		addMouseListener(fruitListener);
 	}

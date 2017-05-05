@@ -62,6 +62,35 @@ public class Tile {
 		this.transparent = transparent;
 	}
 	
+	public void setTile(Tile t) {
+		if (t != null) {
+			img = t.getImage();
+			id = t.getID();
+			name = (t.getName() == null) ? "" : t.getName();
+			this.setSolid(t.isSolid());
+			this.setDanger(t.isDangerous());
+			this.setTransparent(t.isTransparent());
+		} else {
+			return;
+		}
+	}
+	
+	public void replace(Tile t1, Tile t2) {
+		if (t1 == null || t2 == null) {
+			return;
+		} else if (t1 != t2) {
+			t1.setTile(t2);
+		}
+	}
+	
+	public void setSolid(boolean s) { solid = s; }
+	
+	public void setTransparent(boolean t) { transparent = t; }
+	
+	public void setDanger(boolean d) { danger = d; }
+	
+	public Tile getTile() { return this; }
+	
 	public BufferedImage getImage() { return img; }
 	
 	public int getID() { return id; }
@@ -76,13 +105,7 @@ public class Tile {
 	
 	public boolean isTransparent() { return transparent; }
 	
-	public boolean isDanger() { return danger; }
-	
-	public void setSolid(boolean s) { solid = s; }
-	
-	public void setTransparent(boolean t) { transparent = t; }
-	
-	public void setDanger(boolean d) { danger = d; }
+	public boolean isDangerous() { return danger; }
 	
 	
 }
