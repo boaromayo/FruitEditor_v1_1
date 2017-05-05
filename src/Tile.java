@@ -76,10 +76,10 @@ public class Tile {
 	}
 	
 	public void replace(Tile t1, Tile t2) {
-		if (t1 == null || t2 == null) {
-			return;
-		} else if (t1 != t2) {
+		if (t1 != t2) {
 			t1.setTile(t2);
+		} else if (t1 == null || t2 == null) {
+			return;
 		}
 	}
 	
