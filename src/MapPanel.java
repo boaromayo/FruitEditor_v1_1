@@ -27,6 +27,10 @@ public class MapPanel extends JPanel {
 	// POPUP MENU COMPS.
 	private JMenuItem renameItem;
 	private JMenuItem shiftItem;
+	private JMenuItem cutItem;
+	private JMenuItem copyItem;
+	private JMenuItem pasteItem;
+	private JMenuItem deleteItem;
 	
 	// VIEWPORT.
 	private JViewport viewport;
@@ -82,16 +86,25 @@ public class MapPanel extends JPanel {
 		disableItems();
 		
 		popupMenu.add(renameItem);
+		popupMenu.add(shiftItem);
 		
 		popupMenu.addSeparator();
 		
-		popupMenu.add(shiftItem);
+		popupMenu.add(cutItem);
+		popupMenu.add(copyItem);
+		popupMenu.add(pasteItem);
+		
+		popupMenu.addSeparator();
+		
+		popupMenu.add(deleteItem);
 	}
 	
 	private void subSetup() {
 		// RIGHT CLICK MENU ITEMS.
 		renameItem = new JMenuItem("Rename...");	// RENAME
 		shiftItem = new JMenuItem("Shift...");  // SHIFT MAP
+		
+		editSetup();
 		
 		// Add in event listeners.
 		renameItem.addActionListener(fruitListener);
@@ -106,9 +119,38 @@ public class MapPanel extends JPanel {
 		fruitEditor.putComponent(shiftItem.getName(), shiftItem);
 	}
 	
+	private void editSetup() {
+		// RIGHT CLICK MENU -> EDIT ITEMS.
+		cutItem = new JMenuItem("Cut"); 		// CUT
+		copyItem = new JMenuItem("Copy"); 		// COPY
+		pasteItem = new JMenuItem("Paste"); 	// PASTE
+		deleteItem = new JMenuItem("Delete"); 	// DELETE
+		
+		cutItem.addActionListener(fruitListener);
+		copyItem.addActionListener(fruitListener);
+		pasteItem.addActionListener(fruitListener);
+		deleteItem.addActionListener(fruitListener);
+		
+		// Set names for components.
+		cutItem.setName("cutRt");
+		copyItem.setName("copyRt");
+		pasteItem.setName("pasteRt");
+		deleteItem.setName("deleteRt");
+		
+		// Put comps in hashmap.
+		fruitEditor.putComponent(cutItem.getName(), cutItem);
+		fruitEditor.putComponent(copyItem.getName(), copyItem);
+		fruitEditor.putComponent(pasteItem.getName(), pasteItem);
+		fruitEditor.putComponent(deleteItem.getName(), deleteItem);
+	}
+	
 	private void disableItems() {
 		renameItem.setEnabled(false);
 		shiftItem.setEnabled(false);
+		cutItem.setEnabled(false);
+		copyItem.setEnabled(false);
+		pasteItem.setEnabled(false);
+		deleteItem.setEnabled(false);
 	}
 	
 	@Override

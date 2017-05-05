@@ -70,15 +70,19 @@ public class FruitListener implements ActionListener,
 		
 		// EDIT listeners
 		else if (src == getComponent("cutItem") ||
+				src == getComponent("cutRt") || 
 				src == getComponent("cutBtn")) {
 			cutAction();
 		} else if (src == getComponent("copyItem") ||
+				src == getComponent("copyRt") ||
 				src == getComponent("copyBtn")) {
 			copyAction();
 		} else if (src == getComponent("pasteItem") ||
+				src == getComponent("pasteRt") ||
 				src == getComponent("pasteBtn")) {
 			pasteAction();
 		} else if (src == getComponent("deleteItem") ||
+				src == getComponent("deleteRt") ||
 				src == getComponent("deleteBtn")) {
 			deleteAction();
 		}
