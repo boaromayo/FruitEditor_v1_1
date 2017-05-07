@@ -176,6 +176,10 @@ public class TilePanel extends JPanel {
 		viewport = vp;
 	}
 	
+	public void setSelectedTile(Tile t) {
+		selectedTile.setTile(t);
+	}
+	
 	public void propertyChange(PropertyChangeEvent e) {
 		
 	}
