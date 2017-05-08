@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.border.*;
 
 public class StatusPanel extends JPanel {
 	// FILES.
@@ -31,6 +32,7 @@ public class StatusPanel extends JPanel {
 		map = fruitEditor.getMap();
 		mapPanel = fruitEditor.getMapPanel();
 		
+		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setLayout(new BorderLayout());
 		
 		status = new JLabel("No map selected");
