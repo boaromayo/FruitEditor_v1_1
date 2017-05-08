@@ -32,6 +32,7 @@ public class StatusPanel extends JPanel {
 		map = fruitEditor.getMap();
 		mapPanel = fruitEditor.getMapPanel();
 		
+		setPreferredSize(new Dimension(FruitEditor.SCREEN_WIDTH, 16));
 		setBorder(new LineBorder(Color.GRAY, 1));
 		setLayout(new BorderLayout());
 		
