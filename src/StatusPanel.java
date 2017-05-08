@@ -32,7 +32,7 @@ public class StatusPanel extends JPanel {
 		map = fruitEditor.getMap();
 		mapPanel = fruitEditor.getMapPanel();
 		
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
+		setBorder(new BevelBorder());
 		setLayout(new BorderLayout());
 		
 		status = new JLabel("No map selected");
