@@ -286,7 +286,7 @@ public class NewDialog implements ActionListener {
 			if (btn == okBtn) {
 				// if map name or tileset name is blank, put warning prompt
 				// otherwise, set map name and set map dimensions up
-				if (getMapText().startsWith("\\s+") || getMapText().contains(null)) {
+				if (getMapText().equals("") || getMapText().matches("\\s+")) {
 					JOptionPane.showMessageDialog(newDialog, 
 							"Enter a name for this map.", 
 							"Map Name Blank", 

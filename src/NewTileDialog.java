@@ -235,8 +235,8 @@ public class NewTileDialog implements ActionListener {
 				// if tileset filename and/or tileset name is blank,
 				// put warning, else
 				// set up tile panel for tilesets
-				if (getTilesetFilename().contains(null) || 
-						getTilesetFilename().startsWith("\\s+")) {
+				if (getTilesetFilename().equals("") || 
+						getTilesetFilename().matches("\\s+")) {
 					JOptionPane.showMessageDialog(tileDialog, 
 							"No file for tileset loaded.", 
 							"Tileset File", 
