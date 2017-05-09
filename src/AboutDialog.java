@@ -15,7 +15,7 @@ public class AboutDialog {
 	private final int HEIGHT = 128;
 	
 	// VARIABLES.
-	private JLabel label1;
+	private JLabel versionlabel;
 	private JLabel copyrightlabel;
 	private JLabel iconlabel;
 	
@@ -45,9 +45,8 @@ public class AboutDialog {
 	}
 	
 	private void init() {
-		label1 = makeLabel("FruitEditor v1.1_01", "label1");
+		versionlabel = makeLabel("FruitEditor v0.2.3", "versionlabel");
 		copyrightlabel = makeLabel("(c) 2016-2017 Nico Poblete", "copyrightlabel");
-		//iconlabel = makeLabel("Icons made by ", "iconlabel");
 		iconlabel = makeLabel("Icons made by http://www.aha-soft.com//", "iconlabel");
 	
 		okBtn = makeOKButton("OK", "okBtn");
@@ -56,7 +55,7 @@ public class AboutDialog {
 	private void addComps() {
 		aboutdialog.setLayout(new FlowLayout());
 		
-		aboutdialog.add(label1, BorderLayout.NORTH);
+		aboutdialog.add(versionlabel, BorderLayout.NORTH);
 		aboutdialog.add(copyrightlabel, BorderLayout.CENTER);
 		aboutdialog.add(iconlabel, BorderLayout.SOUTH);
 		
@@ -67,18 +66,14 @@ public class AboutDialog {
 	// HELPER METHODS.
 	//===============================**/
 	private JLabel makeLabel(String text, String name) {
-		JLabel lbl;
-		
-		lbl = new JLabel(text, JLabel.CENTER);
+		JLabel lbl = new JLabel(text, JLabel.CENTER);
 		lbl.setName(name);
 		
 		return lbl;
 	}
 	
 	private JButton makeOKButton(String text, String name) {
-		JButton btn;
-		
-		btn = new JButton(text);
+		JButton btn = new JButton(text);
 		btn.setName(name);
 		
 		btn.addActionListener(new ActionListener() {
