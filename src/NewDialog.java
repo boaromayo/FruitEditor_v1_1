@@ -302,6 +302,11 @@ public class NewDialog implements ActionListener {
 							getGridWidth(), getGridHeight()));
 					mapPanel.setMapName(getMapText());
 					
+					// set fruitpanel active if inactive
+					if (!mapPanel.isPanelActive()) {
+						mapPanel.setPanelActive(true);
+					}
+					
 					setMapText(null); // Leave map text field blank.
 					
 					dispose(); // Remove new map dialog.
