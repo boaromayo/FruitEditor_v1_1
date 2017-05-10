@@ -8,6 +8,8 @@ public class Tile {
 	// IMAGE.
 	private BufferedImage img;
 	
+	private String imgPath;
+	
 	// IMAGE DIMENSIONS.
 	private int imgWidth;
 	private int imgHeight;
@@ -27,6 +29,7 @@ public class Tile {
 	
 	public Tile() {
 		this.img = null;
+		this.imgPath = null;
 		this.id = -1;
 		this.name = "";
 		this.solid = false;
@@ -43,7 +46,10 @@ public class Tile {
 		this();
 		try {
 			this.img = FruitImgBank.get().loadBufferedImage(
-					path, imgWidth, imgHeight);
+					path);
+			this.imgPath = path;
+			this.imgWidth = img.getWidth();
+			this.imgHeight = img.getHeight();
 		} catch (RuntimeException e) {
 			System.err.println(
 					"ERROR: Could not find image in " + path);
@@ -63,23 +69,22 @@ public class Tile {
 	}
 	
 	public void setTile(Tile t) {
-		if (t != null) {
-			img = t.getImage();
-			id = t.getID();
-			name = (t.getName() == null) ? "" : t.getName();
-			this.setSolid(t.isSolid());
-			this.setDanger(t.isDangerous());
-			this.setTransparent(t.isTransparent());
-		} else {
-			return;
-		}
+		if (t == null) return;
+		
+		img = t.getImage();
+		imgPath = t.getImagePath();
+		id = t.getID();
+		name = (t.getName() == null) ? "" : t.getName();
+		this.setSolid(t.isSolid());
+		this.setDanger(t.isDangerous());
+		this.setTransparent(t.isTransparent());
 	}
 	
 	public void replace(Tile t1, Tile t2) {
-		if (t1 != t2) {
+		if (t1 == null || t2 == null) return;
+		
+		if (!t1.equals(t2)) {
 			t1.setTile(t2);
-		} else if (t1 == null || t2 == null) {
-			return;
 		}
 	}
 	
@@ -89,9 +94,27 @@ public class Tile {
 	
 	public void setDanger(boolean d) { danger = d; }
 	
+	public boolean equals(Tile t) {
+		if (t == null) return false;
+		
+		if (this.id == t.id) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean compareTo(Tile t1, Tile t2) {
+		if (t1 == null && t2 == null) return false;
+		
+		return t1.equals(t2);
+	}
+	
 	public Tile getTile() { return this; }
 	
 	public BufferedImage getImage() { return img; }
+	
+	public String getImagePath() { return imgPath; }
 	
 	public int getID() { return id; }
 	
@@ -106,6 +129,5 @@ public class Tile {
 	public boolean isTransparent() { return transparent; }
 	
 	public boolean isDangerous() { return danger; }
-	
 	
 }
