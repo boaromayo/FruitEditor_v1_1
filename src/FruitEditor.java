@@ -166,7 +166,7 @@ public class FruitEditor {
 		
 		fruitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fruitFrame.setLocationRelativeTo(null);
-		fruitFrame.setIconImage(FruitImgBank.get().loadBufferedImage("", 20, 20));
+		//fruitFrame.setIconImage(FruitImgBank.get().loadBufferedImage("", 0, 0, 20, 20));
 		fruitFrame.setVisible(true);
 		fruitFrame.setResizable(false);
 	}
