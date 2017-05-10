@@ -252,6 +252,10 @@ public class MapPanel extends JPanel {
 		update();
 	}
 	
+	public void setPanelActive(boolean act) {
+		fruitEditor.setPanelActive(act);
+	}
+	
 	public void propertyChange(PropertyChangeEvent e) {
 		fruitListener.propertyChange(e);
 	}
@@ -312,6 +316,10 @@ public class MapPanel extends JPanel {
 	
 	public boolean gridOn() {
 		return grid;
+	}
+	
+	public boolean isPanelActive() {
+		return fruitEditor.isPanelActive();
 	}
 	
 	public int getMapX() {
