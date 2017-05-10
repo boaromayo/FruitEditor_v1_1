@@ -2,6 +2,7 @@ package FruitEditor;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 
 import java.io.*;
 
@@ -40,7 +41,7 @@ public class NewTileDialog implements ActionListener {
 		String title = "Load New Tileset";
 		
 		tileDialog = new JDialog(frame);
-		
+
 		init();
 		
 		// Add components.
@@ -242,6 +243,18 @@ public class NewTileDialog implements ActionListener {
 							"Tileset File", 
 							JOptionPane.WARNING_MESSAGE);
 				} else {
+					try {
+						File readfile = new File(getTilesetFilename());
+						BufferedImage bimg = FruitImgBank.get().
+								loadBufferedImage(readfile.getAbsolutePath());
+						//tilePanel.setTileset(bimg); 
+						
+						setTilesetName(null);
+					} catch (Exception fe) {
+						System.err.println("ERROR: File not found. REASON: " + fe.getMessage());
+						fe.printStackTrace();
+					}
+					
 					dispose();
 				}
 			} else if (src == browseBtn) {
@@ -256,7 +269,8 @@ public class NewTileDialog implements ActionListener {
 						
 						// set tileset filename and text to the pathname
 						setTilesetFilename(openfile.getAbsolutePath());
-						tilesetText.setText(openfile.getAbsolutePath());
+						setTilesetName(openfile.getName());
+						
 					} catch (Exception exc) {
 						System.err.println("ERROR: Cannot load file. " +
 								"Reason: " + exc.getMessage() + "\n");

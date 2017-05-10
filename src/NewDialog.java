@@ -286,11 +286,16 @@ public class NewDialog implements ActionListener {
 			if (btn == okBtn) {
 				// if map name or tileset name is blank, put warning prompt
 				// otherwise, set map name and set map dimensions up
-				if (getMapText().equals("") || getMapText().matches("\\s+")) {
+				if (getMapText().equals("") || getMapText().matches("^\\s+")) {
 					JOptionPane.showMessageDialog(newDialog, 
 							"Enter a name for this map.", 
 							"Map Name Blank", 
 							JOptionPane.WARNING_MESSAGE);
+				} else if (mapPanel == null) {
+					JOptionPane.showMessageDialog(newDialog, 
+							"The map panel is not set.",
+							"Map Panel Not Set",
+							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// prep the new map
 					mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
