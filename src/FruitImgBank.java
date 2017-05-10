@@ -48,13 +48,31 @@ public class FruitImgBank {
 	}
 		
 	//====================================
-	// loadBufferedImage(path,width,height) - Load a BufferedImage and place the width and height.
+	// loadBufferedImage(path) - Load a BufferedImage.
 	//====================================
-	public BufferedImage loadBufferedImage(String path, int width, int height) {
+	public BufferedImage loadBufferedImage(String path) {
 		BufferedImage img;
 		try {
 			System.out.println("Loading image...");
 			img = ImageIO.read(this.getClass().getResource(path));
+			return img;
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to load buffered image " + path);
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	//====================================
+	// loadBufferedImage(path,x,y,width,height) - Load a BufferedImage, find (x,y), and note the width and height.
+	//====================================
+	public BufferedImage loadBufferedImage(String path, int x, int y, int width, int height) {
+		BufferedImage img;
+		try {
+			System.out.println("Loading image...");
+			img = ImageIO.read(this.getClass().getResource(path));
+			img = img.getSubimage(x, y, width, height);
 			return img;
 		} catch (Exception e) {
 			System.err.println("ERROR: Unable to load buffered image " + path);
