@@ -53,7 +53,7 @@ public class AboutDialog {
 	}
 	
 	private void addComps() {
-		aboutdialog.setLayout(new FlowLayout());
+		aboutdialog.setLayout(new GridLayout(4,1));
 		
 		aboutdialog.add(versionlabel, BorderLayout.NORTH);
 		aboutdialog.add(copyrightlabel, BorderLayout.CENTER);
@@ -75,7 +75,7 @@ public class AboutDialog {
 	private JButton makeOKButton(String text, String name) {
 		JButton btn = new JButton(text);
 		btn.setName(name);
-		
+	
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aboutdialog.dispose();
