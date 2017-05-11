@@ -21,10 +21,10 @@ public class AboutDialog {
 	
 	private JButton okBtn;
 	
-	public AboutDialog(JFrame frame) {
+	public AboutDialog(FruitEditor f) {
 		String title = "About FruitEditor";
 		
-		aboutdialog = new JDialog(frame);
+		aboutdialog = new JDialog(f.getFrame());
 		
 		init();
 		

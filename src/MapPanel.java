@@ -70,6 +70,7 @@ public class MapPanel extends JPanel {
 		// Setup right-click menu.
 		popupSetup();
 	
+		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		setLayout(new FlowLayout());
 		
 		addMouseListener(fruitListener);
@@ -188,11 +189,11 @@ public class MapPanel extends JPanel {
 		int scale = map.getScale(); // Scale factor based on zoom view.
 		
 		for (r=0; r < mapHeight; r++) {
-			g.drawLine(0, r*mapHeight*scale, mapWidth*scale, r*mapHeight*scale);
+			g.drawLine(0, r*gridHeight, mapWidth*gridWidth, r*gridHeight);
 		}
 		
 		for (c=0; c < mapWidth; c++) {
-			g.drawLine(c*mapWidth*scale, 0, c*mapWidth*scale, mapHeight*scale);
+			g.drawLine(c*gridWidth, 0, c*gridWidth, mapHeight*gridHeight);
 		}
 	}
 	

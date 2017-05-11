@@ -28,9 +28,9 @@ public class FruitListener implements ActionListener,
 	
 	public FruitListener(FruitEditor f) {
 		fruitEditor = f;
-		//map = fruitEditor.getMap();
+		map = fruitEditor.getMap();
 		
-		//mapPanel = fruitEditor.getMapPanel();
+		mapPanel = fruitEditor.getMapPanel();
 		//tilePanel = f.getTilePanel();
 		statusPanel = fruitEditor.getStatusPanel();
 		
@@ -171,7 +171,7 @@ public class FruitListener implements ActionListener,
 	//===============================*/
 	private void newAction() {
 		// Load NEW dialog.
-		new NewDialog(fruitEditor.getFrame());
+		new NewDialog(fruitEditor);
 	}
 	
 	private void openAction() {
@@ -274,7 +274,7 @@ public class FruitListener implements ActionListener,
 	}
 	
 	private void aboutAction() {
-		new AboutDialog(fruitEditor.getFrame());
+		new AboutDialog(fruitEditor);
 	}
 	
 	private void openTileAction() {
@@ -296,20 +296,20 @@ public class FruitListener implements ActionListener,
 	// mouseMoved(event) - Update if mouse moved.
 	//=================================**/
 	public void mouseMoved(MouseEvent e) {
-		
+		mapPanel.mouseMoved(e);
 	}
 	/**================================
 	// mouseHovered(event) - Update if mouse hovered.
 	//=================================**/
 	public void mouseHovered(MouseEvent e) {
-		
+		mapPanel.mouseHovered(e);
 	}
 	
 	/**================================
 	// mouseDragged(event) - Update if mouse dragged.
 	//=================================**/
 	public void mouseDragged(MouseEvent e) {
-		
+		mapPanel.mouseDragged(e);
 	}
 	
 	/**================================
@@ -319,6 +319,7 @@ public class FruitListener implements ActionListener,
 	// mousePressed(event) - Update if mouse pressed.
 	//=================================**/
 	public void mousePressed(MouseEvent e) {
+		mapPanel.mousePressed(e);
 		tilePanel.mousePressed(e);
 	}
 	
@@ -326,6 +327,7 @@ public class FruitListener implements ActionListener,
 	// mouseReleased(event) - Update if mouse released.
 	//=================================**/
 	public void mouseReleased(MouseEvent e) {
+		mapPanel.mouseReleased(e);
 		tilePanel.mouseReleased(e);
 	}
 	

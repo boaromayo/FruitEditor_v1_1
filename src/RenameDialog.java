@@ -7,8 +7,8 @@ import javax.swing.*;
 
 public class RenameDialog extends NewDialog {
 
-	public RenameDialog(JFrame frame) {
-		super(frame);
+	public RenameDialog(FruitEditor f) {
+		super(f);
 		
 		String title = "Rename/Resize Map";
 		

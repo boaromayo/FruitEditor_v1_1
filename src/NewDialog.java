@@ -38,13 +38,15 @@ public class NewDialog implements ActionListener {
 	private int mapHeight;
 	private int gridWidth;
 	private int gridHeight;
-	
+
 	protected MapPanel mapPanel;
 	
-	public NewDialog(JFrame frame) {
+	public NewDialog(FruitEditor f) {
 		String title = "Create New Map";
 		
-		newDialog = new JDialog(frame);
+		newDialog = new JDialog(f.getFrame());
+		
+		mapPanel = f.getMapPanel();
 		
 		init();
 		
@@ -306,6 +308,7 @@ public class NewDialog implements ActionListener {
 					if (!mapPanel.isPanelActive()) {
 						mapPanel.setPanelActive(true);
 					}
+					
 					
 					setMapText(null); // Leave map text field blank.
 					

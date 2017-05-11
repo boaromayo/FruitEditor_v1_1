@@ -566,7 +566,7 @@ public class FruitEditor {
 		subToolbarSetup();
 		
 		// Disable tool buttons if no map is loaded.
-		if (map == null || !panelActive) {
+		if (/*map == null ||*/ !panelActive) {
 			disableTools();		
 		}
 		
@@ -873,9 +873,9 @@ public class FruitEditor {
 	/**========================================
 	// getTilePanel() - Get TilePanel.
 	//=========================================**/
-	/*public MapPanel getTilePanel() {
+	public TilePanel getTilePanel() {
 		return fruitPanel.getTilePanel();
-	}*/
+	}
 	
 	/**========================================
 	// getStatusPanel() - Get StatusPanel.

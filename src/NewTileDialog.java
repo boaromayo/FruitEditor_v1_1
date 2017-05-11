@@ -37,11 +37,13 @@ public class NewTileDialog implements ActionListener {
 	
 	private TilePanel tilePanel;
 	
-	public NewTileDialog(JFrame frame) {
+	public NewTileDialog(FruitEditor f) {
 		String title = "Load New Tileset";
 		
-		tileDialog = new JDialog(frame);
+		tileDialog = new JDialog(f.getFrame());
 
+		tilePanel = f.getTilePanel();
+		
 		init();
 		
 		// Add components.

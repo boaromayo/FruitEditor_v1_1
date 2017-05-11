@@ -43,7 +43,7 @@ public class FruitPanel extends JPanel implements Runnable {
 		rightPanel = new JPanel();
 		
 		mapPanel = new MapPanel(fruitEditor);
-		tilePanel = new TilePanel(fruitEditor);
+		//tilePanel = new TilePanel(fruitEditor);
 		//mapListPanel = new MapListPanel();
 
 		tileScrollPane = new JScrollPane(tilePanel);
