@@ -14,10 +14,6 @@ public class Tile {
 	private int imgWidth;
 	private int imgHeight;
 	
-	// SCALE DIMENSIONS.
-	private int scaleWidth;
-	private int scaleHeight;
-	
 	// ID AND NAME.
 	private int id;
 	private String name;
@@ -38,8 +34,6 @@ public class Tile {
 		
 		imgWidth = img.getWidth();
 		imgHeight = img.getHeight();
-		scaleWidth = imgWidth;
-		scaleHeight = imgHeight;
 	}
 	
 	public Tile(int id, String path, String name) {

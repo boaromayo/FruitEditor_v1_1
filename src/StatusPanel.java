@@ -73,7 +73,7 @@ public class StatusPanel extends JPanel {
 	}
 	
 	public void setCurrentMap(String name, int width, int height) {
-		currentMap.setText(mapName + " (" + mapWidth + " x " + mapHeight + ")");
+		currentMap.setText("Map: " + mapName + " (" + mapWidth + " x " + mapHeight + ")");
 	}
 	
 	public void setCursorLocation(int x, int y) {

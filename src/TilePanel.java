@@ -40,6 +40,9 @@ public class TilePanel extends JPanel {
 	private int oldmouseX;
 	private int oldmouseY;
 	
+	// TILESET.
+	private Tileset tileset;
+	
 	// SELECTED TILE.
 	private Tile selectedTile;
 	
@@ -49,6 +52,9 @@ public class TilePanel extends JPanel {
 		fruitListener = fruitEditor.getFruitListener();
 		
 		setBounds(0, 0, FruitEditor.SCREEN_WIDTH / 4, FruitEditor.SCREEN_HEIGHT);
+		setPreferredSize(new Dimension(
+				tileset.getWidth()*gridWidth, 
+				tileset.getHeight()*gridHeight));
 		
 		// Setup popup menu.
 		popupSetup();
@@ -125,7 +131,7 @@ public class TilePanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		
-		Image img = createImage(viewport.getWidth(), viewport.getHeight());
+		Image img = createImage(getWidth(), getHeight());
 		Graphics g2 = img.getGraphics();
 		draw(g2);
 		g.drawImage(img, 0, 0,

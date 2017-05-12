@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import java.util.*;
 
-public class FruitEditor {
+public class FruitEditor implements Runnable {
 	// CONSTANTS.
 	public static final int SCREEN_WIDTH = 960;
 	public static final int SCREEN_HEIGHT = 640;
@@ -143,6 +143,7 @@ public class FruitEditor {
 			fruitFrame.setTitle("FruitEditor - " + map.getName() + ".fmp");
 		else
 			fruitFrame.setTitle("FruitEditor");
+		
 		fruitFrame.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
 		fruitFrame.setLayout(new BorderLayout());
 		
@@ -171,6 +172,49 @@ public class FruitEditor {
 		fruitFrame.setResizable(false);
 	}
 	
+	public void run() {
+		long startTime, diffTime;
+		
+		long targetTime = 1000 / FruitEditor.FPS;
+		
+		long waitTime;
+		//long elapsedTime = 0;
+		
+		//int frameCount = 0;
+		//int maxFrameCount = FruitEditor.FPS;
+		
+		try {
+			while (true) {
+				startTime = System.nanoTime();
+				
+				update();
+				
+				diffTime = (System.nanoTime() - startTime) / 1000000;
+				waitTime = targetTime - diffTime;
+				
+				if (waitTime < 0) {
+					waitTime = targetTime;
+				}
+				
+				Thread.sleep(waitTime);
+				
+				//elapsedTime += System.nanoTime() - startTime;
+				
+				//frameCount++;
+				
+				//if (frameCount == maxFrameCount) {
+					//frameCount = 0;
+					//elapsedTime = 0;
+				//}
+			}
+		} catch (Exception e) {
+			System.err.println("ERROR: Cannot open the panels properly. Reason: " +
+					e.getMessage());
+			e.getStackTrace();
+			System.exit(1);
+		}
+	}
+	
 	/**================================
 	// panelSetup() - Set up main panels.
 	//================================**/
@@ -197,11 +241,10 @@ public class FruitEditor {
 		toolMenu = new JMenu(menuName[4]);			// TOOLKIT
 		helpMenu = new JMenu(menuName[5]);			// HELP
 			
-		// Disable other menus if no map is loaded
-		// or if panel is inactive.
-		if (map == null || !panelActive) {
-			disableMenus();
-		}
+		// Turn on menus depending on two conditions:
+		// when a map is loaded
+		// and if panel is inactive.
+		toggleMenus(false);
 			
 		// Create menu shortcuts.
 		fileMenu.setMnemonic(menuName[0].charAt(0));
@@ -215,15 +258,15 @@ public class FruitEditor {
 		// Set the menuBar for the frame.
 		fruitFrame.setJMenuBar(menuBar);
 	}
-		
+	
 	/**==================================================
-	// disableMenus() - Disable the menus.
+	// toggleMenus() - Disable or enable the menus if active.
 	//==================================================**/
-	private void disableMenus() {
-		editMenu.setEnabled(false);
-		viewMenu.setEnabled(false);
-		drawMenu.setEnabled(false);
-		toolMenu.setEnabled(false);
+	public void toggleMenus(boolean act) {
+		editMenu.setEnabled(act);
+		viewMenu.setEnabled(act);
+		drawMenu.setEnabled(act);
+		toolMenu.setEnabled(act);
 	}
 		
 	/**==================================================
@@ -277,10 +320,7 @@ public class FruitEditor {
 		closeItem.setName("closeItem");
 		
 		// Case for FILE -> SAVE and FILE -> SAVE AS
-		if (map == null || !panelActive) {
-			saveItem.setEnabled(false);
-			saveAsItem.setEnabled(false);
-		}
+		toggleSave(false);
 		
 		// Add in components.
 		fileMenu.add(newItem);
@@ -298,6 +338,11 @@ public class FruitEditor {
 		hash.put(saveItem.getName(), saveItem);
 		hash.put(saveAsItem.getName(), saveAsItem);
 		hash.put(closeItem.getName(), closeItem);
+	}
+	
+	public void toggleSave(boolean act) {
+		saveItem.setEnabled(act);
+		saveAsItem.setEnabled(act);
 	}
 	
 	private void editSetup() {
@@ -565,10 +610,10 @@ public class FruitEditor {
 		// Create and add the buttons in toolbar.
 		subToolbarSetup();
 		
-		// Disable tool buttons if no map is loaded.
-		if (/*map == null ||*/ !panelActive) {
-			disableTools();		
-		}
+		// Toggle tool buttons depending if:
+		// a map is loaded and
+		// if the panel is active.
+		toggleTools(false);
 		
 		// add toolbar to toolbarPanel.
 		toolbarPanel.add(mainToolBar, BorderLayout.CENTER);
@@ -578,37 +623,37 @@ public class FruitEditor {
 	}
 	
 	/**=========================================
-	// disableTools() - Disable tool buttons.
+	// toggleTools() - Enable tool buttons if panel active.
 	//=========================================**/
-	private void disableTools() {
-		saveBtn.setEnabled(false);
+	public void toggleTools(boolean act) {
+		saveBtn.setEnabled(act);
 		
-		cutBtn.setEnabled(false);
-		copyBtn.setEnabled(false);
-		pasteBtn.setEnabled(false);
-		deleteBtn.setEnabled(false);
+		cutBtn.setEnabled(act);
+		copyBtn.setEnabled(act);
+		pasteBtn.setEnabled(act);
+		deleteBtn.setEnabled(act);
 	
-		undoBtn.setEnabled(false);
-		redoBtn.setEnabled(false);
+		undoBtn.setEnabled(act);
+		redoBtn.setEnabled(act);
 	
-		gridBtn.setEnabled(false);
+		gridBtn.setEnabled(act);
 	
-		oneBtn.setEnabled(false);
-		twoBtn.setEnabled(false);
-		fourBtn.setEnabled(false);
-		eightBtn.setEnabled(false);
+		oneBtn.setEnabled(act);
+		twoBtn.setEnabled(act);
+		fourBtn.setEnabled(act);
+		eightBtn.setEnabled(act);
 	
-		mapModeBtn.setEnabled(false);
-		eventModeBtn.setEnabled(false);
+		mapModeBtn.setEnabled(act);
+		eventModeBtn.setEnabled(act);
 	
-		pencilBtn.setEnabled(false);
-		rectBtn.setEnabled(false);
-		circleBtn.setEnabled(false);
-		fillBtn.setEnabled(false);
+		pencilBtn.setEnabled(act);
+		rectBtn.setEnabled(act);
+		circleBtn.setEnabled(act);
+		fillBtn.setEnabled(act);
 		
-		//cherryBtn.setEnabled(false);
-		//orangeBtn.setEnabled(false);
-		//limeBtn.setEnabled(false);
+		//cherryBtn.setEnabled(act);
+		//orangeBtn.setEnabled(act);
+		//limeBtn.setEnabled(act);
 	}
 	
 	/**=========================================
@@ -646,7 +691,7 @@ public class FruitEditor {
 		// Add in FILE ActionListeners.
 		newBtn.addActionListener(fruitListener);
 		openBtn.addActionListener(fruitListener);
-		//saveBtn.addActionListener(fruitListener);
+		saveBtn.addActionListener(fruitListener);
 	}
 	
 	private void editToolSetup() {
@@ -846,9 +891,9 @@ public class FruitEditor {
 	/**========================================
 	// getPanel() - Get FruitPanel.
 	//=========================================**/
-	/*public FruitPanel getPanel() {
+	public FruitPanel getPanel() {
 		return fruitPanel;
-	}*/
+	}
 	
 	/**========================================
 	// getMap() - Get Map file. 
@@ -903,6 +948,7 @@ public class FruitEditor {
 		fruitPanel.update();
 		statusPanel.update();
 		fruitFrame.repaint();
+		validate();
 	}
 	
 	public void validate() {

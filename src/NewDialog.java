@@ -39,14 +39,14 @@ public class NewDialog implements ActionListener {
 	private int gridWidth;
 	private int gridHeight;
 
-	protected MapPanel mapPanel;
+	protected FruitPanel fruitPanel;
 	
 	public NewDialog(FruitEditor f) {
 		String title = "Create New Map";
 		
 		newDialog = new JDialog(f.getFrame());
 		
-		mapPanel = f.getMapPanel();
+		fruitPanel = f.getPanel();
 		
 		init();
 		
@@ -293,21 +293,22 @@ public class NewDialog implements ActionListener {
 							"Enter a name for this map.", 
 							"Map Name Blank", 
 							JOptionPane.WARNING_MESSAGE);
-				} else if (mapPanel == null) {
+				} else if (fruitPanel.getMapPanel() == null) {
 					JOptionPane.showMessageDialog(newDialog, 
 							"The map panel is not set.",
 							"Map Panel Not Set",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// prep the new map
-					mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
+					fruitPanel.getMapPanel().setMap(new Map(getMapWidth(), getMapHeight(), 
 							getGridWidth(), getGridHeight()));
-					mapPanel.setMapName(getMapText());
+					fruitPanel.getMapPanel().setMapName(getMapText());
 					
 					// set fruitpanel active if inactive
-					if (!mapPanel.isPanelActive()) {
-						mapPanel.setPanelActive(true);
+					if (!fruitPanel.getMapPanel().isPanelActive()) {
+						fruitPanel.getMapPanel().setPanelActive(true);
 					}
+					
 					
 					
 					setMapText(null); // Leave map text field blank.

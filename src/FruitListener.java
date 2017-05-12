@@ -38,10 +38,14 @@ public class FruitListener implements ActionListener,
 	}
 	
 	/**==========================
-	// actionPerformed(event) - Event listener
+	// actionPerformed(event) - Action event listener
 	//===========================**/
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
+		
+		if (fruitEditor.isPanelActive() && map != null) {
+			
+		}
 		
 		// FILE listeners.
 		if (src == getComponent("newBtn") || 
@@ -375,7 +379,7 @@ public class FruitListener implements ActionListener,
 	}
 	
 	/**================================
-	// stateChanged(event) - Update any states changed.
+	// 
 	//=================================**/
 	public void propertyChange(PropertyChangeEvent e) {
 		// For any action taken, place in a stack of actions

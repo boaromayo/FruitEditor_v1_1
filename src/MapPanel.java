@@ -166,20 +166,17 @@ public class MapPanel extends JPanel {
 	}
 	
 	public synchronized void draw(Graphics g) {	
-		if (fruitEditor.isPanelActive()) {
-			g.setColor(Color.WHITE);
-			setBackground(g.getColor());
-		
-			map.draw(g);
+		if (isPanelActive()) {
+			map.draw(g, 
+					(int)viewport.getViewPosition().getX(), 
+					(int)viewport.getViewPosition().getY(),
+					viewport.getSize());
 		
 			if (grid) {
 				drawGrid(g);
 			}
 		
-			drawCursor(g);	
-		} else {
-			g.setColor(Color.GRAY);
-			setBackground(g.getColor());
+			drawCursor(g, mouseX, mouseY);
 		}
 	}
 	
@@ -197,17 +194,13 @@ public class MapPanel extends JPanel {
 		}
 	}
 	
-	private void drawCursor(Graphics g) {
+	private void drawCursor(Graphics g, int mx, int my) {
 		Graphics2D g2 = convertTo2d(g);
-		int mx = mouseX / gridWidth;
-		int my = mouseY / gridHeight;
 		
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		
-		g2.drawRect(mx - Map.OFFSET,
-				my - Map.OFFSET,
-				gridWidth, gridHeight);
+		g2.drawRect(mx , my, gridWidth, gridHeight);
 	}
 	
 	public void update() {

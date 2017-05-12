@@ -91,8 +91,8 @@ public class RenameDialog extends NewDialog {
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// refactor the map name and size
-					mapPanel.setMapName(getMapText());
-					mapPanel.setMapSize(getMapWidth(), getMapHeight());
+					fruitPanel.getMapPanel().setMapName(getMapText());
+					fruitPanel.getMapPanel().setMapSize(getMapWidth(), getMapHeight());
 					
 					setMapText(null); // Leave map text field blank.
 					

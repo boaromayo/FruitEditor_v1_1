@@ -80,18 +80,27 @@ public class Map {
 		fruitTiles = new Tile[mapHeight][mapWidth][mapDepth];
 	}
 	
-	public void draw(Graphics g) {
+	public void draw(Graphics g, int x, int y, Dimension size) {
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, mapWidth*gridWidth, mapHeight*gridHeight);
+		
+		x = Math.max(x, 0);
+		y = Math.max(y, 0);
+		
 		int r = fruitTiles.length;
 		int c = fruitTiles[0].length;
 		
-		for (int i=0; i < r; i++) {
-			for (int j=0; j < c; j++) {
+		r = Math.min(y + (int)size.getHeight(), r);
+		c = Math.min(x + (int)size.getWidth(), c);
+		
+		for (int i=y; i < r; i++) {
+			for (int j=x; j < c; j++) {
 				if (getTile(j,i) != null) {
 					g.drawImage(getTile(j,i).getImage(), 
-							j*scaleWidth, 
-							i*scaleHeight, 
-							j*scaleWidth + gridWidth, 
-							i*scaleHeight + gridHeight, 
+							j*gridWidth, 
+							i*gridHeight, 
+							gridWidth, 
+							gridHeight, 
 							null);
 				}
 			}

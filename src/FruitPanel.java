@@ -7,10 +7,13 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
 
-public class FruitPanel extends JPanel implements Runnable {
+public class FruitPanel extends JPanel {
 	
 	// FILES.
 	private FruitEditor fruitEditor;
+	
+	// LISTENER.
+	private FruitListener fruitListener;
 	
 	// PANELS.
 	private MapPanel mapPanel;
@@ -31,6 +34,11 @@ public class FruitPanel extends JPanel implements Runnable {
 	public FruitPanel(FruitEditor f) {
 		fruitEditor = f;
 		
+		fruitListener = f.getFruitListener();
+		
+		setPreferredSize(new Dimension(
+				FruitEditor.SCREEN_WIDTH, 
+				FruitEditor.SCREEN_HEIGHT));
 		setLayout(new BorderLayout());
 		
 		setupPanels();
@@ -60,9 +68,8 @@ public class FruitPanel extends JPanel implements Runnable {
 		//leftPanel.add(tileTabbedPane);
 		rightPanel.add(mapScrollPane);
 		
-		if (!fruitEditor.isPanelActive() || fruitEditor.getMap() == null) {
-			disablePanels();
-		}
+		leftPanel.setEnabled(fruitEditor.isPanelActive() && fruitEditor.getMap() != null);
+		rightPanel.setEnabled(fruitEditor.isPanelActive() && fruitEditor.getMap() != null);
 		
 		splitPane.setDividerLocation(FruitEditor.SCREEN_WIDTH / 4);
 		splitPane.setEnabled(false); // Prevents resizing of splitpane.
@@ -72,58 +79,6 @@ public class FruitPanel extends JPanel implements Runnable {
 		add(splitPane, BorderLayout.CENTER);
 		
 		//repaint();
-	}
-	
-	private void disablePanels() {
-		leftPanel.setEnabled(false);
-		rightPanel.setEnabled(false);
-	}
-	
-	public void run() {
-		setPreferredSize(new Dimension(
-				FruitEditor.SCREEN_WIDTH, 
-				FruitEditor.SCREEN_HEIGHT));
-		
-		long startTime, diffTime;
-		
-		long targetTime = 1000 / FruitEditor.FPS;
-		
-		long waitTime;
-		//long elapsedTime = 0;
-		
-		//int frameCount = 0;
-		//int maxFrameCount = FruitEditor.FPS;
-		
-		try {
-			while (true) {
-				startTime = System.nanoTime();
-				
-				update();
-				
-				diffTime = (System.nanoTime() - startTime) / 1000000;
-				waitTime = targetTime - diffTime;
-				
-				if (waitTime < 0) {
-					waitTime = targetTime;
-				}
-				
-				Thread.sleep(waitTime);
-				
-				//elapsedTime += System.nanoTime() - startTime;
-				
-				//frameCount++;
-				
-				//if (frameCount == maxFrameCount) {
-					//frameCount = 0;
-					//elapsedTime = 0;
-				//}
-			}
-		} catch (Exception e) {
-			System.err.println("ERROR: Cannot open the panels properly. Reason: " +
-					e.getMessage());
-			e.getStackTrace();
-			System.exit(1);
-		}
 	}
 	
 	public MapPanel getMapPanel() {
