@@ -76,7 +76,7 @@ public class RenameDialog extends NewDialog {
 			if (btn == okBtn) {
 				// if map name or tileset name is blank, put warning prompt
 				// otherwise, set map name and set map dimensions up
-				if (getMapText().equals("\\s+") || getMapText().contains(null)) {
+				if (getMapText().matches("^\\s+") || getMapText().equals("")) {
 					JOptionPane.showMessageDialog(newDialog, 
 							"Enter a name for this map.", 
 							"Map Name Blank", 
