@@ -12,6 +12,7 @@ public class FruitEditor implements Runnable {
 	public static final int SCREEN_WIDTH = 960;
 	public static final int SCREEN_HEIGHT = 640;
 	public static final int FPS = 60;
+	public static final int GRID_SIZE = 8;
 	
 	// MAP ACTIVE.
 	private boolean panelActive = false;
@@ -34,7 +35,7 @@ public class FruitEditor implements Runnable {
 	private Map map;
 	
 	// TILESET FILE
-	//private Tileset tilesetFile;
+	private Tileset tileset;
 	
 	// HASH MAP FOR COMPONENTS.
 	private HashMap<String, JComponent> hash;
@@ -131,6 +132,7 @@ public class FruitEditor implements Runnable {
 	private JToggleButton rectBtn;
 	private JToggleButton circleBtn;
 	private JToggleButton fillBtn;
+	
 	// FRUITTOOLS/TOOLKIT
 	//private JButton cherryBtn;
 	//private JButton orangeBtn;
@@ -150,6 +152,7 @@ public class FruitEditor implements Runnable {
 		hash = new HashMap<String, JComponent>();
 		
 		map = new Map();
+		tileset = new Tileset();
 		
 		// Initialize panels.
 		panelSetup();
@@ -896,7 +899,7 @@ public class FruitEditor implements Runnable {
 	}
 	
 	/**========================================
-	// getMap() - Get Map file. 
+	// getMap() - Get Map. 
 	//=========================================**/
 	public Map getMap() {
 		if (map != null)
@@ -915,11 +918,22 @@ public class FruitEditor implements Runnable {
 		return null;
 	}
 	
+	public Tileset getTileset() {
+		if (tileset != null)
+			return tileset;
+		
+		return null;
+	}
+	
 	/**========================================
 	// getTilePanel() - Get TilePanel.
 	//=========================================**/
 	public TilePanel getTilePanel() {
 		return fruitPanel.getTilePanel();
+	}
+	
+	public Tile getSelectedTile() {
+		return getTilePanel().getSelectedTile();
 	}
 	
 	/**========================================

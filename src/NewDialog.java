@@ -71,7 +71,8 @@ public class NewDialog implements ActionListener {
 		// Initialize dimensions.
 		mapWidth = 8;
 		mapHeight = 8;
-		gridWidth = gridHeight = 24;
+		gridWidth = FruitEditor.GRID_SIZE;
+		gridHeight = FruitEditor.GRID_SIZE;
 		
 		// Initialize labels.
 		mapLabel = makeLabel("Map Name", "mapLabel");
@@ -241,7 +242,7 @@ public class NewDialog implements ActionListener {
 		
 		if (name.startsWith("grid")) {
 			spinner = new JSpinner(
-					new SpinnerNumberModel(num, 8, Map.MAP_SIZE, 1));
+					new SpinnerNumberModel(num, 8, FruitEditor.GRID_SIZE*16, 1));
 		} else {
 			spinner = new JSpinner(
 					new SpinnerNumberModel(num, num, Map.MAP_SIZE, 1));

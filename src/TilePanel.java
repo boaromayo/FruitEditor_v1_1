@@ -31,6 +31,10 @@ public class TilePanel extends JPanel {
 	private JViewport viewport;
 	
 	// DIMENSIONS.
+	private int tilesetWidth;
+	private int tilesetHeight;
+	
+	// GRID DIMENSIONS.
 	private int gridWidth;
 	private int gridHeight;
 	
@@ -51,6 +55,12 @@ public class TilePanel extends JPanel {
 		
 		fruitListener = fruitEditor.getFruitListener();
 		
+		tilesetWidth = tileset.getWidth();
+		tilesetHeight = tileset.getHeight();
+		
+		gridWidth = tileset.getGridWidth();
+		gridHeight = tileset.getGridHeight();
+		
 		setBounds(0, 0, FruitEditor.SCREEN_WIDTH / 4, FruitEditor.SCREEN_HEIGHT);
 		setPreferredSize(new Dimension(
 				tileset.getWidth()*gridWidth, 
@@ -59,9 +69,12 @@ public class TilePanel extends JPanel {
 		// Setup popup menu.
 		popupSetup();
 		
+		tileset = fruitEditor.getTileset();
+		
 		selectedTile = new Tile();
 		
 		addMouseListener(fruitListener);
+		addMouseMotionListener(fruitListener);
 	}
 	
 	private void popupSetup() {
@@ -135,11 +148,14 @@ public class TilePanel extends JPanel {
 		Graphics g2 = img.getGraphics();
 		draw(g2);
 		g.drawImage(img, 0, 0,
-				viewport.getWidth(), viewport.getHeight(), null);
+				getWidth(), getHeight(), null);
 		
 	}
 	
 	public void draw(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, tilesetWidth, tilesetHeight);
+		
 		drawGrid(g);
 	
 		drawCursor(g);
@@ -151,7 +167,6 @@ public class TilePanel extends JPanel {
 		int viewHeight = viewport.getHeight();
 		
 		g.setColor(Color.GRAY);
-		
 		
 		for (r=0; r < viewHeight; r++) {
 			g.drawLine(0, r*gridHeight, viewWidth, r*gridHeight);
@@ -186,6 +201,10 @@ public class TilePanel extends JPanel {
 		selectedTile.setTile(t);
 	}
 	
+	public Tile getSelectedTile() {
+		return selectedTile;
+	}
+	
 	public void propertyChange(PropertyChangeEvent e) {
 		
 	}
@@ -206,11 +225,14 @@ public class TilePanel extends JPanel {
 	
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
+		int mx, my;
 		mouseX = e.getX();
 		mouseY = e.getY();
 		
 		if (btn == MouseEvent.BUTTON1) {
-			
+			mx = mouseX / gridWidth;
+			my = mouseY / gridHeight;
+			setSelectedTile(tileset.getTile(my, mx));
 		} else if (btn == MouseEvent.BUTTON2) {
 			if (e.isPopupTrigger())
 				popupMenu.show(this, mouseX, mouseY);

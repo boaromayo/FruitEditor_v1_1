@@ -48,6 +48,8 @@ public class Map {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = 1;
+		gridWidth = FruitEditor.GRID_SIZE;
+		gridHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 
 		initTiles();
@@ -58,6 +60,8 @@ public class Map {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = depth;
+		gridWidth = FruitEditor.GRID_SIZE;
+		gridHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 		
 		initTiles();

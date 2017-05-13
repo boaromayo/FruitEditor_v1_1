@@ -266,10 +266,15 @@ public class MapPanel extends JPanel {
 	
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
+		int mx, my;
 
 		if (btn == MouseEvent.BUTTON1) {
 			mouseX = e.getX();
 			mouseY = e.getY();
+			mx = mouseX / gridWidth;
+			my = mouseY / gridHeight;
+			
+			map.setTile(mx, my, fruitEditor.getSelectedTile());
 		} else if (btn == MouseEvent.BUTTON2) {
 			mouseX = e.getX();
 			mouseY = e.getY();
@@ -292,15 +297,15 @@ public class MapPanel extends JPanel {
 	
 	public void mouseClicked(MouseEvent e) {
 		int btn = e.getButton();
+		int mx, my;
 		
 		if (btn == MouseEvent.BUTTON1) {
 			mouseX = e.getX();
 			mouseY = e.getY();
+			mx = mouseX / gridWidth;
+			my = mouseY / gridHeight;
 		}
-		int mx = mouseX / gridWidth;
-		int my = mouseY / gridHeight;
 		
-		//map.setTile(mx, my, );
 		update();
 	}
 	
