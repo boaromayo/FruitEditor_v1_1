@@ -57,10 +57,10 @@ public class MapPanel extends JPanel {
 		fruitEditor = f;
 		map = f.getMap();
 		
-		fruitListener = fruitEditor.getFruitListener();
+		fruitListener = f.getFruitListener();
 		
-		mapWidth = map.getCols();
-		mapHeight = map.getRows();
+		mapWidth = map.getWidth();
+		mapHeight = map.getHeight();
 		
 		gridWidth = map.getGridWidth();
 		gridHeight = map.getGridHeight();
@@ -217,8 +217,8 @@ public class MapPanel extends JPanel {
 		
 		map = m;
 		
-		mapWidth = m.getCols();
-		mapHeight = m.getRows();
+		mapWidth = m.getWidth();
+		mapHeight = m.getHeight();
 		
 		gridWidth = m.getGridWidth();
 		gridHeight = m.getGridHeight();

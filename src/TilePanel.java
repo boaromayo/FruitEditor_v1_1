@@ -53,7 +53,7 @@ public class TilePanel extends JPanel {
 	public TilePanel(FruitEditor f) {
 		fruitEditor = f;
 		
-		fruitListener = fruitEditor.getFruitListener();
+		fruitListener = f.getFruitListener();
 		
 		tilesetWidth = tileset.getWidth();
 		tilesetHeight = tileset.getHeight();
@@ -187,6 +187,8 @@ public class TilePanel extends JPanel {
 		g2.setColor(Color.BLACK);
 		
 		g2.drawRect(mx, my, gridWidth, gridHeight);
+		
+		repaint();
 	}
 	
 	public void update() {
@@ -197,8 +199,16 @@ public class TilePanel extends JPanel {
 		viewport = vp;
 	}
 	
+	public void setTileset(Tileset t) {
+		tileset = t;
+	}
+	
 	public void setSelectedTile(Tile t) {
 		selectedTile.setTile(t);
+	}
+	
+	public Tileset getTileset() {
+		return tileset;
 	}
 	
 	public Tile getSelectedTile() {
@@ -241,11 +251,13 @@ public class TilePanel extends JPanel {
 
 	public void mouseReleased(MouseEvent e) {
 		int btn = e.getButton();
+		int mx, my;
 		oldmouseX = e.getX();
 		oldmouseY = e.getY();
 		
 		if (btn == MouseEvent.BUTTON1) {
-			
+			mx = mouseX / gridWidth;
+			my = mouseY / gridHeight;
 		} else if (btn == MouseEvent.BUTTON2) {
 			if (e.isPopupTrigger()) {
 				popupMenu.show(this, oldmouseX, oldmouseY);

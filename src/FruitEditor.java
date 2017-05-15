@@ -12,7 +12,8 @@ public class FruitEditor implements Runnable {
 	public static final int SCREEN_WIDTH = 960;
 	public static final int SCREEN_HEIGHT = 640;
 	public static final int FPS = 60;
-	public static final int GRID_SIZE = 8;
+	public static final int GRID_SIZE = 32;
+	//public static final int TILE_SIZE = 24;
 	
 	// MAP ACTIVE.
 	private boolean panelActive = false;
@@ -908,19 +909,19 @@ public class FruitEditor implements Runnable {
 		return null;
 	}
 	
+	public Tileset getTileset() {
+		if (tileset != null)
+			return tileset;
+		
+		return null;
+	}
+	
 	/**========================================
 	// getMapPanel() - Get MapPanel.
 	//=========================================**/
 	public MapPanel getMapPanel() {
 		if (fruitPanel.getMapPanel() != null)
 			return fruitPanel.getMapPanel();
-		
-		return null;
-	}
-	
-	public Tileset getTileset() {
-		if (tileset != null)
-			return tileset;
 		
 		return null;
 	}
@@ -932,6 +933,9 @@ public class FruitEditor implements Runnable {
 		return fruitPanel.getTilePanel();
 	}
 	
+	/**========================================
+	// getSelectedTile() - Get selected tile.
+	//=========================================**/
 	public Tile getSelectedTile() {
 		return getTilePanel().getSelectedTile();
 	}

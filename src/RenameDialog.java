@@ -1,6 +1,6 @@
 package FruitEditor;
 
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -18,8 +18,6 @@ public class RenameDialog extends NewDialog {
 	@Override
 	public void init() {
 		// Initialize dimensions.
-		setMapWidth(8);
-		setMapHeight(8);
 		
 		// Initialize labels.
 		mapLabel = makeLabel("Map Name", "mapLabel");
@@ -91,8 +89,10 @@ public class RenameDialog extends NewDialog {
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// refactor the map name and size
-					fruitPanel.getMapPanel().setMapName(getMapText());
-					fruitPanel.getMapPanel().setMapSize(getMapWidth(), getMapHeight());
+					mapPanel.setMapName(getMapText());
+					mapPanel.setMapSize(getMapWidth(), getMapHeight());
+					
+					fruitEditor.validate();
 					
 					setMapText(null); // Leave map text field blank.
 					

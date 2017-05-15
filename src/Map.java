@@ -17,8 +17,11 @@ public class Map {
 	public static final int SCALE_FOUR = 4;
 	public static final int SCALE_EIGHT = 8;
 	
-	// NAME.
+	// MAP NAME.
 	private String name;
+	
+	// TILES.
+	private Tile[][][] fruitTiles;
 	
 	// DIMENSIONS.
 	private int mapWidth;
@@ -33,9 +36,10 @@ public class Map {
 	// GRID DIMENSIONS.
 	private int gridWidth;
 	private int gridHeight;
-	
-	// TILES.
-	private Tile[][][] fruitTiles;
+
+	// TILE DIMENSIONS.
+	//private int tileWidth;
+	//private int tileHeight;
 	
 	// CURSOR.
 	//private Cursor cursor;
@@ -50,6 +54,8 @@ public class Map {
 		mapDepth = 1;
 		gridWidth = FruitEditor.GRID_SIZE;
 		gridHeight = FruitEditor.GRID_SIZE;
+		//tileWidth = FruitEditor.TILE_SIZE;
+		//tileHeight = FruitEditor.TILE_SIZE;
 		scaleFactor = 1;
 
 		initTiles();
@@ -62,6 +68,8 @@ public class Map {
 		mapDepth = depth;
 		gridWidth = FruitEditor.GRID_SIZE;
 		gridHeight = FruitEditor.GRID_SIZE;
+		//tileWidth = FruitEditor.TILE_SIZE;
+		//tileHeight = FruitEditor.TILE_SIZE;
 		scaleFactor = 1;
 		
 		initTiles();
@@ -74,6 +82,8 @@ public class Map {
 		mapDepth = 1;
 		gridWidth = gw;
 		gridHeight = gh;
+		//tileWidth = FruitEditor.TILE_SIZE;
+		//tileHeight = FruitEditor.TILE_SIZE;
 		scaleFactor = 1;
 		
 		initTiles();
@@ -133,6 +143,10 @@ public class Map {
 	
 	public void setGridHeight(int gh) { gridHeight = gh; }
 	
+	//public void setTileWidth(int tw) { tileWidth = tw; }
+	
+	//public void setTileHeight(int th) { tileHeight = th; }
+	
 	public void setTile(int x, int y, Tile t) {
 		setTile(x,y,0,t); // set first layer by default
 	}
@@ -149,15 +163,19 @@ public class Map {
 	
 	public int getScaleHeight() { return scaleHeight; }
 	
-	public int getRows() { return mapHeight; }
+	public int getWidth() { return mapWidth; }
 	
-	public int getCols() { return mapWidth; }
+	public int getHeight() { return mapHeight; }
 	
 	public int getLayers() { return mapDepth; }
 	
 	public int getGridWidth() { return gridWidth; }
 	
 	public int getGridHeight() { return gridHeight; }
+	
+	//public int getTileWidth() { return tileWidth; }
+	
+	//public int getTileHeight() { return tileHeight; }
 	
 	public Tile getTile(int x, int y) {
 		return getTile(x,y,0); // get first layer by default

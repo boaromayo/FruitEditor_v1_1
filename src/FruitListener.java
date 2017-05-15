@@ -14,7 +14,7 @@ import java.util.*;
 import java.beans.*;
 
 public class FruitListener implements ActionListener,
-	PropertyChangeListener, MouseListener, MouseMotionListener, KeyListener {
+	ChangeListener, PropertyChangeListener, MouseListener, MouseMotionListener, KeyListener {
 	
 	private FruitEditor fruitEditor;
 	
@@ -381,6 +381,10 @@ public class FruitListener implements ActionListener,
 	/**================================
 	// 
 	//=================================**/
+	public void stateChanged(ChangeEvent e) {
+		
+	}
+	
 	public void propertyChange(PropertyChangeEvent e) {
 		// For any action taken, place in a stack of actions
 		actions.add(e);
@@ -444,8 +448,8 @@ public class FruitListener implements ActionListener,
 				new BufferedWriter(new FileWriter(file)));
 		
 			// Write width and height
-			writer.print(map.getCols() + " ");
-			writer.println(map.getRows());
+			writer.print(map.getHeight() + " ");
+			writer.println(map.getWidth());
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();

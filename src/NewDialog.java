@@ -39,14 +39,16 @@ public class NewDialog implements ActionListener {
 	private int gridWidth;
 	private int gridHeight;
 
-	protected FruitPanel fruitPanel;
+	protected FruitEditor fruitEditor;
+	protected MapPanel mapPanel;
 	
 	public NewDialog(FruitEditor f) {
 		String title = "Create New Map";
 		
-		newDialog = new JDialog(f.getFrame());
+		fruitEditor = f;
+		mapPanel = f.getMapPanel();
 		
-		fruitPanel = f.getPanel();
+		newDialog = new JDialog(f.getFrame());
 		
 		init();
 		
@@ -154,32 +156,6 @@ public class NewDialog implements ActionListener {
 		tileFilename = name;
 	}*/
 	
-	public void setWidthFromText() {
-		mapWidth = getMapWidth();
-	}
-	
-	public void setHeightFromText() {
-		mapHeight = getMapHeight();
-	}
-	
-	public void setGridWidthFromText() {
-		gridWidth = getGridWidth();
-	}
-	
-	public void setGridHeightFromText() {
-		gridHeight = getGridHeight();
-	}
-	
-	public void setMapWidth(int mw) {
-		mapWidth = mw;
-		mapWidthText.setValue(mapWidth);
-	}
-	
-	public void setMapHeight(int mh) {
-		mapHeight = mh;
-		mapHeightText.setValue(mapHeight);
-	}
-	
 	/**==================================
 	// PROPERTY GETTER METHODS.
 	//===================================**/
@@ -242,7 +218,7 @@ public class NewDialog implements ActionListener {
 		
 		if (name.startsWith("grid")) {
 			spinner = new JSpinner(
-					new SpinnerNumberModel(num, 8, FruitEditor.GRID_SIZE*16, 1));
+					new SpinnerNumberModel(num, gridWidth, gridWidth*16, 1));
 		} else {
 			spinner = new JSpinner(
 					new SpinnerNumberModel(num, num, Map.MAP_SIZE, 1));
@@ -294,23 +270,24 @@ public class NewDialog implements ActionListener {
 							"Enter a name for this map.", 
 							"Map Name Blank", 
 							JOptionPane.WARNING_MESSAGE);
-				} else if (fruitPanel.getMapPanel() == null) {
+				} else if (mapPanel == null) {
 					JOptionPane.showMessageDialog(newDialog, 
 							"The map panel is not set.",
 							"Map Panel Not Set",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// prep the new map
-					fruitPanel.getMapPanel().setMap(new Map(getMapWidth(), getMapHeight(), 
+					mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
 							getGridWidth(), getGridHeight()));
-					fruitPanel.getMapPanel().setMapName(getMapText());
+					mapPanel.setMapName(getMapText());
 					
 					// set fruitpanel active if inactive
-					if (!fruitPanel.getMapPanel().isPanelActive()) {
-						fruitPanel.getMapPanel().setPanelActive(true);
+					if (!mapPanel.isPanelActive()) {
+						mapPanel.setPanelActive(true);
 					}
 					
-					
+					mapPanel.repaint();
+					fruitEditor.validate();
 					
 					setMapText(null); // Leave map text field blank.
 					
