@@ -169,18 +169,22 @@ public class NewDialog implements ActionListener, ChangeListener {
 	
 	public void setMapWidth(int w) {
 		mapWidth = w;
+		mapWidthText.setValue(w);
 	}
 	
 	public void setMapHeight(int h) {
 		mapHeight = h;
+		mapHeightText.setValue(h);
 	}
 	
 	public void setGridWidth(int gw) {
 		gridWidth = gw;
+		gridWidthText.setValue(gw);
 	}
 	
 	public void setGridHeight(int gh) {
 		gridHeight = gh;
+		gridHeightText.setValue(gh);
 	}
 	
 	public void setLock(boolean l) {
@@ -341,8 +345,13 @@ public class NewDialog implements ActionListener, ChangeListener {
 				}
 			} else if (btn == cancelBtn) {
 				dispose();
-			} else if (btn == lockBtn) {
+			} else if (btn == lockBtn) { // set width and height text field to default if lock btn pressed.
 				setLock(lockBtn.isSelected());
+				
+				if (lock) {
+					setGridWidth(FruitEditor.GRID_SIZE);
+					setGridHeight(FruitEditor.GRID_SIZE);
+				}
 			}
 		}
 	}
@@ -360,13 +369,12 @@ public class NewDialog implements ActionListener, ChangeListener {
 			} else if (src == gridWidthText) {
 				setGridWidth((Integer)gridWidthText.getValue()); // Set grid width to value in text field.
 				if (lock) {
-					gridHeightText.setValue(gridWidth); // Also set grid height if locked.
-					setGridHeight((Integer)gridWidthText.getValue()); // Set grid height text field to new height.
+					// Also set grid height and its text field to new height if locked.
+					setGridHeight((Integer)gridWidthText.getValue());
 				}
 			} else if (src == gridHeightText) {
 				setGridHeight((Integer)gridHeightText.getValue());
 				if (lock) {
-					gridWidthText.setValue(gridHeight);
 					setGridWidth((Integer)gridHeightText.getValue());
 				}
 			}
