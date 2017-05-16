@@ -1,11 +1,13 @@
 package FruitEditor;
 
 import java.awt.*;
+
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 
-public class NewDialog implements ActionListener {
+public class NewDialog implements ActionListener, ChangeListener {
 	// DIALOG.
 	protected JDialog newDialog;
 	
@@ -31,6 +33,7 @@ public class NewDialog implements ActionListener {
 	//private JButton browseBtn;
 	protected JButton okBtn;
 	protected JButton cancelBtn;
+	protected JToggleButton lockBtn;
 	
 	// PROPERTIES.
 	//private String tileFilename;
@@ -38,6 +41,8 @@ public class NewDialog implements ActionListener {
 	private int mapHeight;
 	private int gridWidth;
 	private int gridHeight;
+	
+	private boolean lock = true;
 
 	protected FruitEditor fruitEditor;
 	protected MapPanel mapPanel;
@@ -92,10 +97,19 @@ public class NewDialog implements ActionListener {
 		gridWidthText = makeSpinner(gridWidth, "gridWidthText");
 		gridHeightText = makeSpinner(gridHeight, "gridHeightText");
 		
+		// add change listeners.
+		mapWidthText.addChangeListener(this);
+		mapHeightText.addChangeListener(this);
+		gridWidthText.addChangeListener(this);
+		gridHeightText.addChangeListener(this);
+		
 		// initialize buttons.
 		//browseBtn 	= makeButton("B", "../img/openfile.png", "browseBtn"); // Load open dialog to browse tileset files (*.png, *.jpg)
 		okBtn  	   	= makeButton("OK", "okBtn");
 		cancelBtn  	= makeButton("Cancel", "cancelBtn");
+		lockBtn		= makeToggleBtn("Lock", "lockBtn");
+		
+		lockBtn.setSelected(lock); // set button state to lock.
 	}
 	
 	/**==================================
@@ -132,8 +146,11 @@ public class NewDialog implements ActionListener {
 		
 		newDialog.add(size);
 		
+		btn.setLayout(new GridLayout(1,3,2,2));
+		
 		btn.add(okBtn); // (0,3)
 		btn.add(cancelBtn); // (1,3)
+		btn.add(lockBtn); // (2,3)
 		
 		newDialog.add(btn);
 	}
@@ -155,6 +172,26 @@ public class NewDialog implements ActionListener {
 	/*public void setTilesetFilename(String name) {
 		tileFilename = name;
 	}*/
+	
+	public void setMapWidth(int w) {
+		mapWidth = w;
+	}
+	
+	public void setMapHeight(int h) {
+		mapHeight = h;
+	}
+	
+	public void setGridWidth(int gw) {
+		gridWidth = gw;
+	}
+	
+	public void setGridHeight(int gh) {
+		gridHeight = gh;
+	}
+	
+	public void setLock(boolean l) {
+		lock = l;
+	}
 	
 	/**==================================
 	// PROPERTY GETTER METHODS.
@@ -187,6 +224,8 @@ public class NewDialog implements ActionListener {
 		return (Integer)gridHeightText.getValue();
 	}
 	
+	public boolean isSizeLocked() { return lock; }
+ 	
 	/**==================================
 	// HELPER METHODS.
 	//===================================**/
@@ -218,7 +257,7 @@ public class NewDialog implements ActionListener {
 		
 		if (name.startsWith("grid")) {
 			spinner = new JSpinner(
-					new SpinnerNumberModel(num, gridWidth, gridWidth*16, 1));
+					new SpinnerNumberModel(num, 8, gridWidth*16, 1));
 		} else {
 			spinner = new JSpinner(
 					new SpinnerNumberModel(num, num, Map.MAP_SIZE, 1));
@@ -232,6 +271,17 @@ public class NewDialog implements ActionListener {
 		JButton btn;
 		
 		btn = new JButton(text);
+		btn.setName(name);
+		
+		btn.addActionListener(this);
+		
+		return btn;
+	}
+	
+	protected JToggleButton makeToggleBtn(String text, String name) {
+		JToggleButton btn;
+		
+		btn = new JToggleButton(text);
 		btn.setName(name);
 		
 		btn.addActionListener(this);
@@ -295,6 +345,34 @@ public class NewDialog implements ActionListener {
 				}
 			} else if (btn == cancelBtn) {
 				dispose();
+			} else if (btn == lockBtn) {
+				setLock(lockBtn.isSelected());
+			}
+		}
+	}
+	
+	public void stateChanged(ChangeEvent e) {
+		Object src = e.getSource();
+		
+		if (newDialog.isVisible()) {
+			if (src == mapWidthText) {
+				setMapWidth((Integer)mapWidthText.getValue());
+				System.out.println(mapWidth); // test debug here
+			} else if (src == mapHeightText) {
+				setMapHeight((Integer)mapHeightText.getValue());
+				System.out.println(mapHeight); // test debug here
+			} else if (src == gridWidthText) {
+				setGridWidth((Integer)gridWidthText.getValue()); // Set grid width to value in text field.
+				if (lock) {
+					gridHeightText.setValue(gridWidth); // Also set grid height if locked.
+					setGridHeight((Integer)gridWidthText.getValue()); // Set grid height text field to new height.
+				}
+			} else if (src == gridHeightText) {
+				setGridHeight((Integer)gridHeightText.getValue());
+				if (lock) {
+					gridWidthText.setValue(gridHeight);
+					setGridWidth((Integer)gridHeightText.getValue());
+				}
 			}
 		}
 	}
