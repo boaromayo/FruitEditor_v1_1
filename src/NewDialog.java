@@ -97,12 +97,6 @@ public class NewDialog implements ActionListener, ChangeListener {
 		gridWidthText = makeSpinner(gridWidth, "gridWidthText");
 		gridHeightText = makeSpinner(gridHeight, "gridHeightText");
 		
-		// add change listeners.
-		mapWidthText.addChangeListener(this);
-		mapHeightText.addChangeListener(this);
-		gridWidthText.addChangeListener(this);
-		gridHeightText.addChangeListener(this);
-		
 		// initialize buttons.
 		//browseBtn 	= makeButton("B", "../img/openfile.png", "browseBtn"); // Load open dialog to browse tileset files (*.png, *.jpg)
 		okBtn  	   	= makeButton("OK", "okBtn");
@@ -264,6 +258,8 @@ public class NewDialog implements ActionListener, ChangeListener {
 		}
 		
 		spinner.setName(name);
+		spinner.addChangeListener(this);
+		
 		return spinner;
 	}
 	 
