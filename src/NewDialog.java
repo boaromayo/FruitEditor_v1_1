@@ -3,11 +3,12 @@ package FruitEditor;
 import java.awt.*;
 
 import java.awt.event.*;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class NewDialog implements ActionListener, ChangeListener {
+public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	// DIALOG.
 	protected JDialog newDialog;
 	
@@ -71,6 +72,7 @@ public class NewDialog implements ActionListener, ChangeListener {
 		newDialog.setLocationRelativeTo(null);
 		newDialog.setVisible(true);
 		newDialog.setFocusable(true);
+		newDialog.requestFocus();
 		newDialog.setResizable(false);
 	}
 	
@@ -246,6 +248,7 @@ public class NewDialog implements ActionListener, ChangeListener {
 		txtField = new JTextField(width);
 		txtField.setName(name);
 		txtField.addActionListener(this);
+		txtField.addKeyListener(this);
 		
 		return txtField;
 	}
@@ -263,6 +266,7 @@ public class NewDialog implements ActionListener, ChangeListener {
 		
 		spinner.setName(name);
 		spinner.addChangeListener(this);
+		spinner.addKeyListener(this);
 		
 		return spinner;
 	}
@@ -274,6 +278,7 @@ public class NewDialog implements ActionListener, ChangeListener {
 		btn.setName(name);
 		
 		btn.addActionListener(this);
+		btn.addKeyListener(this);
 		
 		return btn;
 	}
@@ -285,6 +290,7 @@ public class NewDialog implements ActionListener, ChangeListener {
 		btn.setName(name);
 		
 		btn.addActionListener(this);
+		btn.addKeyListener(this);
 		
 		return btn;
 	}
@@ -301,6 +307,7 @@ public class NewDialog implements ActionListener, ChangeListener {
 		
 		btn.setName(name);
 		btn.addActionListener(this);
+		btn.addKeyListener(this);
 		
 		return btn;
 	}*/
@@ -313,39 +320,11 @@ public class NewDialog implements ActionListener, ChangeListener {
 		
 		if (newDialog.isVisible()) {
 			if (btn == okBtn) {
-				// if map name or tileset name is blank, put warning prompt
-				// otherwise, set map name and set map dimensions up
-				if (getMapText().equals("") || getMapText().matches("^\\s+")) {
-					JOptionPane.showMessageDialog(newDialog, 
-							"Enter a name for this map.", 
-							"Map Name Blank", 
-							JOptionPane.WARNING_MESSAGE);
-				} else if (mapPanel == null) {
-					JOptionPane.showMessageDialog(newDialog, 
-							"The map panel is not set.",
-							"Map Panel Not Set",
-							JOptionPane.ERROR_MESSAGE);
-				} else {
-					// prep the new map
-					mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
-							getGridWidth(), getGridHeight()));
-					mapPanel.setMapName(getMapText());
-					
-					// set fruitpanel active if inactive
-					if (!mapPanel.isPanelActive()) {
-						mapPanel.setPanelActive(true);
-					}
-					
-					mapPanel.repaint();
-					fruitEditor.validate();
-					
-					setMapText(null); // Leave map text field blank.
-					
-					dispose(); // Remove new map dialog.
-				}
+				loadMap();
 			} else if (btn == cancelBtn) {
 				dispose();
-			} else if (btn == lockBtn) { // set width and height text field to default if lock btn pressed.
+			} else if (btn == lockBtn) { 
+				// set width and height text field to default size if locked.
 				setLock(lockBtn.isSelected());
 				
 				if (lock) {
@@ -378,6 +357,64 @@ public class NewDialog implements ActionListener, ChangeListener {
 					setGridWidth((Integer)gridHeightText.getValue());
 				}
 			}
+		}
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		Object src = e.getSource();
+		int key = e.getKeyCode();
+		
+		if (newDialog.isVisible()) {
+			if (key == KeyEvent.VK_ENTER) {
+				if (src == okBtn) {
+					okBtn.doClick();
+				} else if (src == cancelBtn) {
+					cancelBtn.doClick();
+				} else if (src == lockBtn) {
+					lockBtn.doClick();
+				}
+			} else if (key == KeyEvent.VK_ESCAPE) {
+				dispose();
+			}
+		}
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		
+	}
+	
+	public void keyTyped(KeyEvent e) {
+		
+	}
+	
+	private void loadMap() {
+		// if map name or tileset name is blank, put warning prompt
+		// otherwise, set map name and set map dimensions up
+		if (getMapText().equals("") || getMapText().matches("^\\s+")) {
+			JOptionPane.showMessageDialog(newDialog, 
+					"Enter a name for this map.", 
+					"Map Name Blank", 
+					JOptionPane.WARNING_MESSAGE);
+		} else if (mapPanel == null) {
+			JOptionPane.showMessageDialog(newDialog, 
+					"The map panel is not set.",
+					"Map Panel Not Set",
+					JOptionPane.ERROR_MESSAGE);
+		} else {
+			// prep the new map
+			mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
+					getGridWidth(), getGridHeight()));
+			mapPanel.setMapName(getMapText());
+			
+			// set fruitpanel active if inactive
+			mapPanel.setPanelActive(true);
+			
+			mapPanel.repaint();
+			fruitEditor.validate();
+			
+			setMapText(null); // Leave map text field blank.
+			
+			dispose(); // Remove new map dialog.
 		}
 	}
 }
