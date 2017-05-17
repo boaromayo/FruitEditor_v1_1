@@ -43,10 +43,6 @@ public class FruitListener implements ActionListener,
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
 		
-		if (fruitEditor.isPanelActive() && map != null) {
-			
-		}
-		
 		// FILE listeners.
 		if (src == getComponent("newBtn") || 
 				src == getComponent("newItem")) {
@@ -94,7 +90,8 @@ public class FruitListener implements ActionListener,
 		// VIEW -> GRID
 		else if (src == getComponent("gridItem") || 
 				src == getComponent("gridBtn")) {
-			gridAction();
+			gridAction((JCheckBoxMenuItem)getComponent("gridItem"), 
+					(JButton)getComponent("gridBtn"));
 		}
 		
 		// VIEW -> SCALE item listeners
@@ -268,11 +265,7 @@ public class FruitListener implements ActionListener,
 		
 	}
 	
-	private void gridAction() {
-		JCheckBoxMenuItem gridItem = 
-				(JCheckBoxMenuItem)getComponent("gridItem");
-		JButton gridBtn = (JButton)getComponent("gridBtn");
-		
+	private void gridAction(JCheckBoxMenuItem gridItem, JButton gridBtn) {
 		mapPanel.setGrid(gridItem.isSelected() || gridBtn.isSelected());
 		mapPanel.update();
 	}
@@ -379,10 +372,17 @@ public class FruitListener implements ActionListener,
 	}
 	
 	/**================================
-	// 
+	// STATE CHANGE METHODS
 	//=================================**/
 	public void stateChanged(ChangeEvent e) {
+		/*Object src = e.getSource();
 		
+		if (fruitEditor.isPanelActive()) {
+			fruitEditor.toggleMenus(true);
+			fruitEditor.toggleSave(true);
+			fruitEditor.toggleTools(true);
+			statusPanel.update();
+		}*/
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
