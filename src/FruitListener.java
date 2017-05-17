@@ -479,20 +479,19 @@ public class FruitListener implements ActionListener,
 	//=============================**/
 	private JFileChooser makeFileChooser() {
 		JFileChooser jfc = new JFileChooser();
+		
+		// FruitEditor and text files only.
 		FileNameExtensionFilter filter = 
-				new FileNameExtensionFilter("FruitEditor Maps (*.fmp)", "fmp", "txt");
-		
-		jfc.setFileFilter(filter);
-		
-		return jfc;
-	}
-	
-	private JFileChooser makeTextFileChooser() {
-		JFileChooser jfc = new JFileChooser();
-		FileNameExtensionFilter textfilter = 
+				new FileNameExtensionFilter("FruitEditor Maps (*.fmp)", "fmp");
+		FileNameExtensionFilter textfilter =
 				new FileNameExtensionFilter("Text Files (*.txt)", "txt");
 		
-		jfc.setFileFilter(textfilter);
+		// Add file filters.
+		jfc.addChoosableFileFilter(filter);
+		jfc.addChoosableFileFilter(textfilter);
+		
+		jfc.setAcceptAllFileFilterUsed(false);
+		jfc.setFileFilter(filter);
 		
 		return jfc;
 	}
