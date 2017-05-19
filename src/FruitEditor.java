@@ -15,6 +15,9 @@ public class FruitEditor implements Runnable {
 	public static final int GRID_SIZE = 32;
 	//public static final int TILE_SIZE = 24;
 	
+	// EDITOR MODE.
+	private EditorMode editorMode;
+	
 	// MAP ACTIVE.
 	private boolean panelActive = false;
 	
@@ -149,6 +152,8 @@ public class FruitEditor implements Runnable {
 		
 		fruitFrame.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
 		fruitFrame.setLayout(new BorderLayout());
+		
+		editorMode = EditorMode.MAP_MODE;
 		
 		hash = new HashMap<String, JComponent>();
 		
@@ -324,7 +329,7 @@ public class FruitEditor implements Runnable {
 		closeItem.setName("closeItem");
 		
 		// Case for FILE -> SAVE and FILE -> SAVE AS
-		toggleSave(false);
+		toggleSave(panelActive);
 		
 		// Add in components.
 		fileMenu.add(newItem);
@@ -617,7 +622,7 @@ public class FruitEditor implements Runnable {
 		// Toggle tool buttons depending if:
 		// a map is loaded and
 		// if the panel is active.
-		toggleTools(false);
+		toggleTools(panelActive);
 		
 		// add toolbar to toolbarPanel.
 		toolbarPanel.add(mainToolBar, BorderLayout.CENTER);
@@ -854,6 +859,30 @@ public class FruitEditor implements Runnable {
 	}
 	
 	/**========================================
+	// setDrawMode(value) - Set the draw mode.
+	//=========================================**/
+	/*public void setDrawMode(int value) {
+		if (value == 0) {
+			drawMode = DrawMode.PENCIL; // This is the default.
+		} else if (value == 1) {
+			drawMode = DrawMode.RECTANGLE;
+		} else if (value == 2) {
+			drawMode = DrawMode.CIRCLE;
+		} else if (value == 3) {
+			drawMode = DrawMode.FILL;
+		} else {
+			drawMode = DrawMode.PENCIL;
+		}
+	}*/
+	
+	/**========================================
+	// setMode(mode) - Set mode.
+	//=========================================**/
+	public void setMode(EditorMode m) {
+		editorMode = m;
+	}
+	
+	/**========================================
 	// putComponent(key, value) - Place JComponent into hashmap. 
 	//=========================================*/
 	public void putComponent(String key, JComponent value) {
@@ -948,6 +977,20 @@ public class FruitEditor implements Runnable {
 			return statusPanel;
 		
 		return null;
+	}
+	
+	/**========================================
+	// equals(editorMode) - Get the mode.
+	//=========================================**/
+	public boolean equals(EditorMode e) {
+		return editorMode.mode() == e.mode();
+	}
+	
+	/**========================================
+	// mode() - Get the mode.
+	//=========================================**/
+	public EditorMode mode() {
+		return editorMode;
 	}
 	
 	/**========================================

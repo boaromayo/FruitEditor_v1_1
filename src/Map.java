@@ -3,6 +3,7 @@ package FruitEditor;
 import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -16,6 +17,9 @@ public class Map {
 	public static final int SCALE_TWO = 2;
 	public static final int SCALE_FOUR = 4;
 	public static final int SCALE_EIGHT = 8;
+
+	// DRAW MODE.
+	private DrawMode drawMode;
 	
 	// MAP NAME.
 	private String name;
@@ -60,6 +64,7 @@ public class Map {
 
 		initTiles();
 		setScale(scaleFactor);
+		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public Map(int width, int height, int depth) {
@@ -74,6 +79,7 @@ public class Map {
 		
 		initTiles();
 		setScale(scaleFactor);
+		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public Map(int width, int height, int gw, int gh) {
@@ -88,6 +94,7 @@ public class Map {
 		
 		initTiles();
 		setScale(scaleFactor);
+		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public void initTiles() { 
@@ -155,6 +162,13 @@ public class Map {
 		fruitTiles[y][x][z] = t;
 	}
 	
+	/**========================================
+	// setDrawMode(drawMode) - Set the draw mode.
+	//=========================================**/
+	public void setDrawMode(DrawMode d) {
+		drawMode = d;
+	}
+	
 	public String getName() { return name; }
 	
 	public int getScale() { return scaleFactor; }
@@ -183,6 +197,14 @@ public class Map {
 	
 	public Tile getTile(int x, int y, int z) {
 		return fruitTiles[y][x][z];
+	}
+	
+	public boolean equals(DrawMode d) {
+		return drawMode.mode() == d.mode();
+	}
+	
+	public DrawMode drawMode() {
+		return drawMode;
 	}
 	
 	public int[][][] getMapIntArray() {

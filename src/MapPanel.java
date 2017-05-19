@@ -183,7 +183,7 @@ public class MapPanel extends JPanel {
 	private void drawGrid(Graphics g) {
 		g.setColor(Color.GRAY);
 		int r, c; // Init counters for grid drawing. 
-		int scale = map.getScale(); // Scale factor based on zoom view.
+		//int scale = map.getScale(); // Scale factor based on zoom view.
 		
 		for (r=0; r < mapHeight; r++) {
 			g.drawLine(0, r*gridHeight, mapWidth*gridWidth, r*gridHeight);

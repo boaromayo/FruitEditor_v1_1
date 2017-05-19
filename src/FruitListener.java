@@ -112,25 +112,25 @@ public class FruitListener implements ActionListener,
 		// VIEW -> MODE item listeners
 		else if (src == getComponent("mapModeItem") ||
 				src == getComponent("mapModeBtn")) {
-			
+			//fruitEditor.setMode(EditorMode.MAP_MODE);
 		} else if (src == getComponent("eventModeItem") ||
 				src == getComponent("eventModeBtn")) {
-			
+			//fruitEditor.setMode(EditorMode.EVENT_MODE);
 		}
 		
 		// DRAW item listeners
 		else if (src == getComponent("pencilItem") ||
 				src == getComponent("pencilBtn")) {
-			
+			map.setDrawMode(DrawMode.PENCIL);
 		} else if (src == getComponent("rectItem") ||
 				src == getComponent("rectBtn")) {
-			
+			map.setDrawMode(DrawMode.RECTANGLE);
 		} else if (src == getComponent("circleItem") ||
 				src == getComponent("circleBtn")) {
-			
+			map.setDrawMode(DrawMode.CIRCLE);
 		} else if (src == getComponent("fillItem") ||
 				src == getComponent("fillBtn")) {
-			
+			map.setDrawMode(DrawMode.FILL);
 		}
 		
 		// TOOLKIT item listeners
