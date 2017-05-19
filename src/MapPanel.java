@@ -311,6 +311,10 @@ public class MapPanel extends JPanel {
 	
 	public void mouseDragged(MouseEvent e) {
 		int btn = e.getButton();
+		
+		if (btn == MouseEvent.BUTTON1 && map.equals(DrawMode.RECTANGLE)) {
+			
+		}
 	}
 	
 	public boolean gridOn() {

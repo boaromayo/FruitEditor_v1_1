@@ -490,7 +490,10 @@ public class FruitListener implements ActionListener,
 		jfc.addChoosableFileFilter(filter);
 		jfc.addChoosableFileFilter(textfilter);
 		
+		// Accept text and .fmp files only
 		jfc.setAcceptAllFileFilterUsed(false);
+		
+		// Set to .fmp file filter
 		jfc.setFileFilter(filter);
 		
 		return jfc;
