@@ -372,6 +372,8 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 					cancelBtn.doClick();
 				} else if (src == lockBtn) {
 					lockBtn.doClick();
+				} else if (src == mapText) {
+					loadMap();
 				}
 			} else if (key == KeyEvent.VK_ESCAPE) {
 				dispose();
