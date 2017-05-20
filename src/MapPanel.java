@@ -57,7 +57,7 @@ public class MapPanel extends JPanel {
 		fruitEditor = f;
 		map = f.getMap();
 		
-		fruitListener = f.getFruitListener();
+		fruitListener = (f.getFruitListener() != null ? f.getFruitListener() : null);
 		
 		mapWidth = map.getWidth();
 		mapHeight = map.getHeight();
@@ -76,6 +76,10 @@ public class MapPanel extends JPanel {
 		addMouseListener(fruitListener);
 		addMouseMotionListener(fruitListener);
 		addPropertyChangeListener(fruitListener);
+		addKeyListener(fruitListener);
+		
+		setFocusable(true);
+		requestFocusInWindow();
 	}
 	
 	private void popupSetup() {
@@ -176,7 +180,7 @@ public class MapPanel extends JPanel {
 				drawGrid(g);
 			}
 		
-			drawCursor(g, mouseX, mouseY);
+			drawCursor(g);
 		}
 	}
 	
@@ -194,13 +198,15 @@ public class MapPanel extends JPanel {
 		}
 	}
 	
-	private void drawCursor(Graphics g, int mx, int my) {
+	private void drawCursor(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
+		int tmx = mouseX / gridWidth;
+		int tmy = mouseY / gridHeight;
 		
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		
-		g2.drawRect(mx , my, gridWidth, gridHeight);
+		g2.drawRect(tmx, tmy, gridWidth, gridHeight);
 	}
 	
 	public void update() {
@@ -257,6 +263,13 @@ public class MapPanel extends JPanel {
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
+		int mx = mouseX / gridWidth;
+		int my = mouseY / gridHeight;
+		
+		// Set status panel
+		if (mouseX >= 0 && mouseX <= map.getWidth() &&
+				mouseY >= 0 && mouseY <= map.getHeight())
+			fruitEditor.setStatus(map, mx, my);
 	}
 	
 	public void mouseHovered(MouseEvent e) {

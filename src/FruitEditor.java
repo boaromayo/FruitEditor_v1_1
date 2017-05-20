@@ -18,6 +18,8 @@ public class FruitEditor implements Runnable {
 	// EDITOR MODE.
 	private EditorMode editorMode;
 	
+	private Thread t;
+	
 	// MAP ACTIVE.
 	private boolean panelActive = false;
 	
@@ -221,6 +223,12 @@ public class FruitEditor implements Runnable {
 					e.getMessage());
 			e.getStackTrace();
 			System.exit(1);
+		}
+	}
+	
+	public void addNotify() {
+		if (t == null) {
+			t = new Thread();
 		}
 	}
 	
@@ -883,6 +891,30 @@ public class FruitEditor implements Runnable {
 	}
 	
 	/**========================================
+	// setStatus(text) - Set status panel.
+	//=========================================**/
+	public void setStatus(String text) {
+		statusPanel.setStatus(text);
+	}
+	
+	/**========================================
+	// setStatus(currentmap, (x, y)) - Set status panel.
+	//=========================================**/
+	public void setStatus(Map currentMap, int x, int y) {
+		statusPanel.setCurrentMap(currentMap.getName(), currentMap.getWidth(), currentMap.getHeight());
+		statusPanel.setCursorLocation(x, y);
+	}
+	
+	/**========================================
+	// setStatus(status, currentmap, (x, y)) - Set status panel.
+	//=========================================**/
+	public void setStatus(String status, Map currentMap, int x, int y) {
+		statusPanel.setStatus(status);
+		statusPanel.setCurrentMap(currentMap.getName(), currentMap.getWidth(), currentMap.getHeight());
+		statusPanel.setCursorLocation(x, y);
+	}
+	
+	/**========================================
 	// putComponent(key, value) - Place JComponent into hashmap. 
 	//=========================================*/
 	public void putComponent(String key, JComponent value) {
@@ -1004,10 +1036,8 @@ public class FruitEditor implements Runnable {
 	// UPDATE METHOD. 
 	//========================================**/
 	public void update() {
-		menuBar.updateUI();
-		mainToolBar.updateUI();
 		fruitPanel.update();
-		statusPanel.update();
+		statusPanel.repaint();
 		fruitFrame.repaint();
 		validate();
 	}

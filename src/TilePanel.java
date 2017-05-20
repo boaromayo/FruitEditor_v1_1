@@ -55,6 +55,8 @@ public class TilePanel extends JPanel {
 		
 		fruitListener = f.getFruitListener();
 		
+		tileset = new Tileset();
+		
 		tilesetWidth = tileset.getWidth();
 		tilesetHeight = tileset.getHeight();
 		
@@ -178,15 +180,15 @@ public class TilePanel extends JPanel {
 	}
 	
 	private void drawCursor(Graphics g) {
-		int mx = mouseX / gridWidth;
-		int my = mouseY / gridHeight;
+		int tmx = mouseX / gridWidth;
+		int tmy = mouseY / gridHeight;
 		
 		Graphics2D g2 = convertTo2D(g);
 		
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		
-		g2.drawRect(mx, my, gridWidth, gridHeight);
+		g2.drawRect(tmx, tmy, gridWidth, gridHeight);
 		
 		repaint();
 	}
@@ -200,7 +202,12 @@ public class TilePanel extends JPanel {
 	}
 	
 	public void setTileset(Tileset t) {
+		if (t == null)
+			return;
+		
 		tileset = t;
+		
+		selectedTile = tileset.getTile(0,0);
 	}
 	
 	public void setSelectedTile(Tile t) {
@@ -222,6 +229,8 @@ public class TilePanel extends JPanel {
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
+		
+		// Set status
 		
 	}
 	

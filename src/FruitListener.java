@@ -18,8 +18,7 @@ public class FruitListener implements ActionListener,
 	
 	private FruitEditor fruitEditor;
 	
-	private MapPanel mapPanel;
-	private TilePanel tilePanel;
+	private FruitPanel fruitPanel;
 	private StatusPanel statusPanel;
 	
 	private Map map;
@@ -28,11 +27,10 @@ public class FruitListener implements ActionListener,
 	
 	public FruitListener(FruitEditor f) {
 		fruitEditor = f;
-		map = fruitEditor.getMap();
+		map = f.getMap();
 		
-		mapPanel = fruitEditor.getMapPanel();
-		//tilePanel = f.getTilePanel();
-		statusPanel = fruitEditor.getStatusPanel();
+		fruitPanel = f.getPanel();
+		statusPanel = f.getStatusPanel();
 		
 		actions = new Stack<PropertyChangeEvent>();
 	}
@@ -266,8 +264,8 @@ public class FruitListener implements ActionListener,
 	}
 	
 	private void gridAction(JCheckBoxMenuItem gridItem, JButton gridBtn) {
-		mapPanel.setGrid(gridItem.isSelected() || gridBtn.isSelected());
-		mapPanel.update();
+		fruitPanel.setGrid(gridItem.isSelected() || gridBtn.isSelected());
+		fruitPanel.update();
 	}
 	
 	private void aboutAction() {
@@ -293,20 +291,20 @@ public class FruitListener implements ActionListener,
 	// mouseMoved(event) - Update if mouse moved.
 	//=================================**/
 	public void mouseMoved(MouseEvent e) {
-		mapPanel.mouseMoved(e);
+		fruitPanel.mouseMoved(e);
 	}
 	/**================================
 	// mouseHovered(event) - Update if mouse hovered.
 	//=================================**/
 	public void mouseHovered(MouseEvent e) {
-		mapPanel.mouseHovered(e);
+		fruitPanel.mouseHovered(e);
 	}
 	
 	/**================================
 	// mouseDragged(event) - Update if mouse dragged.
 	//=================================**/
 	public void mouseDragged(MouseEvent e) {
-		mapPanel.mouseDragged(e);
+		fruitPanel.mouseDragged(e);
 	}
 	
 	/**================================
@@ -316,27 +314,21 @@ public class FruitListener implements ActionListener,
 	// mousePressed(event) - Update if mouse pressed.
 	//=================================**/
 	public void mousePressed(MouseEvent e) {
-		mapPanel.mousePressed(e);
-		tilePanel.mousePressed(e);
+		fruitPanel.mousePressed(e);
 	}
 	
 	/**================================
 	// mouseReleased(event) - Update if mouse released.
 	//=================================**/
 	public void mouseReleased(MouseEvent e) {
-		mapPanel.mouseReleased(e);
-		tilePanel.mouseReleased(e);
+		fruitPanel.mouseReleased(e);
 	}
 	
 	/**================================
 	// mouseClicked(event) - Update if mouse clicked.
 	//=================================**/
 	public void mouseClicked(MouseEvent e) {
-		Object src = e.getSource();
-		
-		// Get mouseClicked methods from main panels.
-		mapPanel.mouseClicked(e);
-		tilePanel.mouseClicked(e);
+		fruitPanel.mouseClicked(e);
 	}
 	
 	public void mouseEntered(MouseEvent e) {
@@ -375,14 +367,14 @@ public class FruitListener implements ActionListener,
 	// STATE CHANGE METHODS
 	//=================================**/
 	public void stateChanged(ChangeEvent e) {
-		/*Object src = e.getSource();
+		Object src = e.getSource();
 		
 		if (fruitEditor.isPanelActive()) {
 			fruitEditor.toggleMenus(true);
 			fruitEditor.toggleSave(true);
 			fruitEditor.toggleTools(true);
 			statusPanel.update();
-		}*/
+		}
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
