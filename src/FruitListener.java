@@ -127,17 +127,48 @@ public class FruitListener implements ActionListener,
 		}
 		
 		// DRAW item listeners
-		else if (src == getComponent("pencilItem") ||
-				src == getComponent("pencilBtn")) {
+		else if (src == getComponent("pencilItem")) {
+			JToggleButton pencilBtn = (JToggleButton)getComponent("pencilBtn");
+			
+			pencilBtn.setSelected(true);
 			map.setDrawMode(DrawMode.PENCIL);
-		} else if (src == getComponent("rectItem") ||
-				src == getComponent("rectBtn")) {
+		} else if (src == getComponent("rectItem")) {
+			JToggleButton rectBtn = (JToggleButton)getComponent("rectBtn");
+			
+			rectBtn.setSelected(true);
 			map.setDrawMode(DrawMode.RECTANGLE);
-		} else if (src == getComponent("circleItem") ||
-				src == getComponent("circleBtn")) {
+		} else if (src == getComponent("circleItem")) {
+			JToggleButton circleBtn = (JToggleButton)getComponent("circleBtn");
+			
+			circleBtn.setSelected(true);
 			map.setDrawMode(DrawMode.CIRCLE);
-		} else if (src == getComponent("fillItem") ||
-				src == getComponent("fillBtn")) {
+		} else if (src == getComponent("fillItem")) {
+			JToggleButton fillBtn = (JToggleButton)getComponent("fillBtn");
+			
+			fillBtn.setSelected(true);
+			map.setDrawMode(DrawMode.FILL);
+		}
+		
+		// DRAW toolbar listeners
+		else if (src == getComponent("pencilBtn")) {
+			JRadioButtonMenuItem pencilItem = (JRadioButtonMenuItem)getComponent("pencilItem");
+			
+			pencilItem.setSelected(true);
+			map.setDrawMode(DrawMode.PENCIL);
+		} else if (src == getComponent("rectBtn")) {
+			JRadioButtonMenuItem rectItem = (JRadioButtonMenuItem)getComponent("rectItem");
+			
+			rectItem.setSelected(true);
+			map.setDrawMode(DrawMode.RECTANGLE);
+		} else if (src == getComponent("circleBtn")) {
+			JRadioButtonMenuItem circleItem = (JRadioButtonMenuItem)getComponent("circleItem");
+			
+			circleItem.setSelected(true);			
+			map.setDrawMode(DrawMode.CIRCLE);
+		} else if (src == getComponent("fillBtn")) {
+			JRadioButtonMenuItem fillItem = (JRadioButtonMenuItem)getComponent("fillItem");
+			
+			fillItem.setSelected(true);
 			map.setDrawMode(DrawMode.FILL);
 		}
 		
