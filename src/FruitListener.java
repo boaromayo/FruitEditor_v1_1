@@ -40,7 +40,7 @@ public class FruitListener implements ActionListener,
 	//===========================**/
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
-		
+				
 		// FILE listeners.
 		if (src == getComponent("newBtn") || 
 				src == getComponent("newItem")) {
@@ -86,10 +86,20 @@ public class FruitListener implements ActionListener,
 		}
 		
 		// VIEW -> GRID
-		else if (src == getComponent("gridItem") || 
-				src == getComponent("gridBtn")) {
-			gridAction((JCheckBoxMenuItem)getComponent("gridItem"), 
-					(JButton)getComponent("gridBtn"));
+		else if (src == getComponent("gridItem")) {
+			JCheckBoxMenuItem gridItem = (JCheckBoxMenuItem)getComponent("gridItem");
+			JToggleButton gridBtn = (JToggleButton)getComponent("gridBtn");
+			
+			fruitPanel.setGrid(gridItem.isSelected());
+			gridBtn.setSelected(gridItem.isSelected());
+			fruitPanel.repaint();
+		} else if (src == getComponent("gridBtn")) {
+			JCheckBoxMenuItem gridItem = (JCheckBoxMenuItem)getComponent("gridItem");
+			JToggleButton gridBtn = (JToggleButton)getComponent("gridBtn");
+			
+			fruitPanel.setGrid(gridBtn.isSelected());
+			gridItem.setSelected(gridBtn.isSelected());
+			fruitPanel.repaint();
 		}
 		
 		// VIEW -> SCALE item listeners
@@ -263,11 +273,6 @@ public class FruitListener implements ActionListener,
 		
 	}
 	
-	private void gridAction(JCheckBoxMenuItem gridItem, JButton gridBtn) {
-		fruitPanel.setGrid(gridItem.isSelected() || gridBtn.isSelected());
-		fruitPanel.update();
-	}
-	
 	private void aboutAction() {
 		new AboutDialog(fruitEditor);
 	}
@@ -367,14 +372,14 @@ public class FruitListener implements ActionListener,
 	// STATE CHANGE METHODS
 	//=================================**/
 	public void stateChanged(ChangeEvent e) {
-		Object src = e.getSource();
+		//Object src = e.getSource();
 		
-		if (fruitEditor.isPanelActive()) {
-			fruitEditor.toggleMenus(true);
-			fruitEditor.toggleSave(true);
-			fruitEditor.toggleTools(true);
-			statusPanel.update();
-		}
+		// Toggle menus depending if:
+		// a map is loaded and
+		// if the panel is active.
+		fruitEditor.toggleMenus(fruitEditor.isPanelActive());
+		fruitEditor.toggleSave(fruitEditor.isPanelActive());
+		fruitEditor.toggleTools(fruitEditor.isPanelActive());
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {

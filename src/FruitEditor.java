@@ -258,11 +258,6 @@ public class FruitEditor implements Runnable {
 		toolMenu = new JMenu(menuName[4]);			// TOOLKIT
 		helpMenu = new JMenu(menuName[5]);			// HELP
 			
-		// Turn on menus depending on two conditions:
-		// when a map is loaded
-		// and if panel is inactive.
-		toggleMenus(false);
-			
 		// Create menu shortcuts.
 		fileMenu.setMnemonic(menuName[0].charAt(0));
 		editMenu.setMnemonic(menuName[1].charAt(0));
@@ -337,7 +332,7 @@ public class FruitEditor implements Runnable {
 		closeItem.setName("closeItem");
 		
 		// Case for FILE -> SAVE and FILE -> SAVE AS
-		toggleSave(panelActive);
+		//toggleSave(panelActive);
 		
 		// Add in components.
 		fileMenu.add(newItem);
@@ -627,11 +622,6 @@ public class FruitEditor implements Runnable {
 		// Create and add the buttons in toolbar.
 		subToolbarSetup();
 		
-		// Toggle tool buttons depending if:
-		// a map is loaded and
-		// if the panel is active.
-		toggleTools(panelActive);
-		
 		// add toolbar to toolbarPanel.
 		toolbarPanel.add(mainToolBar, BorderLayout.CENTER);
 		
@@ -706,9 +696,9 @@ public class FruitEditor implements Runnable {
 		mainToolBar.addSeparator();
 		
 		// Add in FILE ActionListeners.
-		newBtn.addActionListener(fruitListener);
+		/*newBtn.addActionListener(fruitListener);
 		openBtn.addActionListener(fruitListener);
-		saveBtn.addActionListener(fruitListener);
+		saveBtn.addActionListener(fruitListener);*/
 	}
 	
 	private void editToolSetup() {
@@ -1073,7 +1063,7 @@ public class FruitEditor implements Runnable {
 		btn.setToolTipText(tooltip);
 
 		// Add button ActionListener.
-		//btn.addActionListener(fruitListener);
+		btn.addActionListener(fruitListener);
 		
 		// Add button to hashmap.
 		hash.put(btn.getName(), btn);

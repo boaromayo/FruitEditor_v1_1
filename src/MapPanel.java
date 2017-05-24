@@ -246,7 +246,7 @@ public class MapPanel extends JPanel {
 	/**========================================
 	// setGrid() - Set grid on/off.
 	//=========================================**/
-	public synchronized void setGrid(boolean gr) {
+	public void setGrid(boolean gr) {
 		grid = gr;
 		
 		update();
