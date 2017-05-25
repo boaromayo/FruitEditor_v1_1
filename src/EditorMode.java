@@ -12,4 +12,8 @@ public enum EditorMode {
 	public int mode() {
 		return mode;
 	}
+	
+	public boolean equals(EditorMode e) {
+		return this.mode() == e.mode();
+	}
 }

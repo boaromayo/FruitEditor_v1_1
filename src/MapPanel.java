@@ -180,7 +180,9 @@ public class MapPanel extends JPanel {
 				drawGrid(g);
 			}
 		
-			drawCursor(g);
+			if (fruitEditor.equals(EditorMode.EVENT_MODE)) {
+				drawCursor(g);
+			}
 		}
 	}
 	
@@ -189,11 +191,11 @@ public class MapPanel extends JPanel {
 		int r, c; // Init counters for grid drawing. 
 		//int scale = map.getScale(); // Scale factor based on zoom view.
 		
-		for (r=0; r < mapHeight; r++) {
+		for (r=0; r <= mapHeight; r++) {
 			g.drawLine(0, r*gridHeight, mapWidth*gridWidth, r*gridHeight);
 		}
 		
-		for (c=0; c < mapWidth; c++) {
+		for (c=0; c <= mapWidth; c++) {
 			g.drawLine(c*gridWidth, 0, c*gridWidth, mapHeight*gridHeight);
 		}
 	}
@@ -248,8 +250,6 @@ public class MapPanel extends JPanel {
 	//=========================================**/
 	public void setGrid(boolean gr) {
 		grid = gr;
-		
-		update();
 	}
 	
 	public void setPanelActive(boolean act) {

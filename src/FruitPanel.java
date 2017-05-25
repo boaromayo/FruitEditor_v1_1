@@ -113,7 +113,7 @@ public class FruitPanel extends JPanel {
 	
 	public void setGrid(boolean gr) {
 		mapPanel.setGrid(gr);
-		mapPanel.repaint();
+		update();
 	}
 	
 	public void mouseMoved(MouseEvent e) {

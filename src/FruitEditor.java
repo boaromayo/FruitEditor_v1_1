@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import java.util.*;
 
-public class FruitEditor implements Runnable {
+public class FruitEditor /*implements Runnable*/ {
 	// CONSTANTS.
 	public static final int SCREEN_WIDTH = 960;
 	public static final int SCREEN_HEIGHT = 640;
@@ -183,7 +183,7 @@ public class FruitEditor implements Runnable {
 		fruitFrame.setResizable(false);
 	}
 	
-	public void run() {
+	/*public void run() {
 		long startTime, diffTime;
 		
 		long targetTime = 1000 / FruitEditor.FPS;
@@ -230,7 +230,7 @@ public class FruitEditor implements Runnable {
 		if (t == null) {
 			t = new Thread();
 		}
-	}
+	}*/
 	
 	/**================================
 	// panelSetup() - Set up main panels.
@@ -504,8 +504,8 @@ public class FruitEditor implements Runnable {
 		modegrp.add(eventModeItem);
 		
 		// Add in VIEW -> MODE ActionListeners.
-		//mapModeItem.addActionListener(fruitMenuListener());
-		//eventModeItem.addActionListener(fruitMenuListener());
+		mapModeItem.addActionListener(fruitListener);
+		eventModeItem.addActionListener(fruitListener);
 		
 		// Add in sub-menu components.
 		modeMenu.add(mapModeItem);
@@ -878,6 +878,7 @@ public class FruitEditor implements Runnable {
 	//=========================================**/
 	public void setMode(EditorMode m) {
 		editorMode = m;
+		update();
 	}
 	
 	/**========================================
@@ -1005,7 +1006,7 @@ public class FruitEditor implements Runnable {
 	// equals(editorMode) - Get the mode.
 	//=========================================**/
 	public boolean equals(EditorMode e) {
-		return editorMode.mode() == e.mode();
+		return editorMode.equals(e);
 	}
 	
 	/**========================================

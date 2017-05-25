@@ -117,13 +117,23 @@ public class FruitListener implements ActionListener,
 			//map.setScale(Map.SCALE_EIGHT);
 		}
 		
-		// VIEW -> MODE item listeners
-		else if (src == getComponent("mapModeItem") ||
-				src == getComponent("mapModeBtn")) {
-			//fruitEditor.setMode(EditorMode.MAP_MODE);
-		} else if (src == getComponent("eventModeItem") ||
-				src == getComponent("eventModeBtn")) {
-			//fruitEditor.setMode(EditorMode.EVENT_MODE);
+		// VIEW -> MODE item and button listeners
+		else if (src == getComponent("mapModeItem")) {
+			JToggleButton mapModeBtn = (JToggleButton) getComponent("mapModeBtn");
+			mapModeBtn.setSelected(true);
+			fruitEditor.setMode(EditorMode.MAP_MODE);
+		} else if (src == getComponent("eventModeItem")) {
+			JToggleButton eventModeBtn = (JToggleButton) getComponent("eventModeBtn");
+			eventModeBtn.setSelected(true);
+			fruitEditor.setMode(EditorMode.EVENT_MODE);
+		} else if (src == getComponent("mapModeBtn")) {
+			JRadioButtonMenuItem mapModeItem = (JRadioButtonMenuItem) getComponent("mapModeItem");
+			mapModeItem.setSelected(true);
+			fruitEditor.setMode(EditorMode.MAP_MODE);
+		} else if (src == getComponent("eventModeBtn")) {
+			JRadioButtonMenuItem eventModeItem = (JRadioButtonMenuItem) getComponent("eventModeItem");
+			eventModeItem.setSelected(true);
+			fruitEditor.setMode(EditorMode.EVENT_MODE);
 		}
 		
 		// DRAW item listeners
