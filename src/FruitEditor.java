@@ -424,7 +424,7 @@ public class FruitEditor implements Runnable {
 
 		// Set grid item if grid is on.
 		//gridItem.setState(getMapPanel().gridOn());
-		gridItem.setState(true);
+		gridItem.setSelected(true);
 		
 		// Add in components.
 		viewMenu.add(scaleMenu);
