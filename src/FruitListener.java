@@ -90,16 +90,16 @@ public class FruitListener implements ActionListener,
 			JCheckBoxMenuItem gridItem = (JCheckBoxMenuItem)getComponent("gridItem");
 			JToggleButton gridBtn = (JToggleButton)getComponent("gridBtn");
 			
-			fruitPanel.setGrid(gridItem.isSelected());
 			gridBtn.setSelected(gridItem.isSelected());
-			fruitPanel.repaint();
+			
+			fruitPanel.setGrid(gridItem.isSelected());
 		} else if (src == getComponent("gridBtn")) {
 			JCheckBoxMenuItem gridItem = (JCheckBoxMenuItem)getComponent("gridItem");
 			JToggleButton gridBtn = (JToggleButton)getComponent("gridBtn");
 			
-			fruitPanel.setGrid(gridBtn.isSelected());
 			gridItem.setSelected(gridBtn.isSelected());
-			fruitPanel.repaint();
+			
+			fruitPanel.setGrid(gridBtn.isSelected());
 		}
 		
 		// VIEW -> SCALE item listeners
@@ -127,48 +127,33 @@ public class FruitListener implements ActionListener,
 		}
 		
 		// DRAW item listeners
-		else if (src == getComponent("pencilItem")) {
+		else if (src == getComponent("pencilItem") ||
+				src == getComponent("pencilBtn")) {
+			JRadioButtonMenuItem pencilItem = (JRadioButtonMenuItem)getComponent("pencilItem");
 			JToggleButton pencilBtn = (JToggleButton)getComponent("pencilBtn");
-			
+			pencilItem.setSelected(true);
 			pencilBtn.setSelected(true);
 			map.setDrawMode(DrawMode.PENCIL);
-		} else if (src == getComponent("rectItem")) {
+		} else if (src == getComponent("rectItem") ||
+				src == getComponent("rectBtn")) {
+			JRadioButtonMenuItem rectItem = (JRadioButtonMenuItem)getComponent("rectItem");
 			JToggleButton rectBtn = (JToggleButton)getComponent("rectBtn");
-			
+			rectItem.setSelected(true);
 			rectBtn.setSelected(true);
 			map.setDrawMode(DrawMode.RECTANGLE);
-		} else if (src == getComponent("circleItem")) {
+		} else if (src == getComponent("circleItem") ||
+				src == getComponent("circleBtn")) {
+			JRadioButtonMenuItem circleItem = (JRadioButtonMenuItem)getComponent("circleItem");
 			JToggleButton circleBtn = (JToggleButton)getComponent("circleBtn");
-			
+			circleItem.setSelected(true);
 			circleBtn.setSelected(true);
 			map.setDrawMode(DrawMode.CIRCLE);
-		} else if (src == getComponent("fillItem")) {
-			JToggleButton fillBtn = (JToggleButton)getComponent("fillBtn");
-			
-			fillBtn.setSelected(true);
-			map.setDrawMode(DrawMode.FILL);
-		}
-		
-		// DRAW toolbar listeners
-		else if (src == getComponent("pencilBtn")) {
-			JRadioButtonMenuItem pencilItem = (JRadioButtonMenuItem)getComponent("pencilItem");
-			
-			pencilItem.setSelected(true);
-			map.setDrawMode(DrawMode.PENCIL);
-		} else if (src == getComponent("rectBtn")) {
-			JRadioButtonMenuItem rectItem = (JRadioButtonMenuItem)getComponent("rectItem");
-			
-			rectItem.setSelected(true);
-			map.setDrawMode(DrawMode.RECTANGLE);
-		} else if (src == getComponent("circleBtn")) {
-			JRadioButtonMenuItem circleItem = (JRadioButtonMenuItem)getComponent("circleItem");
-			
-			circleItem.setSelected(true);
-			map.setDrawMode(DrawMode.CIRCLE);
-		} else if (src == getComponent("fillBtn")) {
+		} else if (src == getComponent("fillItem") ||
+				src == getComponent("fillBtn")) {
 			JRadioButtonMenuItem fillItem = (JRadioButtonMenuItem)getComponent("fillItem");
-			
+			JToggleButton fillBtn = (JToggleButton)getComponent("fillBtn");
 			fillItem.setSelected(true);
+			fillBtn.setSelected(true);
 			map.setDrawMode(DrawMode.FILL);
 		}
 		
