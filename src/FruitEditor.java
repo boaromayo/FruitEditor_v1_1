@@ -529,10 +529,10 @@ public class FruitEditor implements Runnable {
 		fillItem	= new JRadioButtonMenuItem("Flood Fill");		// DRAW -> FILL
 		
 		// Add in DRAW ActionListeners.
-		/*pencilItem.addActionListener(fruitMenuListener());
-		rectItem.addActionListener(fruitMenuListener());
-		circleItem.addActionListener(fruitMenuListener());
-		fillItem.addActionListener(fruitMenuListener());*/
+		pencilItem.addActionListener(fruitListener);
+		rectItem.addActionListener(fruitListener);
+		circleItem.addActionListener(fruitListener);
+		fillItem.addActionListener(fruitListener);
 		
 		// Set names for components.
 		pencilItem.setName("pencilItem");

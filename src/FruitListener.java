@@ -163,7 +163,7 @@ public class FruitListener implements ActionListener,
 		} else if (src == getComponent("circleBtn")) {
 			JRadioButtonMenuItem circleItem = (JRadioButtonMenuItem)getComponent("circleItem");
 			
-			circleItem.setSelected(true);			
+			circleItem.setSelected(true);
 			map.setDrawMode(DrawMode.CIRCLE);
 		} else if (src == getComponent("fillBtn")) {
 			JRadioButtonMenuItem fillItem = (JRadioButtonMenuItem)getComponent("fillItem");
