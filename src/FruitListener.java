@@ -199,6 +199,8 @@ public class FruitListener implements ActionListener,
 		} else if (src == getComponent("closeTile")) {
 			closeTileAction();
 		}
+		
+		fruitEditor.update();
 	}
 	
 	/**==============================

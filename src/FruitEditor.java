@@ -878,7 +878,6 @@ public class FruitEditor /*implements Runnable*/ {
 	//=========================================**/
 	public void setMode(EditorMode m) {
 		editorMode = m;
-		update();
 	}
 	
 	/**========================================
