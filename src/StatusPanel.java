@@ -53,7 +53,7 @@ public class StatusPanel extends JPanel {
 		if (fruitEditor.getMap() != null) {
 			setMap(fruitEditor.getMap());
 			
-			setStatus("\t\t");
+			setStatus("\t");
 			setCurrentMap(mapName, mapWidth, mapHeight);
 			setLocation(mapX, mapY);
 		}
