@@ -45,13 +45,11 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	
 	private boolean lock = true;
 
-	protected FruitEditor fruitEditor;
 	protected MapPanel mapPanel;
 	
 	public NewDialog(FruitEditor f) {
 		String title = "Create New Map";
 		
-		fruitEditor = f;
 		mapPanel = f.getMapPanel();
 		
 		newDialog = new JDialog(f.getFrame());
@@ -404,16 +402,10 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 					JOptionPane.ERROR_MESSAGE);
 		} else {
 			// prep the new map
+			// updates are taken care of in the map panel's map setting method
 			mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
 					getGridWidth(), getGridHeight()));
 			mapPanel.setMapName(getMapText());
-			
-			// set fruitpanel active if inactive
-			if (!fruitEditor.isPanelActive()) {
-				mapPanel.setPanelActive(true);
-			}
-			
-			fruitEditor.update();
 			
 			setMapText(null); // Leave map text field blank.
 			

@@ -92,8 +92,6 @@ public class RenameDialog extends NewDialog {
 					mapPanel.setMapName(getMapText());
 					mapPanel.setMapSize(getMapWidth(), getMapHeight());
 					
-					fruitEditor.validate();
-					
 					setMapText(null); // Leave map text field blank.
 					
 					dispose(); // Remove new map dialog.
