@@ -23,6 +23,7 @@ public class FruitListener implements ActionListener,
 	
 	private Map map;
 	
+	private Stack<ChangeEvent> changes;
 	private Stack<PropertyChangeEvent> actions;
 	
 	public FruitListener(FruitEditor f) {
@@ -400,14 +401,14 @@ public class FruitListener implements ActionListener,
 	// STATE CHANGE METHODS
 	//=================================**/
 	public void stateChanged(ChangeEvent e) {
-		//Object src = e.getSource();
-		
 		// Toggle menus depending if:
 		// a map is loaded and
 		// if the panel is active.
-		fruitEditor.toggleMenus(fruitEditor.isPanelActive());
+		/*fruitEditor.toggleMenus(fruitEditor.isPanelActive());
 		fruitEditor.toggleSave(fruitEditor.isPanelActive());
-		fruitEditor.toggleTools(fruitEditor.isPanelActive());
+		fruitEditor.toggleTools(fruitEditor.isPanelActive());		
+	
+		fruitEditor.update();*/
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {

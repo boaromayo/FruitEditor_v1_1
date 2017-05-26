@@ -107,13 +107,12 @@ public class FruitPanel extends JPanel {
 	}*/
 	
 	public void update() {
-		mapPanel.repaint();
-		//tilePanel.repaint();
+		mapPanel.update();
+		//tilePanel.update();
 	}
 	
 	public void setGrid(boolean gr) {
 		mapPanel.setGrid(gr);
-		update();
 	}
 	
 	public void mouseMoved(MouseEvent e) {

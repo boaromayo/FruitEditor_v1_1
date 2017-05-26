@@ -409,10 +409,11 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 			mapPanel.setMapName(getMapText());
 			
 			// set fruitpanel active if inactive
-			mapPanel.setPanelActive(true);
+			if (!fruitEditor.isPanelActive()) {
+				mapPanel.setPanelActive(true);
+			}
 			
-			mapPanel.repaint();
-			fruitEditor.validate();
+			fruitEditor.update();
 			
 			setMapText(null); // Leave map text field blank.
 			

@@ -51,21 +51,23 @@ public class StatusPanel extends JPanel {
 	
 	public void update() {
 		if (fruitEditor.getMap() != null) {
-			mapName = map.getName();
-			mapWidth = map.getCols();
-			mapHeight = map.getRows();
-			mapX = mapPanel.getMapX();
-			mapY = mapPanel.getMapY();
+			setMap(fruitEditor.getMap());
 			
+			setStatus("\t\t");
 			setCurrentMap(mapName, mapWidth, mapHeight);
 			setLocation(mapX, mapY);
-		} else {
-			setStatus("No map selected");
-			currentMap.setText("");
-			cursorPosition.setText("(0,0)");
 		}
 		
 		repaint();
+	}
+	
+	public synchronized void setMap(Map m) {
+		map = fruitEditor.getMap();
+		mapName = map.getName();
+		mapWidth = map.getWidth();
+		mapHeight = map.getHeight();
+		mapX = mapPanel.getMapX();
+		mapY = mapPanel.getMapY();
 	}
 	
 	public void setStatus(String text) {

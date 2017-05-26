@@ -174,6 +174,10 @@ public class FruitEditor /*implements Runnable*/ {
 		// Setup the toolbar.
 		toolbarSetup();
 		
+		toggleTools(panelActive);
+		toggleSave(panelActive);
+		toggleMenus(panelActive);
+		
 		fruitFrame.pack();
 		
 		fruitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1026,14 +1030,22 @@ public class FruitEditor /*implements Runnable*/ {
 	// UPDATE METHOD. 
 	//========================================**/
 	public void update() {
+		toggleMenus(panelActive);
+		toggleTools(panelActive);
+		toggleSave(panelActive);
+		
+		menuBar.repaint();
+		toolbarPanel.repaint();
 		fruitPanel.update();
-		statusPanel.repaint();
+		statusPanel.update();
 		fruitFrame.repaint();
 		validate();
 	}
 	
 	public void validate() {
 		fruitFrame.validate();
+		menuBar.revalidate();
+		toolbarPanel.revalidate();
 	}
 	
 	/**========================================

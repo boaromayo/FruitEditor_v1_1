@@ -268,8 +268,11 @@ public class MapPanel extends JPanel {
 		
 		// Set status panel
 		if (mouseX >= 0 && mouseX <= map.getWidth() &&
-				mouseY >= 0 && mouseY <= map.getHeight())
-			fruitEditor.setStatus(map, mx, my);
+				mouseY >= 0 && mouseY <= map.getHeight()) {
+			fruitEditor.getStatusPanel().setCursorLocation(mx, my);
+		}
+		
+		fruitEditor.update();
 	}
 	
 	public void mouseHovered(MouseEvent e) {
