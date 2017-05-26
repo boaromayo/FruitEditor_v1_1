@@ -235,7 +235,6 @@ public class MapPanel extends JPanel {
 			setPanelActive(true);
 		}
 		
-		// This method will update the map panel as well.
 		fruitEditor.update();
 	}
 	
