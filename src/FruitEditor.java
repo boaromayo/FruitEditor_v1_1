@@ -187,6 +187,8 @@ public class FruitEditor /*implements Runnable*/ {
 		fruitFrame.setResizable(false);
 	}
 	
+	// May get rid of this since it's not needed. 
+	// This is not a game-based app, where the run() loop is called every time.
 	/*public void run() {
 		long startTime, diffTime;
 		
@@ -1006,14 +1008,14 @@ public class FruitEditor /*implements Runnable*/ {
 	}
 	
 	/**========================================
-	// equals(editorMode) - Get the mode.
+	// equals(editorMode) - Check for current mode.
 	//=========================================**/
 	public boolean equals(EditorMode e) {
 		return editorMode.equals(e);
 	}
 	
 	/**========================================
-	// mode() - Get the mode.
+	// mode() - Get the editor mode.
 	//=========================================**/
 	public EditorMode mode() {
 		return editorMode;

@@ -231,7 +231,11 @@ public class MapPanel extends JPanel {
 		gridWidth = m.getGridWidth();
 		gridHeight = m.getGridHeight();
 		
-		update();
+		if (!isPanelActive()) {
+			setPanelActive(true);
+		}
+		
+		fruitEditor.update(); // This will update the map panel as well
 	}
 	
 	public void setMapName(String n) {
