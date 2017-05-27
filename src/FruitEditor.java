@@ -979,7 +979,7 @@ public class FruitEditor /*implements Runnable*/ {
 	}
 	
 	/**========================================
-	// isPanelActive() - Check if FruitPanel active.
+	// isPanelActive() - Check if panel active.
 	//=========================================**/
 	public boolean isPanelActive() {
 		return panelActive;

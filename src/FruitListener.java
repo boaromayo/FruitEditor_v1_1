@@ -233,7 +233,8 @@ public class FruitListener implements ActionListener,
 		}
 	}
 	
-	/* TODO: This method looks redundant. Maybe shorten this later. */
+	/* TODO: This method has redundant functionality.
+	 * Maybe shorten this later. */
 	private void saveAction() {
 		JFileChooser save = makeFileChooser();
 		
