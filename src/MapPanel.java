@@ -21,6 +21,10 @@ public class MapPanel extends JPanel {
 	// EVENT LISTENER.
 	private FruitListener fruitListener;
 	
+	// EDITOR MODE.
+	private EditorMode editorMode;
+		
+		
 	// POPUP (RIGHT-CLICK) MENU.
 	private JPopupMenu popupMenu;
 	
@@ -57,7 +61,9 @@ public class MapPanel extends JPanel {
 		fruitEditor = f;
 		map = f.getMap();
 		
-		fruitListener = (f.getFruitListener() != null ? f.getFruitListener() : null);
+		fruitListener = (f.getListener() != null ? f.getListener() : null);
+		
+		editorMode = EditorMode.MAP_MODE;
 		
 		mapWidth = map.getWidth();
 		mapHeight = map.getHeight();
@@ -180,7 +186,7 @@ public class MapPanel extends JPanel {
 				drawGrid(g);
 			}
 		
-			if (fruitEditor.equals(EditorMode.EVENT_MODE)) {
+			if (editorMode.equals(EditorMode.EVENT_MODE)) {
 				drawCursor(g);
 			}
 		}
@@ -259,6 +265,14 @@ public class MapPanel extends JPanel {
 	public void setPanelActive(boolean act) {
 		fruitEditor.setPanelActive(act);
 	}
+	
+	/**========================================
+	// setMode(mode) - Set mode.
+	//=========================================**/
+	public void setMode(EditorMode m) {
+		editorMode = m;
+	}
+	
 	
 	public void propertyChange(PropertyChangeEvent e) {
 		fruitListener.propertyChange(e);

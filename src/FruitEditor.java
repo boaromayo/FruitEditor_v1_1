@@ -15,9 +15,6 @@ public class FruitEditor /*implements Runnable*/ {
 	public static final int GRID_SIZE = 32;
 	//public static final int TILE_SIZE = 24;
 	
-	// EDITOR MODE.
-	private EditorMode editorMode;
-	
 	private Thread t;
 	
 	// MAP ACTIVE.
@@ -154,8 +151,6 @@ public class FruitEditor /*implements Runnable*/ {
 		
 		fruitFrame.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
 		fruitFrame.setLayout(new BorderLayout());
-		
-		editorMode = EditorMode.MAP_MODE;
 		
 		hash = new HashMap<String, JComponent>();
 		
@@ -863,30 +858,6 @@ public class FruitEditor /*implements Runnable*/ {
 	}
 	
 	/**========================================
-	// setDrawMode(value) - Set the draw mode.
-	//=========================================**/
-	/*public void setDrawMode(int value) {
-		if (value == 0) {
-			drawMode = DrawMode.PENCIL; // This is the default.
-		} else if (value == 1) {
-			drawMode = DrawMode.RECTANGLE;
-		} else if (value == 2) {
-			drawMode = DrawMode.CIRCLE;
-		} else if (value == 3) {
-			drawMode = DrawMode.FILL;
-		} else {
-			drawMode = DrawMode.PENCIL;
-		}
-	}*/
-	
-	/**========================================
-	// setMode(mode) - Set mode.
-	//=========================================**/
-	public void setMode(EditorMode m) {
-		editorMode = m;
-	}
-	
-	/**========================================
 	// setStatus(text) - Set status panel.
 	//=========================================**/
 	public void setStatus(String text) {
@@ -940,9 +911,9 @@ public class FruitEditor /*implements Runnable*/ {
 	}
 	
 	/**========================================
-	// getFruitListener() - Get FruitListener.
+	// getListener() - Get event listener.
 	//=========================================**/
-	public FruitListener getFruitListener() {
+	public FruitListener getListener() {
 		if (fruitListener != null)
 			return fruitListener;
 		
@@ -1005,20 +976,6 @@ public class FruitEditor /*implements Runnable*/ {
 			return statusPanel;
 		
 		return null;
-	}
-	
-	/**========================================
-	// equals(editorMode) - Check for current mode.
-	//=========================================**/
-	public boolean equals(EditorMode e) {
-		return editorMode.equals(e);
-	}
-	
-	/**========================================
-	// mode() - Get the editor mode.
-	//=========================================**/
-	public EditorMode mode() {
-		return editorMode;
 	}
 	
 	/**========================================

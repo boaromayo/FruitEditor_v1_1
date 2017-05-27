@@ -34,7 +34,7 @@ public class FruitPanel extends JPanel {
 	public FruitPanel(FruitEditor f) {
 		fruitEditor = f;
 		
-		fruitListener = f.getFruitListener();
+		fruitListener = f.getListener();
 		
 		setPreferredSize(new Dimension(
 				FruitEditor.SCREEN_WIDTH, 

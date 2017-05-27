@@ -53,7 +53,7 @@ public class TilePanel extends JPanel {
 	public TilePanel(FruitEditor f) {
 		fruitEditor = f;
 		
-		fruitListener = f.getFruitListener();
+		fruitListener = f.getListener();
 		
 		tileset = new Tileset();
 		

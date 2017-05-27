@@ -122,19 +122,19 @@ public class FruitListener implements ActionListener,
 		else if (src == getComponent("mapModeItem")) {
 			JToggleButton mapModeBtn = (JToggleButton) getComponent("mapModeBtn");
 			mapModeBtn.setSelected(true);
-			fruitEditor.setMode(EditorMode.MAP_MODE);
+			getMapPanel().setMode(EditorMode.MAP_MODE);
 		} else if (src == getComponent("eventModeItem")) {
 			JToggleButton eventModeBtn = (JToggleButton) getComponent("eventModeBtn");
 			eventModeBtn.setSelected(true);
-			fruitEditor.setMode(EditorMode.EVENT_MODE);
+			getMapPanel().setMode(EditorMode.EVENT_MODE);
 		} else if (src == getComponent("mapModeBtn")) {
 			JRadioButtonMenuItem mapModeItem = (JRadioButtonMenuItem) getComponent("mapModeItem");
 			mapModeItem.setSelected(true);
-			fruitEditor.setMode(EditorMode.MAP_MODE);
+			getMapPanel().setMode(EditorMode.MAP_MODE);
 		} else if (src == getComponent("eventModeBtn")) {
 			JRadioButtonMenuItem eventModeItem = (JRadioButtonMenuItem) getComponent("eventModeItem");
 			eventModeItem.setSelected(true);
-			fruitEditor.setMode(EditorMode.EVENT_MODE);
+			getMapPanel().setMode(EditorMode.EVENT_MODE);
 		}
 		
 		// DRAW item listeners
@@ -225,14 +225,15 @@ public class FruitListener implements ActionListener,
 			try {
 				readText(file); // read the map file
 				statusPanel.setStatus(confirmStr);
-				validate();
+				statusPanel.update();
 			} catch (Exception e) {
-				System.err.println("ERROR: Unable to read file.");
+				System.err.println("ERROR: Could not read file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
 	
+	/* TODO: This method looks redundant. Maybe shorten this later. */
 	private void saveAction() {
 		JFileChooser save = makeFileChooser();
 		
@@ -243,18 +244,18 @@ public class FruitListener implements ActionListener,
 			String confirmStr = "Map saved.";
 			
 			try {
-				writeText(file); // write onto the file
+				writeText(file);
 				statusPanel.setStatus(confirmStr);
-				validate();
+				statusPanel.update();
 				
 				//map = file;
 			} catch (Exception e) {
-				System.err.println("ERROR: Unable to write file " + file);
+				System.err.println("ERROR: Unable to write file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private void saveAsAction() {
 		JFileChooser saveAs = makeFileChooser();
 		
@@ -262,10 +263,12 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = saveAs.getSelectedFile();
+			String confirmStr = "Map saved as " + file.getName();
 			
 			try {
 				writeText(file);
-				validate();
+				statusPanel.setStatus(confirmStr);
+				statusPanel.update();
 				
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to write file " + file);
@@ -401,14 +404,7 @@ public class FruitListener implements ActionListener,
 	// STATE CHANGE METHODS
 	//=================================**/
 	public void stateChanged(ChangeEvent e) {
-		// Toggle menus depending if:
-		// a map is loaded and
-		// if the panel is active.
-		/*fruitEditor.toggleMenus(fruitEditor.isPanelActive());
-		fruitEditor.toggleSave(fruitEditor.isPanelActive());
-		fruitEditor.toggleTools(fruitEditor.isPanelActive());		
-	
-		fruitEditor.update();*/
+		
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
@@ -443,8 +439,6 @@ public class FruitListener implements ActionListener,
 			r = c = 0;
 			
 			while (!line.isEmpty()) {
-				lines = line.split("\\s+");
-				
 				for (c = 0; c < lines.length; c++) {
 					ids[r][c] = Integer.parseInt(lines[c]);
 				}
@@ -456,8 +450,7 @@ public class FruitListener implements ActionListener,
 			// Convert id to tiles
 			//Tile t = new Tile(ids[r][c]);
 			
-			fruitEditor.setMap(map);
-			fruitEditor.update();
+			fruitPanel.getMapPanel().setMap(map);
 			
 			// Close reader to cleanup
 			reader.close();
@@ -529,11 +522,7 @@ public class FruitListener implements ActionListener,
 		return fruitEditor.getComponent(text);
 	}
 	
-	public void validate() {
-		if (fruitEditor == null) {
-			return;
-		}
-		
-		fruitEditor.validate();
+	private MapPanel getMapPanel() {
+		return fruitPanel.getMapPanel();
 	}
 }
