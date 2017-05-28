@@ -15,8 +15,6 @@ public class FruitEditor /*implements Runnable*/ {
 	public static final int GRID_SIZE = 32;
 	//public static final int TILE_SIZE = 24;
 	
-	private Thread t;
-	
 	// MAP ACTIVE.
 	private boolean panelActive = false;
 	
@@ -169,6 +167,7 @@ public class FruitEditor /*implements Runnable*/ {
 		// Setup the toolbar.
 		toolbarSetup();
 		
+		// Disable the menus and tools.
 		toggleTools(panelActive);
 		toggleSave(panelActive);
 		toggleMenus(panelActive);

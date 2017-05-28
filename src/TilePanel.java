@@ -10,7 +10,7 @@ import javax.swing.event.*;
 
 import java.io.*;
 
-public class TilePanel extends JPanel {
+public class TilePanel extends JPanel implements MouseListener, MouseMotionListener {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
@@ -75,8 +75,8 @@ public class TilePanel extends JPanel {
 		
 		selectedTile = new Tile();
 		
-		addMouseListener(fruitListener);
-		addMouseMotionListener(fruitListener);
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 	
 	private void popupSetup() {
@@ -226,6 +226,9 @@ public class TilePanel extends JPanel {
 		
 	}
 	
+	/**=======================================
+	 * MOUSE MOTION LISTENER METHODS.
+	//========================================**/
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
@@ -242,6 +245,13 @@ public class TilePanel extends JPanel {
 		
 	}
 	
+	public void mouseDragged(MouseEvent e) {
+		
+	}
+
+	/**================================
+	 * MOUSE LISTENER METHODS.
+	//=================================**/
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
 		int mx, my;
@@ -278,7 +288,11 @@ public class TilePanel extends JPanel {
 		
 	}
 	
-	public void mouseDragged(MouseEvent e) {
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+	
+	public void mouseExited(MouseEvent e) {
 		
 	}
 	

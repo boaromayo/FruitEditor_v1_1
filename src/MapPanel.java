@@ -11,7 +11,7 @@ import java.io.*;
 
 import java.util.*;
 
-public class MapPanel extends JPanel {
+public class MapPanel extends JPanel implements MouseListener, MouseMotionListener {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
@@ -23,7 +23,6 @@ public class MapPanel extends JPanel {
 	
 	// EDITOR MODE.
 	private EditorMode editorMode;
-		
 		
 	// POPUP (RIGHT-CLICK) MENU.
 	private JPopupMenu popupMenu;
@@ -56,6 +55,9 @@ public class MapPanel extends JPanel {
 	private int oldmouseX;
 	private int oldmouseY;
 	
+	// CURSOR COORDS.
+	private int cursorX;
+	private int cursorY;
 	
 	public MapPanel(FruitEditor f) {
 		fruitEditor = f;
@@ -80,10 +82,9 @@ public class MapPanel extends JPanel {
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		setLayout(new FlowLayout());
 		
-		addMouseListener(fruitListener);
-		addMouseMotionListener(fruitListener);
+		addMouseListener(this);
+		addMouseMotionListener(this);
 		addPropertyChangeListener(fruitListener);
-		addKeyListener(fruitListener);
 		
 		setFocusable(true);
 		requestFocusInWindow();
@@ -165,6 +166,11 @@ public class MapPanel extends JPanel {
 		deleteItem.setEnabled(false);
 	}
 	
+	public void update() {
+		revalidate();
+		repaint();
+	}
+	
 	@Override
 	public synchronized void paint(Graphics g) {
 		super.paintComponent(g);
@@ -178,11 +184,14 @@ public class MapPanel extends JPanel {
 	
 	public synchronized void draw(Graphics g) {	
 		if (isPanelActive()) {
-			map.draw(g, 
-					(int)viewport.getViewPosition().getX(), 
-					(int)viewport.getViewPosition().getY(),
-					viewport.getSize());
-		
+			if (map != null) {
+				map.draw(g, 
+						(int)viewport.getViewPosition().getX(), 
+						(int)viewport.getViewPosition().getY(),
+						viewport.getSize());
+			
+			}
+			
 			if (grid) {
 				drawGrid(g);
 			}
@@ -194,23 +203,30 @@ public class MapPanel extends JPanel {
 	}
 	
 	private void drawGrid(Graphics g) {
-		g.setColor(Color.GRAY);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Color.GRAY);
+		g2.setStroke(new BasicStroke(1, 
+				BasicStroke.CAP_BUTT, 
+				BasicStroke.JOIN_BEVEL, 
+				0, 
+				new float[] {2}, 
+				0)); // draws dashed line
 		int r, c; // Init counters for grid drawing. 
 		//int scale = map.getScale(); // Scale factor based on zoom view.
 		
 		for (r=0; r <= mapHeight; r++) {
-			g.drawLine(0, r*gridHeight, mapWidth*gridWidth, r*gridHeight);
+			g2.drawLine(0, r*gridHeight, mapWidth*gridWidth, r*gridHeight);
 		}
 		
 		for (c=0; c <= mapWidth; c++) {
-			g.drawLine(c*gridWidth, 0, c*gridWidth, mapHeight*gridHeight);
+			g2.drawLine(c*gridWidth, 0, c*gridWidth, mapHeight*gridHeight);
 		}
 	}
 	
 	private void drawCursor(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
-		int tmx = mouseX / gridWidth;
-		int tmy = mouseY / gridHeight;
+		int tmx = cursorX / gridWidth;
+		int tmy = cursorY / gridHeight;
 		
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
@@ -218,9 +234,21 @@ public class MapPanel extends JPanel {
 		g2.drawRect(tmx, tmy, gridWidth, gridHeight);
 	}
 	
-	public void update() {
-		revalidate();
-		repaint();
+	public void mapPressed(int x, int y) {
+		switch (map.drawMode()) {
+		case PENCIL:
+			map.setTile(x, y, fruitEditor.getSelectedTile());
+			update();
+			break;
+		case RECTANGLE:
+			break;
+		case CIRCLE:
+			break;
+		case FILL:
+			//floodFill(x, y, map.getTile(x, y), fruitEditor.getSelectedTile());
+		default:
+			break;
+		}
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -281,79 +309,6 @@ public class MapPanel extends JPanel {
 		fruitListener.propertyChange(e);
 	}
 	
-	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
-		int mx = mouseX / gridWidth;
-		int my = mouseY / gridHeight;
-		
-		// Set status panel
-		if (mouseX >= 0 && mouseX <= map.getWidth() &&
-				mouseY >= 0 && mouseY <= map.getHeight()) {
-			fruitEditor.getStatusPanel().setCursorLocation(mx, my);
-		}
-		
-		fruitEditor.update();
-	}
-	
-	public void mouseHovered(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
-	}
-	
-	public void mousePressed(MouseEvent e) {
-		int btn = e.getButton();
-		int mx, my;
-
-		if (btn == MouseEvent.BUTTON1) {
-			mouseX = e.getX();
-			mouseY = e.getY();
-			mx = mouseX / gridWidth;
-			my = mouseY / gridHeight;
-			
-			map.setTile(mx, my, fruitEditor.getSelectedTile());
-		} else if (btn == MouseEvent.BUTTON2) {
-			mouseX = e.getX();
-			mouseY = e.getY();
-			popupMenu.show(this, mouseX, mouseY);
-		}
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		int btn = e.getButton();
-		
-		if (btn == MouseEvent.BUTTON1) {
-			oldmouseX = e.getX();
-			oldmouseY = e.getY();
-		} else if (btn == MouseEvent.BUTTON2) {
-			oldmouseX = e.getX();
-			oldmouseY = e.getY();
-			popupMenu.show(this, oldmouseX, oldmouseY);
-		}
-	}
-	
-	public void mouseClicked(MouseEvent e) {
-		int btn = e.getButton();
-		int mx, my;
-		
-		if (btn == MouseEvent.BUTTON1) {
-			mouseX = e.getX();
-			mouseY = e.getY();
-			mx = mouseX / gridWidth;
-			my = mouseY / gridHeight;
-		}
-		
-		update();
-	}
-	
-	public void mouseDragged(MouseEvent e) {
-		int btn = e.getButton();
-		
-		/*if (btn == MouseEvent.BUTTON1 && map.equals(DrawMode.RECTANGLE)) {
-			
-		}*/
-	}
-	
 	public boolean gridOn() {
 		return grid;
 	}
@@ -375,5 +330,102 @@ public class MapPanel extends JPanel {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		return g2;
+	}
+	
+	/**=======================================
+	 * MOUSE MOTION LISTENER METHODS.
+	//========================================**/
+	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+		int mx = mouseX / gridWidth;
+		int my = mouseY / gridHeight;
+		
+		// Set status panel
+		if (mouseX >= 0 && mouseX <= map.getWidth() &&
+				mouseY >= 0 && mouseY <= map.getHeight() && isPanelActive()) {
+			fruitEditor.getStatusPanel().setCursorLocation(mx, my);
+		}
+		
+		fruitEditor.update();
+	}
+	
+	public void mouseHovered(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+	}
+	
+	public void mouseDragged(MouseEvent e) {
+		int btn = e.getButton();
+		
+		/*if (btn == MouseEvent.BUTTON1 && map.equals(DrawMode.RECTANGLE)) {
+			
+		}*/
+	}
+	
+	/**================================
+	 * MOUSE LISTENER METHODS.
+	//=================================**/
+	public void mousePressed(MouseEvent e) {
+		int btn = e.getButton();
+		
+		if (btn == MouseEvent.BUTTON1) {
+			// if left-click btn is pressed
+			mouseX = e.getX();
+			mouseY = e.getY();
+			
+			if (mouseX >= 0 && mouseX < map.getWidth()
+					&& mouseY >= 0 && mouseY < map.getHeight()) {
+				mapPressed(mouseX, mouseY);
+			}
+			
+			update();
+		} else if (btn == MouseEvent.BUTTON3) {
+			// if right-click btn is pressed
+			mouseX = e.getX();
+			mouseY = e.getY();
+			if (isPanelActive()) {
+				popupMenu.show(this, mouseX, mouseY);
+			}
+		}
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		int btn = e.getButton();
+		
+		if (btn == MouseEvent.BUTTON1) {
+			// if left-click btn is released
+			oldmouseX = e.getX();
+			oldmouseY = e.getY();
+		} else if (btn == MouseEvent.BUTTON3) {
+			// if right-click btn is released
+			oldmouseX = e.getX();
+			oldmouseY = e.getY();
+			if (isPanelActive()) {
+				popupMenu.show(this, oldmouseX, oldmouseY);
+			}
+		}
+	}
+	
+	public void mouseClicked(MouseEvent e) {
+		int btn = e.getButton();
+		int mx, my;
+		
+		if (btn == MouseEvent.BUTTON1) {
+			mouseX = e.getX();
+			mouseY = e.getY();
+			mx = mouseX / gridWidth;
+			my = mouseY / gridHeight;
+		}
+		
+		update();
+	}
+	
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+	
+	public void mouseExited(MouseEvent e) {
+		
 	}
 }

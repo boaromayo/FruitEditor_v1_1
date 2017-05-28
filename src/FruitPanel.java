@@ -42,10 +42,6 @@ public class FruitPanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		setupPanels();
-		
-		addMouseListener(fruitListener);
-		addMouseMotionListener(fruitListener);
-		addKeyListener(fruitListener);
 	}
 	
 	private void setupPanels() {
@@ -113,35 +109,5 @@ public class FruitPanel extends JPanel {
 	
 	public void setGrid(boolean gr) {
 		mapPanel.setGrid(gr);
-	}
-	
-	public void mouseMoved(MouseEvent e) {
-		mapPanel.mouseMoved(e);
-		//tilePanel.mouseMoved(e);
-	}
-	
-	public void mouseHovered(MouseEvent e) {
-		mapPanel.mouseHovered(e);
-		//tilePanel.mouseHovered(e);
-	}
-	
-	public void mousePressed(MouseEvent e) {
-		mapPanel.mousePressed(e);
-		//tilePanel.mousePressed(e);
-	}
-	
-	public void mouseReleased(MouseEvent e) {
-		mapPanel.mouseReleased(e);
-		//tilePanel.mouseReleased(e);
-	}
-	
-	public void mouseClicked(MouseEvent e) {
-		mapPanel.mouseClicked(e);
-		//tilePanel.mouseClicked(e);
-	}
-	
-	public void mouseDragged(MouseEvent e) {
-		mapPanel.mouseDragged(e);
-		//tilePanel.mouseDragged(e);
 	}
 }

@@ -50,16 +50,19 @@ public class StatusPanel extends JPanel implements MouseMotionListener {
 		
 		setupPanel();
 		
-		addMouseMotionListener(fruitListener);
+		addMouseMotionListener(this);
 	}
 	
 	public void update() {
-		if (fruitEditor.getMap() != null) {
+		if (fruitEditor.getMap() != null && 
+				fruitEditor.isPanelActive()) {
 			setMap(fruitEditor.getMap());
 			
 			setStatus("\t");
 			setCurrentMap(mapName, mapWidth, mapHeight);
 			setLocation(mapX, mapY);
+		} else {
+			setStatus();
 		}
 		
 		repaint();
@@ -72,12 +75,21 @@ public class StatusPanel extends JPanel implements MouseMotionListener {
 		mapHeight = m.getHeight();
 	}
 	
+	public void setStatus() {
+		statusLabel.setText("No map selected");
+	}
+	
 	public void setStatus(String text) {
 		statusLabel.setText(text);
 	}
 	
 	public void setCurrentMap(String name, int width, int height) {
-		currentMapLabel.setText("Map: " + mapName + " (" + mapWidth + " x " + mapHeight + ")");
+		if (mapName != null)
+			currentMapLabel.setText("Map: " + mapName + " (" + mapWidth + " x " + mapHeight + ")");
+	}
+	
+	public void setCursorLocation() {
+		cursorPosition.setText("");
 	}
 	
 	public void setCursorLocation(int x, int y) {
@@ -94,7 +106,10 @@ public class StatusPanel extends JPanel implements MouseMotionListener {
 		mapX = e.getX() / map.getGridWidth();
 		mapY = e.getY() / map.getGridHeight();
 		
-		setCursorLocation(mapX, mapY);
+		/*if (mapName == null)
+			setStatus("No map selected");
+		else
+			setCursorLocation(mapX, mapY);*/
 	}
 	
 	public void mouseHovered(MouseEvent e) {

@@ -14,7 +14,7 @@ import java.util.*;
 import java.beans.*;
 
 public class FruitListener implements ActionListener,
-	ChangeListener, PropertyChangeListener, MouseListener, MouseMotionListener, KeyListener {
+	ChangeListener, PropertyChangeListener {
 	
 	private FruitEditor fruitEditor;
 	
@@ -224,8 +224,8 @@ public class FruitListener implements ActionListener,
 			
 			try {
 				readText(file); // read the map file
-				statusPanel.setStatus(confirmStr);
-				statusPanel.update();
+				statusPanel.setStatus(confirmStr + "\t");
+				statusPanel.repaint();
 			} catch (Exception e) {
 				System.err.println("ERROR: Could not read file " + file.getPath());
 				e.printStackTrace();
@@ -246,8 +246,8 @@ public class FruitListener implements ActionListener,
 			
 			try {
 				writeText(file);
-				statusPanel.setStatus(confirmStr);
-				statusPanel.update();
+				statusPanel.setStatus(confirmStr + "\t");
+				statusPanel.repaint();
 				
 				//map = file;
 			} catch (Exception e) {
@@ -329,21 +329,19 @@ public class FruitListener implements ActionListener,
 	// mouseMoved(event) - Update if mouse moved.
 	//=================================**/
 	public void mouseMoved(MouseEvent e) {
-		fruitPanel.mouseMoved(e);
-		statusPanel.mouseMoved(e);
+		//statusPanel.mouseMoved(e);
 	}
 	/**================================
 	// mouseHovered(event) - Update if mouse hovered.
 	//=================================**/
 	public void mouseHovered(MouseEvent e) {
-		fruitPanel.mouseHovered(e);
 	}
 	
 	/**================================
 	// mouseDragged(event) - Update if mouse dragged.
 	//=================================**/
 	public void mouseDragged(MouseEvent e) {
-		fruitPanel.mouseDragged(e);
+		//fruitPanel.mouseDragged(e);
 	}
 	
 	/**================================
@@ -353,21 +351,21 @@ public class FruitListener implements ActionListener,
 	// mousePressed(event) - Update if mouse pressed.
 	//=================================**/
 	public void mousePressed(MouseEvent e) {
-		fruitPanel.mousePressed(e);
+		//fruitPanel.mousePressed(e);
 	}
 	
 	/**================================
 	// mouseReleased(event) - Update if mouse released.
 	//=================================**/
 	public void mouseReleased(MouseEvent e) {
-		fruitPanel.mouseReleased(e);
+		//fruitPanel.mouseReleased(e);
 	}
 	
 	/**================================
 	// mouseClicked(event) - Update if mouse clicked.
 	//=================================**/
 	public void mouseClicked(MouseEvent e) {
-		fruitPanel.mouseClicked(e);
+		//fruitPanel.mouseClicked(e);
 	}
 	
 	public void mouseEntered(MouseEvent e) {
