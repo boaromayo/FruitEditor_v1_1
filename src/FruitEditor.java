@@ -182,8 +182,8 @@ public class FruitEditor /*implements Runnable*/ {
 		fruitFrame.setResizable(false);
 	}
 	
-	// May get rid of this since it's not needed. 
-	// This is not a game-based app, where the run() loop is called every time.
+	/* TODO: May get rid of this since it's not needed. 
+	 * This is not a game-based app, where the run() loop is called every time. */
 	/*public void run() {
 		long startTime, diffTime;
 		
@@ -331,9 +331,6 @@ public class FruitEditor /*implements Runnable*/ {
 		saveItem.setName("saveItem");
 		saveAsItem.setName("saveAsItem");
 		closeItem.setName("closeItem");
-		
-		// Case for FILE -> SAVE and FILE -> SAVE AS
-		//toggleSave(panelActive);
 		
 		// Add in components.
 		fileMenu.add(newItem);
