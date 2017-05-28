@@ -59,9 +59,10 @@ public class MapPanel extends JPanel {
 	
 	public MapPanel(FruitEditor f) {
 		fruitEditor = f;
+		
 		map = f.getMap();
 		
-		fruitListener = (f.getListener() != null ? f.getListener() : null);
+		fruitListener = f.getListener();
 		
 		editorMode = EditorMode.MAP_MODE;
 		
@@ -236,6 +237,8 @@ public class MapPanel extends JPanel {
 		
 		gridWidth = m.getGridWidth();
 		gridHeight = m.getGridHeight();
+		
+		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		
 		if (!isPanelActive()) {
 			setPanelActive(true);

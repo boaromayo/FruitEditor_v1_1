@@ -330,6 +330,7 @@ public class FruitListener implements ActionListener,
 	//=================================**/
 	public void mouseMoved(MouseEvent e) {
 		fruitPanel.mouseMoved(e);
+		statusPanel.mouseMoved(e);
 	}
 	/**================================
 	// mouseHovered(event) - Update if mouse hovered.

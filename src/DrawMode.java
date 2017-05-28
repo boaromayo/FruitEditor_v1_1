@@ -15,4 +15,8 @@ public enum DrawMode {
 	public int mode() {
 		return mode;
 	}
+	
+	public boolean equals(DrawMode d) {
+		return this.mode == d.mode;
+	}
 }

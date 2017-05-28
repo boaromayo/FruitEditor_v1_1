@@ -858,30 +858,6 @@ public class FruitEditor /*implements Runnable*/ {
 	}
 	
 	/**========================================
-	// setStatus(text) - Set status panel.
-	//=========================================**/
-	public void setStatus(String text) {
-		statusPanel.setStatus(text);
-	}
-	
-	/**========================================
-	// setStatus(currentmap, (x, y)) - Set status panel.
-	//=========================================**/
-	public void setStatus(Map currentMap, int x, int y) {
-		statusPanel.setCurrentMap(currentMap.getName(), currentMap.getWidth(), currentMap.getHeight());
-		statusPanel.setCursorLocation(x, y);
-	}
-	
-	/**========================================
-	// setStatus(status, currentmap, (x, y)) - Set status panel.
-	//=========================================**/
-	public void setStatus(String status, Map currentMap, int x, int y) {
-		statusPanel.setStatus(status);
-		statusPanel.setCurrentMap(currentMap.getName(), currentMap.getWidth(), currentMap.getHeight());
-		statusPanel.setCursorLocation(x, y);
-	}
-	
-	/**========================================
 	// putComponent(key, value) - Place JComponent into hashmap. 
 	//=========================================*/
 	public void putComponent(String key, JComponent value) {
@@ -928,7 +904,7 @@ public class FruitEditor /*implements Runnable*/ {
 	}
 	
 	/**========================================
-	// getMap() - Get Map. 
+	// getMap() - Get map. 
 	//=========================================**/
 	public Map getMap() {
 		if (map != null)
@@ -937,6 +913,9 @@ public class FruitEditor /*implements Runnable*/ {
 		return null;
 	}
 	
+	/**========================================
+	// getTileset() - Get tileset. 
+	//=========================================**/
 	public Tileset getTileset() {
 		if (tileset != null)
 			return tileset;

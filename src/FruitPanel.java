@@ -99,7 +99,6 @@ public class FruitPanel extends JPanel {
 		return null;
 	}
 	
-	// p---
 	/*public MapListPanel getMapListPanel() {
 		if (mapListPanel != null)
 			return mapListPanel;

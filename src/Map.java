@@ -199,10 +199,6 @@ public class Map {
 		return fruitTiles[y][x][z];
 	}
 	
-	public boolean equals(DrawMode d) {
-		return drawMode.mode() == d.mode();
-	}
-	
 	public DrawMode drawMode() {
 		return drawMode;
 	}
