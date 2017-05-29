@@ -45,7 +45,7 @@ public class FruitListener implements ActionListener,
 		// FILE listeners.
 		if (src == getComponent("newBtn") || 
 				src == getComponent("newItem")) {
-			newAction();
+			new NewDialog(fruitEditor); // Load NEW dialog.
 		} else if (src == getComponent("openBtn") ||
 				src == getComponent("openItem")) {
 			openAction();
@@ -181,24 +181,7 @@ public class FruitListener implements ActionListener,
 		
 		// HELP item listener
 		else if (src == getComponent("aboutItem")) {
-			aboutAction();
-		}
-		
-		// RIGHT CLICK MENUS.
-		// MapPanel item listeners
-		else if (src == getComponent("rename")) {
-			
-		} else if (src == getComponent("shift")) {
-			
-		}
-		
-		// TilePanel item listeners
-		else if (src == getComponent("openTile")) {
-			openTileAction();
-		} else if (src == getComponent("gridTile")) {
-			gridTileAction();
-		} else if (src == getComponent("closeTile")) {
-			closeTileAction();
+			new AboutDialog(fruitEditor);
 		}
 		
 		fruitEditor.update();
@@ -207,11 +190,6 @@ public class FruitListener implements ActionListener,
 	/**==============================
 	// ACTION EVENT METHODS. 
 	//===============================*/
-	private void newAction() {
-		// Load NEW dialog.
-		new NewDialog(fruitEditor);
-	}
-	
 	private void openAction() {
 		// Load OPEN dialog.
 		JFileChooser open = makeFileChooser();
@@ -304,10 +282,6 @@ public class FruitListener implements ActionListener,
 	
 	private void deleteAction() {
 		
-	}
-	
-	private void aboutAction() {
-		new AboutDialog(fruitEditor);
 	}
 	
 	private void openTileAction() {

@@ -1,40 +1,40 @@
 package FruitEditor;
 
 import java.awt.*;
+import java.awt.Dialog.ModalityType;
 
 import java.awt.event.*;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
 public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	// DIALOG.
-	protected JDialog newDialog;
+	private JDialog newDialog;
 	
 	// DIALOG SIZE.
-	private final int WIDTH = 480;
+	private final int WIDTH = 500;
 	private final int HEIGHT = 200;
 	
 	// COMPONENTS.
-	protected JLabel mapLabel;
+	private JLabel mapLabel;
 	//private JLabel tileLabel;
-	protected JLabel mapWidthLabel;
-	protected JLabel mapHeightLabel;
-	protected JLabel gridWidthLabel;
-	protected JLabel gridHeightLabel;
+	private JLabel mapWidthLabel;
+	private JLabel mapHeightLabel;
+	private JLabel gridWidthLabel;
+	private JLabel gridHeightLabel;
 	
-	protected JTextField mapText;
+	private JTextField mapText;
 	//private JTextField tileText;
-	protected JSpinner mapWidthText;
-	protected JSpinner mapHeightText;
-	protected JSpinner gridWidthText;
-	protected JSpinner gridHeightText;
+	private JSpinner mapWidthText;
+	private JSpinner mapHeightText;
+	private JSpinner gridWidthText;
+	private JSpinner gridHeightText;
 	
 	//private JButton browseBtn;
-	protected JButton okBtn;
-	protected JButton cancelBtn;
-	protected JToggleButton lockBtn;
+	private JButton okBtn;
+	private JButton cancelBtn;
+	private JToggleButton lockBtn;
 	
 	// PROPERTIES.
 	//private String tileFilename;
@@ -45,7 +45,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	
 	private boolean lock = true;
 
-	protected MapPanel mapPanel;
+	private MapPanel mapPanel;
 	
 	public NewDialog(FruitEditor f) {
 		String title = "Create New Map";
@@ -60,18 +60,18 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		addComps();
 		
 		// Set specs for new map dialog.
-		newDialog.pack();
+		//newDialog.pack();
 		
 		newDialog.setTitle(title);
 		newDialog.setSize(WIDTH,HEIGHT);
 
-		newDialog.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
+		newDialog.setModalityType(ModalityType.DOCUMENT_MODAL);
 		newDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		newDialog.setLocationRelativeTo(null);
 		newDialog.setVisible(true);
+		newDialog.setResizable(false);
 		newDialog.setFocusable(true);
 		newDialog.requestFocus();
-		newDialog.setResizable(false);
 	}
 	
 	public void init() {
@@ -109,7 +109,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	/**==================================
 	// addComps() - Add components
 	//===================================**/
-	protected void addComps() {
+	private void addComps() {
 		newDialog.setLayout(new GridLayout(3,1,2,2));
 		JPanel one = new JPanel();
 		//JPanel two = new JPanel();
@@ -227,7 +227,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	/**==================================
 	// HELPER METHODS.
 	//===================================**/
-	protected JLabel makeLabel(String text, String name) {
+	private JLabel makeLabel(String text, String name) {
 		JLabel lbl;
 		
 		lbl = new JLabel(text);
@@ -236,7 +236,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		return lbl;
 	}
 	
-	protected JTextField makeTextField(String name) {
+	private JTextField makeTextField(String name) {
 		return makeTextField(name, 30);
 	}
 	
@@ -251,7 +251,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		return txtField;
 	}
 	
-	protected JSpinner makeSpinner(int num, String name) {
+	private JSpinner makeSpinner(int num, String name) {
 		JSpinner spinner;
 		
 		if (name.startsWith("grid")) {
@@ -269,7 +269,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		return spinner;
 	}
 	 
-	protected JButton makeButton(String text, String name) {
+	private JButton makeButton(String text, String name) {
 		JButton btn;
 		
 		btn = new JButton(text);
@@ -281,7 +281,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		return btn;
 	}
 	
-	protected JToggleButton makeToggleBtn(String text, String name) {
+	private JToggleButton makeToggleBtn(String text, String name) {
 		JToggleButton btn;
 		
 		btn = new JToggleButton(text);

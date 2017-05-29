@@ -1,23 +1,64 @@
 package FruitEditor;
 
 import java.awt.*;
+import java.awt.Dialog.ModalityType;
+
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 
-public class RenameDialog extends NewDialog {
+public class RenameDialog implements ActionListener, ChangeListener {
+	// DIALOG.
+	private JDialog renameDialog;
+	
+	// COMPONENTS.
+	private JLabel mapLabel;
+	private JLabel mapWidthLabel;
+	private JLabel mapHeightLabel;
+	
+	private JTextField mapText;
+	private JSpinner mapWidthText;
+	private JSpinner mapHeightText;
+	
+	private JButton okBtn;
+	private JButton cancelBtn;
 
+	// PROPERTIES.
+	private int mapWidth;
+	private int mapHeight;
+	
+	private MapPanel mapPanel;
+	
 	public RenameDialog(FruitEditor f) {
-		super(f);
-		
 		String title = "Rename/Resize Map";
 		
-		newDialog.setTitle(title);
+		renameDialog = new JDialog(f.getFrame());
+		
+		mapPanel = f.getMapPanel();
+		
+		init();
+		
+		addComps();
+		
+		renameDialog.pack();
+		
+		renameDialog.setTitle(title);
+		
+		renameDialog.setModalityType(ModalityType.DOCUMENT_MODAL);
+		renameDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		renameDialog.setLocationRelativeTo(null);
+		renameDialog.setVisible(true);
+		renameDialog.setResizable(false);
+		renameDialog.setFocusable(true);
+		renameDialog.requestFocus();
 	}
 	
-	@Override
+	//@Override
 	public void init() {
-		// Initialize dimensions.
+		// Initialize properties.
+		mapWidth = mapPanel.getMapWidth();
+		mapHeight = mapPanel.getMapHeight();
 		
 		// Initialize labels.
 		mapLabel = makeLabel("Map Name", "mapLabel");
@@ -25,9 +66,9 @@ public class RenameDialog extends NewDialog {
 		mapHeightLabel = makeLabel("Height:", "mapHeightLabel");
 		
 		// initialize text fields.
-		mapText = makeTextField("mapText");
-		mapWidthText = makeSpinner(getMapWidth(), "mapWidthText");
-		mapHeightText = makeSpinner(getMapHeight(), "mapHeightText");
+		mapText = makeTextField("mapText", mapPanel.getMapName());
+		mapWidthText = makeSpinner(mapWidth, "mapWidthText");
+		mapHeightText = makeSpinner(mapHeight, "mapHeightText");
 		
 		// initialize buttons.
 		okBtn  	   	= makeButton("OK", "okBtn");
@@ -37,9 +78,9 @@ public class RenameDialog extends NewDialog {
 	/**==================================
 	// addComps() - Add components
 	//===================================**/
-	@Override
+	//@Override
 	protected void addComps() {
-		newDialog.setLayout(new GridLayout(3,1,2,2));
+		renameDialog.setLayout(new GridLayout(3,1));
 		JPanel one = new JPanel();
 		JPanel size = new JPanel();
 		JPanel btn = new JPanel();
@@ -47,7 +88,7 @@ public class RenameDialog extends NewDialog {
 		one.add(mapLabel); // (0,0)
 		one.add(mapText); // (1,0)
 		
-		newDialog.add(one);
+		renameDialog.add(one);
 		
 		size.setLayout(new GridLayout(2,2,8,1));
 		
@@ -56,12 +97,103 @@ public class RenameDialog extends NewDialog {
 		size.add(mapWidthText); // (2,2)
 		size.add(mapHeightText); // (3,2)
 		
-		newDialog.add(size);
+		renameDialog.add(size);
 		
 		btn.add(okBtn); // (0,3)
 		btn.add(cancelBtn); // (1,3)
 		
-		newDialog.add(btn);
+		renameDialog.add(btn);
+	}
+	
+	/**==================================
+	// dispose() - Dispose dialog.
+	//===================================**/
+	public void dispose() {
+		renameDialog.dispose();
+	}
+	
+	/**==================================
+	// PROPERTY SETTER METHODS.
+	//===================================**/
+	public void setMapText(String name) {
+		mapText.setText(name);
+	}
+	
+	public void setMapWidth(int w) {
+		mapWidth = w;
+		mapWidthText.setValue(w);
+	}
+	
+	public void setMapHeight(int h) {
+		mapHeight = h;
+		mapHeightText.setValue(h);
+	}
+	
+	/**==================================
+	// PROPERTY GETTER METHODS.
+	//===================================**/
+	public String getMapText() {
+		return mapText.getText();
+	}
+	
+	public int getMapWidth() {
+		return (Integer)mapWidthText.getValue();
+	}
+	
+	public int getMapHeight() {
+		return (Integer)mapHeightText.getValue();
+	}
+	
+	/**==================================
+	// HELPER METHODS.
+	//===================================**/
+	protected JLabel makeLabel(String text, String name) {
+		JLabel lbl;
+		
+		lbl = new JLabel(text);
+		lbl.setName(name);
+		
+		return lbl;
+	}
+	
+	protected JTextField makeTextField(String name, String text) {
+		return makeTextField(name, text, 30);
+	}
+	
+	private JTextField makeTextField(String name, String text, int width) {
+		JTextField txtField;
+		
+		txtField = new JTextField(text,width);
+		txtField.setName(name);
+		txtField.addActionListener(this);
+		//txtField.addKeyListener(this);
+		
+		return txtField;
+	}
+	
+	protected JSpinner makeSpinner(int num, String name) {
+		JSpinner spinner;
+		
+		spinner = new JSpinner(
+					new SpinnerNumberModel(num, 8, Map.MAP_SIZE, 1));
+		
+		spinner.setName(name);
+		spinner.addChangeListener(this);
+		//spinner.addKeyListener(this);
+		
+		return spinner;
+	}
+	
+	protected JButton makeButton(String text, String name) {
+		JButton btn;
+		
+		btn = new JButton(text);
+		btn.setName(name);
+		
+		btn.addActionListener(this);
+		//btn.addKeyListener(this);
+		
+		return btn;
 	}
 	
 	/**=======================================
@@ -70,12 +202,12 @@ public class RenameDialog extends NewDialog {
 	public void actionPerformed(ActionEvent e) {
 		Object btn = e.getSource();
 		
-		if (newDialog.isVisible()) {
+		if (renameDialog.isVisible()) {
 			if (btn == okBtn) {
 				// if map name or tileset name is blank, put warning prompt
 				// otherwise, set map name and set map dimensions up
 				if (getMapText().matches("^\\s+") || getMapText().equals("")) {
-					JOptionPane.showMessageDialog(newDialog, 
+					JOptionPane.showMessageDialog(renameDialog, 
 							"Enter a name for this map.", 
 							"Map Name Blank", 
 							JOptionPane.WARNING_MESSAGE);
@@ -98,6 +230,20 @@ public class RenameDialog extends NewDialog {
 				}
 			} else if (btn == cancelBtn) {
 				dispose();
+			}
+		}
+	}
+	
+	public void stateChanged(ChangeEvent e) {
+		Object src = e.getSource();
+		
+		if (renameDialog.isVisible()) {
+			if (src == mapWidthText) {
+				setMapWidth((Integer)mapWidthText.getValue());
+				System.out.println(mapWidth); // test debug here
+			} else if (src == mapHeightText) {
+				setMapHeight((Integer)mapHeightText.getValue());
+				System.out.println(mapHeight); // test debug here
 			}
 		}
 	}

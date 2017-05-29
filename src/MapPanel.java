@@ -11,7 +11,8 @@ import java.io.*;
 
 import java.util.*;
 
-public class MapPanel extends JPanel implements MouseListener, MouseMotionListener {
+public class MapPanel extends JPanel implements MouseListener, 
+	MouseMotionListener, ActionListener {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
@@ -120,8 +121,8 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 		editSetup();
 		
 		// Add in event listeners.
-		renameItem.addActionListener(fruitListener);
-		shiftItem.addActionListener(fruitListener);
+		renameItem.addActionListener(this);
+		shiftItem.addActionListener(this);
 		
 		// Set names for components.
 		renameItem.setName("rename");
@@ -158,7 +159,6 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 	}
 	
 	private void disableItems() {
-		renameItem.setEnabled(false);
 		shiftItem.setEnabled(false);
 		cutItem.setEnabled(false);
 		copyItem.setEnabled(false);
@@ -280,8 +280,12 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 	}
 	
 	public synchronized void setMapSize(int w, int h) {
-		map.setWidth(w);
-		map.setHeight(h);
+		mapWidth = w;
+		mapHeight = h;
+		map.setWidth(mapWidth);
+		map.setHeight(mapHeight);
+		
+		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		
 		update();
 	}
@@ -325,11 +329,31 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 		return (int)mouseY / gridHeight;
 	}
 	
+	public String getMapName() {
+		return map.getName();
+	}
+	
+	public int getMapWidth() {
+		return mapWidth;
+	}
+	
+	public int getMapHeight() {
+		return mapHeight;
+	}
+	
 	private Graphics2D convertTo2d(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		return g2;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		Object src = e.getSource();
+		
+		if (src == renameItem) {
+			new RenameDialog(fruitEditor);
+		}
 	}
 	
 	/**=======================================
