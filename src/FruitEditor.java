@@ -13,7 +13,7 @@ public class FruitEditor /*implements Runnable*/ {
 	public static final int SCREEN_HEIGHT = 640;
 	public static final int FPS = 60;
 	public static final int GRID_SIZE = 32;
-	//public static final int TILE_SIZE = 24;
+	public static final int SCROLL_SPEED = 20; // for tile and map scroll panes
 	
 	// MAP ACTIVE.
 	private boolean panelActive = false;

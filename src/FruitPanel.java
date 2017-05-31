@@ -57,6 +57,12 @@ public class FruitPanel extends JPanel {
 		tileScrollPane = new JScrollPane(tilePanel);
 		//tileTabbedPane = new JTabbedPane();
 		mapScrollPane = new JScrollPane(mapPanel);
+		
+		// Make the scrolling faster for scroll panes. Set to an arbitrary speed.
+		tileScrollPane.getVerticalScrollBar().setUnitIncrement(FruitEditor.SCROLL_SPEED);
+		tileScrollPane.getHorizontalScrollBar().setUnitIncrement(FruitEditor.SCROLL_SPEED);
+		mapScrollPane.getVerticalScrollBar().setUnitIncrement(FruitEditor.SCROLL_SPEED);
+		mapScrollPane.getVerticalScrollBar().setUnitIncrement(FruitEditor.SCROLL_SPEED);
 	
 		mapPanel.setViewport(mapScrollPane.getViewport());
 		//tilePanel.setViewport(tileScrollPane.getViewport());

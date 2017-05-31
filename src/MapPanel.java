@@ -12,7 +12,7 @@ import java.io.*;
 import java.util.*;
 
 public class MapPanel extends JPanel implements MouseListener, 
-	MouseMotionListener, ActionListener {
+	MouseMotionListener, KeyListener, ActionListener {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
@@ -39,7 +39,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	// VIEWPORT.
 	private JViewport viewport;
 	
-	// DIMENSIONS.
+	// MAP DIMENSIONS.
 	private int mapWidth;
 	private int mapHeight;
 	
@@ -85,6 +85,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addKeyListener(this);
 		addPropertyChangeListener(fruitListener);
 		
 		setFocusable(true);
@@ -192,18 +193,20 @@ public class MapPanel extends JPanel implements MouseListener,
 			
 			}
 			
+			drawCursor(g, mouseX, mouseY);
+			
 			if (grid) {
 				drawGrid(g);
 			}
 		
 			if (editorMode.equals(EditorMode.EVENT_MODE)) {
-				drawCursor(g);
+				drawEventCursor(g);
 			}
 		}
 	}
 	
 	private void drawGrid(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
+		Graphics2D g2 = convertTo2d(g);
 		g2.setColor(Color.GRAY);
 		g2.setStroke(new BasicStroke(1, 
 				BasicStroke.CAP_BUTT, 
@@ -211,6 +214,7 @@ public class MapPanel extends JPanel implements MouseListener,
 				0, 
 				new float[] {2}, 
 				0)); // draws dashed line
+		
 		int r, c; // Init counters for grid drawing. 
 		//int scale = map.getScale(); // Scale factor based on zoom view.
 		
@@ -223,15 +227,30 @@ public class MapPanel extends JPanel implements MouseListener,
 		}
 	}
 	
-	private void drawCursor(Graphics g) {
-		Graphics2D g2 = convertTo2d(g);
-		int tmx = cursorX / gridWidth;
-		int tmy = cursorY / gridHeight;
+	private void drawCursor(Graphics g, int x, int y) {
+		int mx = x - (x % gridWidth); // set the cursor positions
+		int my = y - (y % gridHeight);
 		
-		g2.setStroke(new BasicStroke(2));
+		g.setColor(Color.BLACK);
+		
+		if (checkBounds(mx,my,
+				mapWidth*gridWidth,mapHeight*gridHeight)) {
+			g.drawRect(mx, my, gridWidth, gridHeight);
+		}
+	}
+	
+	private void drawEventCursor(Graphics g) {
+		Graphics2D g2 = convertTo2d(g);
+		int tx = cursorX - (cursorX % gridWidth);
+		int ty = cursorY - (cursorY % gridHeight);
+		
+		g2.setStroke(new BasicStroke(3));
 		g2.setColor(Color.BLACK);
 		
-		g2.drawRect(tmx, tmy, gridWidth, gridHeight);
+		if (checkBounds(tx,ty,
+				mapWidth*gridWidth,mapHeight*gridHeight)) {
+			g2.drawRect(tx, ty, gridWidth, gridHeight);
+		}
 	}
 	
 	public void mapPressed(int x, int y) {
@@ -246,6 +265,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			break;
 		case FILL:
 			//floodFill(x, y, map.getTile(x, y), fruitEditor.getSelectedTile());
+			update();
 		default:
 			break;
 		}
@@ -308,11 +328,6 @@ public class MapPanel extends JPanel implements MouseListener,
 		editorMode = m;
 	}
 	
-	
-	public void propertyChange(PropertyChangeEvent e) {
-		fruitListener.propertyChange(e);
-	}
-	
 	public boolean gridOn() {
 		return grid;
 	}
@@ -341,6 +356,11 @@ public class MapPanel extends JPanel implements MouseListener,
 		return mapHeight;
 	}
 	
+	// Keep this checkBounds() method private to prevent any interaction with other panels.
+	private boolean checkBounds(int x, int y, int w, int h) {
+		return (x >= 0 && x < w && y >= 0 && y < h);
+	}
+	
 	private Graphics2D convertTo2d(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
@@ -348,27 +368,38 @@ public class MapPanel extends JPanel implements MouseListener,
 		return g2;
 	}
 	
+	
+	/**=======================================
+	 * actionPerformed(ActionEvent) - Perform ActionEvents.
+	//========================================**/
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
 		
 		if (src == renameItem) {
 			new RenameDialog(fruitEditor);
+		} else if (src == shiftItem) {
+			// TODO: Add shift dialog box here.
 		}
+	}
+	
+	public void propertyChange(PropertyChangeEvent e) {
+		fruitListener.propertyChange(e);
 	}
 	
 	/**=======================================
 	 * MOUSE MOTION LISTENER METHODS.
 	//========================================**/
 	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
-		int mx = mouseX / gridWidth;
-		int my = mouseY / gridHeight;
+		mouseX = e.getX() - (e.getX() % gridWidth);
+		mouseY = e.getY() - (e.getY() % gridHeight);
+		int tx = mouseX / gridWidth; // make the tile coordinates
+		int ty = mouseY / gridHeight;
 		
 		// Set status panel
-		if (mouseX >= 0 && mouseX <= map.getWidth() &&
-				mouseY >= 0 && mouseY <= map.getHeight() && isPanelActive()) {
-			fruitEditor.getStatusPanel().setCursorLocation(mx, my);
+		if (isPanelActive() && checkBounds(tx,ty,map.getWidth(),map.getHeight())) {
+			fruitEditor.getStatusPanel().setCursorLocation(tx,ty);
+		} else {
+			fruitEditor.getStatusPanel().setCursorLocation();
 		}
 		
 		fruitEditor.update();
@@ -398,8 +429,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			mouseX = e.getX();
 			mouseY = e.getY();
 			
-			if (mouseX >= 0 && mouseX < map.getWidth()
-					&& mouseY >= 0 && mouseY < map.getHeight()) {
+			if (checkBounds(mouseX,mouseY,map.getWidth(),map.getHeight())) {
 				mapPressed(mouseX, mouseY);
 			}
 			
@@ -408,7 +438,8 @@ public class MapPanel extends JPanel implements MouseListener,
 			// if right-click btn is pressed
 			mouseX = e.getX();
 			mouseY = e.getY();
-			if (isPanelActive()) {
+			if (isPanelActive() &&
+					checkBounds(mouseX,mouseY,mapWidth*gridWidth,mapHeight*gridHeight)) {
 				popupMenu.show(this, mouseX, mouseY);
 			}
 		}
@@ -425,7 +456,8 @@ public class MapPanel extends JPanel implements MouseListener,
 			// if right-click btn is released
 			oldmouseX = e.getX();
 			oldmouseY = e.getY();
-			if (isPanelActive()) {
+			if (isPanelActive() &&
+					checkBounds(oldmouseX,oldmouseY,mapWidth*gridWidth,mapHeight*gridHeight)) {
 				popupMenu.show(this, oldmouseX, oldmouseY);
 			}
 		}
@@ -450,6 +482,23 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mouseExited(MouseEvent e) {
+		
+	}
+	
+	/**================================
+	 * KEY LISTENER METHODS.
+	//=================================**/
+	public void keyPressed(KeyEvent e) {
+		if (editorMode.equals(EditorMode.EVENT_MODE)) {
+			
+		}
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		
+	}
+	
+	public void keyTyped(KeyEvent e) {
 		
 	}
 }
