@@ -10,12 +10,13 @@ import javax.swing.event.*;
 
 import java.io.*;
 
-public class TilePanel extends JPanel implements MouseListener, MouseMotionListener {
+public class TilePanel extends JPanel implements MouseListener, 
+	MouseMotionListener, ActionListener {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
 	// EVENT LISTENER.
-	private FruitListener fruitListener;
+	//private FruitListener fruitListener;
 	
 	// POPUP (or RIGHT-CLICK) MENU.
 	private JPopupMenu popupMenu;
@@ -53,9 +54,7 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 	public TilePanel(FruitEditor f) {
 		fruitEditor = f;
 		
-		fruitListener = f.getListener();
-		
-		tileset = new Tileset();
+		tileset = f.getTileset();
 		
 		tilesetWidth = tileset.getWidth();
 		tilesetHeight = tileset.getHeight();
@@ -65,15 +64,13 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 		
 		setBounds(0, 0, FruitEditor.SCREEN_WIDTH / 4, FruitEditor.SCREEN_HEIGHT);
 		setPreferredSize(new Dimension(
-				tileset.getWidth()*gridWidth, 
-				tileset.getHeight()*gridHeight));
+				tilesetWidth, 
+				tilesetHeight));
 		
 		// Setup popup menu.
 		popupSetup();
 		
-		tileset = fruitEditor.getTileset();
-		
-		selectedTile = new Tile();
+		selectedTile = tileset.getTile(0,0);
 		
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -109,9 +106,9 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 		
 		// Add in event listeners.
 		//newTileItem.addActionListener(fruitListener);
-		openTileItem.addActionListener(fruitListener);
-		gridTileItem.addActionListener(fruitListener);
-		closeTileItem.addActionListener(fruitListener);
+		openTileItem.addActionListener(this);
+		gridTileItem.addActionListener(this);
+		closeTileItem.addActionListener(this);
 		
 		// Set names for components.
 		//newTileItem.setName("newTileItem");
@@ -132,18 +129,8 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 		closeTileItem.setEnabled(false);
 	}
 	
-	public void openTileset() {
-		try {
-			
-		} catch (Exception e) {
-			System.err.println("ERROR: Cannot load tileset. Reason: " + e.getMessage());
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
-	
 	@Override
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 		super.paintComponent(g);
 		
 		Image img = createImage(getWidth(), getHeight());
@@ -154,46 +141,71 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 		
 	}
 	
-	public void draw(Graphics g) {
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, tilesetWidth, tilesetHeight);
-		
-		drawGrid(g);
+	public synchronized void draw(Graphics g) {
+		if (fruitEditor.isPanelActive()) {
+			if (tileset != null) {
+				tileset.draw(g,
+						(int)viewport.getViewPosition().getX(), 
+						(int)viewport.getViewPosition().getY(), 
+						viewport.getSize());
+			}
 	
-		drawCursor(g);
+			drawCursor(g, mouseX, mouseY);
+			drawSelectedCursor(g, 
+					selectedTile.getID()*gridWidth, 
+					selectedTile.getID()*gridHeight);
+			drawGrid(g);
+		}
 	}
 	
 	private void drawGrid(Graphics g) {
+		Graphics2D g2 = convertTo2d(g);
+		g2.setColor(Color.GRAY);
+		g2.setStroke(new BasicStroke(1,
+				BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_BEVEL,
+				0,
+				new float[] {2},
+				0)); // draw dashed line
+		
 		int r, c; // Init counter for grid lines.
-		int viewWidth = viewport.getWidth();
-		int viewHeight = viewport.getHeight();
+		int viewWidth = tilesetWidth / gridWidth;
+		int viewHeight = tilesetHeight / gridHeight;
 		
-		g.setColor(Color.GRAY);
-		
-		for (r=0; r < viewHeight; r++) {
-			g.drawLine(0, r*gridHeight, viewWidth, r*gridHeight);
+		for (r=0; r <= viewHeight; r++) {
+			g2.drawLine(0, r*gridHeight, tilesetWidth, r*gridHeight);
 		}
 		
-		for (c=0; c < viewWidth; c++) {
-			g.drawLine(c*gridWidth, 0, c*gridWidth, viewHeight);
+		for (c=0; c <= viewWidth; c++) {
+			g2.drawLine(c*gridWidth, 0, c*gridWidth, tilesetHeight);
 		}
 	}
 	
-	private void drawCursor(Graphics g) {
-		int tmx = mouseX / gridWidth;
-		int tmy = mouseY / gridHeight;
+	private void drawCursor(Graphics g, int x, int y) {
+		int tmx = x - (x % gridWidth); // snap cursor to grid using x - (x % w)
+		int tmy = y - (y % gridHeight);
 		
-		Graphics2D g2 = convertTo2D(g);
+		g.setColor(Color.BLACK);
+		
+		if (checkBounds(tmx,tmy,tilesetWidth,tilesetHeight)) {
+			g.drawRect(tmx, tmy, gridWidth, gridHeight);
+		}
+	}
+	
+	private void drawSelectedCursor(Graphics g, int x, int y) {
+		int tmx = x - (x % gridWidth);
+		int tmy = y - (y % gridHeight);
+		
+		Graphics2D g2 = convertTo2d(g);
 		
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		
 		g2.drawRect(tmx, tmy, gridWidth, gridHeight);
-		
-		repaint();
 	}
 	
 	public void update() {
+		revalidate();
 		repaint();
 	}
 	
@@ -205,9 +217,15 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 		if (t == null)
 			return;
 		
-		tileset = t;
+		fruitEditor.setTileset(t);
 		
-		selectedTile = tileset.getTile(0,0);
+		tileset = t;
+		tilesetWidth = t.getWidth();
+		tilesetHeight = t.getHeight();
+		
+		selectedTile = t.getTile(0,0);
+		
+		setPreferredSize(new Dimension(tilesetWidth,tilesetHeight));
 	}
 	
 	public void setSelectedTile(Tile t) {
@@ -222,8 +240,34 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 		return selectedTile;
 	}
 	
+	private boolean checkBounds(int x, int y, int w, int h) {
+		return (x >= 0 && x < w && y >= 0 && y < h);
+	}
+	
+	private Graphics2D convertTo2d(Graphics g) {
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		return g2;
+	}
+	
 	public void propertyChange(PropertyChangeEvent e) {
 		
+	}
+	
+	/**=======================================
+	 * actionPerformed(ActionEvent) - Perform ActionEvents.
+	//========================================**/
+	public void actionPerformed(ActionEvent e) {
+		Object src = e.getSource();
+		
+		if (src == openTileItem) {
+			new NewTileDialog(fruitEditor);
+		} else if (src == gridTileItem) {
+			
+		} else if (src == closeTileItem) {
+			
+		}
 	}
 	
 	/**=======================================
@@ -234,15 +278,21 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 		mouseY = e.getY();
 		
 		// Set status
+		fruitEditor.getStatusPanel().setCursorLocation();
 		
+		fruitEditor.update();
 	}
 	
 	public void mouseHovered(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
+		mouseX = e.getX() - (e.getX() % gridWidth); // snap to grid
+		mouseY = e.getY() - (e.getY() % gridHeight);
+		int r = mouseX / gridWidth;
+		int c = mouseY / gridHeight;
+		Tile hoveredTile = tileset.getTile(r, c);
+		String tileName = hoveredTile.getName() != null ? hoveredTile.getName() : "No Tile";
 		
 		// Make a tool tip text of the hovered over tile.
-		
+		setToolTipText(tileName);
 	}
 	
 	public void mouseDragged(MouseEvent e) {
@@ -255,16 +305,17 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
 		int mx, my;
-		mouseX = e.getX();
-		mouseY = e.getY();
+		mouseX = e.getX() - (e.getX() % gridWidth);
+		mouseY = e.getY() - (e.getY() % gridHeight);
 		
 		if (btn == MouseEvent.BUTTON1) {
 			mx = mouseX / gridWidth;
 			my = mouseY / gridHeight;
-			setSelectedTile(tileset.getTile(my, mx));
-		} else if (btn == MouseEvent.BUTTON2) {
-			if (e.isPopupTrigger())
+			setSelectedTile(tileset.getTile(my,mx));
+		} else if (btn == MouseEvent.BUTTON3) {
+			if (e.isPopupTrigger() && fruitEditor.isPanelActive()) {
 				popupMenu.show(this, mouseX, mouseY);
+			}
 		}
 	}
 
@@ -278,7 +329,7 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 			mx = mouseX / gridWidth;
 			my = mouseY / gridHeight;
 		} else if (btn == MouseEvent.BUTTON2) {
-			if (e.isPopupTrigger()) {
+			if (e.isPopupTrigger() && fruitEditor.isPanelActive()) {
 				popupMenu.show(this, oldmouseX, oldmouseY);
 			}
 		}
@@ -294,12 +345,5 @@ public class TilePanel extends JPanel implements MouseListener, MouseMotionListe
 	
 	public void mouseExited(MouseEvent e) {
 		
-	}
-	
-	public Graphics2D convertTo2D(Graphics g) {
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		return g2;
 	}
 }

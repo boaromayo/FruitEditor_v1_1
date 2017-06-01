@@ -101,7 +101,7 @@ public class FruitEditor /*implements Runnable*/ {
 	//private JMenuItem databaseItem;
 	//private JMenuItem mapConvertItem;
 	//private JMenuItem resourceItem;
-	private JMenuItem configItem;
+	//private JMenuItem configItem;
 	// MENU: HELP
 	private JMenuItem aboutItem;
 	
@@ -565,7 +565,7 @@ public class FruitEditor /*implements Runnable*/ {
 		//databaseItem	= new JMenuItem("Cherry DataBase");			// TOOLKIT -> CHERRY DATABASE
 		//mapConvertItem	= new JMenuItem("Orange MapConverter");		// TOOLKIT -> ORANGE MAPCONVERT
 		//resourceItem 	= new JMenuItem("Lime ResourceBase");		// TOOLKIT -> LIME RESOURCEBASE
-		configItem		= new JMenuItem("Settings...");				// TOOLKIT -> SETTINGS
+		//configItem		= new JMenuItem("Settings...");				// TOOLKIT -> SETTINGS
 		
 		// Add in TOOLKIT ActionListeners.
 		//databaseItem.addActionListener(fruitListener);
@@ -580,13 +580,13 @@ public class FruitEditor /*implements Runnable*/ {
 		// MENU SEPARATOR.
 		//toolMenu.addSeparator();
 		// Add in menu components.
-		toolMenu.add(configItem);
+		//toolMenu.add(configItem);
 		
 		// Add components to hashmap.
 		//hash.put(databaseItem.getName(), databaseItem);
 		//hash.put(mapConvertItem.getName(), mapConvertItem);
 		//hash.put(resourceItem.getName(), resourceItem);
-		hash.put("configItem", configItem);
+		//hash.put("configItem", configItem);
 	}
 	
 	private void helpSetup() {
@@ -844,6 +844,13 @@ public class FruitEditor /*implements Runnable*/ {
 	//=========================================**/
 	public void setMap(Map m) {
 		map = m;
+	}
+	
+	/**========================================
+	// setTileset(t) - Set the tileset.
+	//=========================================*/
+	public void setTileset(Tileset t) {
+		tileset = t;
 	}
 	
 	/**========================================
