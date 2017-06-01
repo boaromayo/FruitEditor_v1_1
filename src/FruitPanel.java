@@ -12,9 +12,6 @@ public class FruitPanel extends JPanel {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
-	// LISTENER.
-	private FruitListener fruitListener;
-	
 	// PANELS.
 	private MapPanel mapPanel;
 	private TilePanel tilePanel;
@@ -34,8 +31,6 @@ public class FruitPanel extends JPanel {
 	public FruitPanel(FruitEditor f) {
 		fruitEditor = f;
 		
-		fruitListener = f.getListener();
-		
 		setPreferredSize(new Dimension(
 				FruitEditor.SCREEN_WIDTH, 
 				FruitEditor.SCREEN_HEIGHT));
@@ -51,7 +46,7 @@ public class FruitPanel extends JPanel {
 		rightPanel = new JPanel();
 		
 		mapPanel = new MapPanel(fruitEditor);
-		//tilePanel = new TilePanel(fruitEditor);
+		tilePanel = new TilePanel(fruitEditor);
 		//mapListPanel = new MapListPanel();
 
 		tileScrollPane = new JScrollPane(tilePanel);
@@ -65,12 +60,12 @@ public class FruitPanel extends JPanel {
 		mapScrollPane.getVerticalScrollBar().setUnitIncrement(FruitEditor.SCROLL_SPEED);
 	
 		mapPanel.setViewport(mapScrollPane.getViewport());
-		//tilePanel.setViewport(tileScrollPane.getViewport());
+		tilePanel.setViewport(tileScrollPane.getViewport());
 		
-		//leftPanel.setLayout(new FlowLayout());	
+		leftPanel.setLayout(new BorderLayout());	
 		rightPanel.setLayout(new BorderLayout());
 		
-		//leftPanel.add(tileScrollPane);
+		leftPanel.add(tileScrollPane);
 		//leftPanel.add(tileTabbedPane);
 		rightPanel.add(mapScrollPane);
 		
@@ -110,7 +105,7 @@ public class FruitPanel extends JPanel {
 	
 	public void update() {
 		mapPanel.update();
-		//tilePanel.update();
+		tilePanel.update();
 	}
 	
 	public void setGrid(boolean gr) {

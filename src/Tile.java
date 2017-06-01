@@ -1,14 +1,10 @@
 package FruitEditor;
 
-import java.awt.*;
 import java.awt.image.*;
-import javax.swing.*;
 
 public class Tile {
 	// IMAGE.
 	private BufferedImage img;
-	
-	private String imgPath;
 	
 	// IMAGE DIMENSIONS.
 	private int imgWidth;
@@ -24,41 +20,41 @@ public class Tile {
 	private boolean danger;
 	
 	public Tile() {
-		this.img = null;
-		this.imgPath = null;
+		this.img = null/*FruitImgBank.get().
+				loadBufferedImage("blank.gif")*/;
 		this.id = -1;
-		this.name = "";
+		this.name = "None";
 		this.solid = false;
 		this.transparent = false;
 		this.danger = false;
+		
+		if (img == null) return;
 		
 		imgWidth = img.getWidth();
 		imgHeight = img.getHeight();
 	}
 	
-	public Tile(int id, String path, String name) {
+	public Tile(int id, BufferedImage img, String name) {
 		this();
 		try {
-			this.img = FruitImgBank.get().loadBufferedImage(
-					path);
-			this.imgPath = path;
+			this.img = img;
 			this.imgWidth = img.getWidth();
 			this.imgHeight = img.getHeight();
 		} catch (RuntimeException e) {
 			System.err.println(
-					"ERROR: Could not find image in " + path);
+					"ERROR: Could not find image " + name);
 		}
 		this.id = id;
 		this.name = name;
 	}
 	
-	public Tile(int id, String path, String name, boolean solid) {
-		this(id, path, name);
+	public Tile(int id, BufferedImage img, String name, boolean solid) {
+		this(id, img, name);
 		this.solid = solid;
 	}
 	
-	public Tile(int id, String path, String name, boolean solid, boolean transparent) {
-		this(id, path, name, solid);
+	public Tile(int id, BufferedImage img, String name, boolean solid, boolean transparent) {
+		this(id, img, name, solid);
 		this.transparent = transparent;
 	}
 	
@@ -66,7 +62,6 @@ public class Tile {
 		if (t == null) return;
 		
 		img = t.getImage();
-		imgPath = t.getImagePath();
 		id = t.getID();
 		name = (t.getName() == null) ? "" : t.getName();
 		this.setSolid(t.isSolid());
@@ -107,8 +102,6 @@ public class Tile {
 	public Tile getTile() { return this; }
 	
 	public BufferedImage getImage() { return img; }
-	
-	public String getImagePath() { return imgPath; }
 	
 	public int getID() { return id; }
 	
