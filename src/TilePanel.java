@@ -149,12 +149,13 @@ public class TilePanel extends JPanel implements MouseListener,
 						(int)viewport.getViewPosition().getY(), 
 						viewport.getSize());
 			}
-	
-			drawCursor(g, mouseX, mouseY);
-			drawSelectedCursor(g, 
-					selectedTile.getID()*gridWidth, 
-					selectedTile.getID()*gridHeight);
+					/*selectedTile.getID()*gridWidth, 
+					selectedTile.getID()*gridHeight);*/
 			drawGrid(g);
+			
+			drawCursor(g, mouseX, mouseY);
+			
+			drawSelectedCursor(g, 0, 0);
 		}
 	}
 	
@@ -311,7 +312,12 @@ public class TilePanel extends JPanel implements MouseListener,
 		if (btn == MouseEvent.BUTTON1) {
 			mx = mouseX / gridWidth;
 			my = mouseY / gridHeight;
-			setSelectedTile(tileset.getTile(my,mx));
+			
+			if (mouseX >= 0 && mouseX < tilesetWidth && 
+					mouseY >= 0 && mouseY < tilesetHeight) {
+				setSelectedTile(tileset.getTile(my,mx));
+			}
+			
 		} else if (btn == MouseEvent.BUTTON3) {
 			if (e.isPopupTrigger() && fruitEditor.isPanelActive()) {
 				popupMenu.show(this, mouseX, mouseY);
