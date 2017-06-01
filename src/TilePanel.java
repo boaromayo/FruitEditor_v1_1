@@ -328,7 +328,7 @@ public class TilePanel extends JPanel implements MouseListener,
 		if (btn == MouseEvent.BUTTON1) {
 			mx = mouseX / gridWidth;
 			my = mouseY / gridHeight;
-		} else if (btn == MouseEvent.BUTTON2) {
+		} else if (btn == MouseEvent.BUTTON3) {
 			if (e.isPopupTrigger() && fruitEditor.isPanelActive()) {
 				popupMenu.show(this, oldmouseX, oldmouseY);
 			}
