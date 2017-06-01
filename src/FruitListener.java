@@ -1,6 +1,5 @@
 package FruitEditor;
 
-import java.awt.*;
 import java.awt.event.*;
 
 import java.io.*;
@@ -18,20 +17,11 @@ public class FruitListener implements ActionListener,
 	
 	private FruitEditor fruitEditor;
 	
-	private FruitPanel fruitPanel;
-	private StatusPanel statusPanel;
-	
-	private Map map;
-	
-	private Stack<ChangeEvent> changes;
+	//private Stack<ChangeEvent> changes;
 	private Stack<PropertyChangeEvent> actions;
 	
 	public FruitListener(FruitEditor f) {
 		fruitEditor = f;
-		map = f.getMap();
-		
-		fruitPanel = f.getPanel();
-		statusPanel = f.getStatusPanel();
 		
 		actions = new Stack<PropertyChangeEvent>();
 	}
@@ -92,49 +82,47 @@ public class FruitListener implements ActionListener,
 			JToggleButton gridBtn = (JToggleButton)getComponent("gridBtn");
 			
 			gridBtn.setSelected(gridItem.isSelected());
-			
-			fruitPanel.setGrid(gridItem.isSelected());
+			setGrid(gridItem.isSelected());
 		} else if (src == getComponent("gridBtn")) {
 			JCheckBoxMenuItem gridItem = (JCheckBoxMenuItem)getComponent("gridItem");
 			JToggleButton gridBtn = (JToggleButton)getComponent("gridBtn");
 			
 			gridItem.setSelected(gridBtn.isSelected());
-			
-			fruitPanel.setGrid(gridBtn.isSelected());
+			setGrid(gridBtn.isSelected());
 		}
 		
 		// VIEW -> SCALE item listeners
 		else if (src == getComponent("oneItem") ||
 				src == getComponent("oneBtn")) {
-			//map.setScale(Map.SCALE_ONE);
+			//setScale(Map.SCALE_ONE);
 		} else if (src == getComponent("twoItem") ||
 				src == getComponent("twoBtn")) {
-			//map.setScale(Map.SCALE_TWO);
+			//setScale(Map.SCALE_TWO);
 		} else if (src == getComponent("fourItem") ||
 				src == getComponent("fourBtn")) {
-			//map.setScale(Map.SCALE_FOUR);
+			//setScale(Map.SCALE_FOUR);
 		} else if (src == getComponent("eightItem") ||
 				src == getComponent("eightBtn")) {
-			//map.setScale(Map.SCALE_EIGHT);
+			//setScale(Map.SCALE_EIGHT);
 		}
 		
 		// VIEW -> MODE item and button listeners
 		else if (src == getComponent("mapModeItem")) {
 			JToggleButton mapModeBtn = (JToggleButton) getComponent("mapModeBtn");
 			mapModeBtn.setSelected(true);
-			getMapPanel().setMode(EditorMode.MAP_MODE);
+			setMode(EditorMode.MAP_MODE);
 		} else if (src == getComponent("eventModeItem")) {
 			JToggleButton eventModeBtn = (JToggleButton) getComponent("eventModeBtn");
 			eventModeBtn.setSelected(true);
-			getMapPanel().setMode(EditorMode.EVENT_MODE);
+			setMode(EditorMode.EVENT_MODE);
 		} else if (src == getComponent("mapModeBtn")) {
 			JRadioButtonMenuItem mapModeItem = (JRadioButtonMenuItem) getComponent("mapModeItem");
 			mapModeItem.setSelected(true);
-			getMapPanel().setMode(EditorMode.MAP_MODE);
+			setMode(EditorMode.MAP_MODE);
 		} else if (src == getComponent("eventModeBtn")) {
 			JRadioButtonMenuItem eventModeItem = (JRadioButtonMenuItem) getComponent("eventModeItem");
 			eventModeItem.setSelected(true);
-			getMapPanel().setMode(EditorMode.EVENT_MODE);
+			setMode(EditorMode.EVENT_MODE);
 		}
 		
 		// DRAW item listeners
@@ -144,28 +132,28 @@ public class FruitListener implements ActionListener,
 			JToggleButton pencilBtn = (JToggleButton)getComponent("pencilBtn");
 			pencilItem.setSelected(true);
 			pencilBtn.setSelected(true);
-			map.setDrawMode(DrawMode.PENCIL);
+			setDrawMode(DrawMode.PENCIL);
 		} else if (src == getComponent("rectItem") ||
 				src == getComponent("rectBtn")) {
 			JRadioButtonMenuItem rectItem = (JRadioButtonMenuItem)getComponent("rectItem");
 			JToggleButton rectBtn = (JToggleButton)getComponent("rectBtn");
 			rectItem.setSelected(true);
 			rectBtn.setSelected(true);
-			map.setDrawMode(DrawMode.RECTANGLE);
+			setDrawMode(DrawMode.RECTANGLE);
 		} else if (src == getComponent("circleItem") ||
 				src == getComponent("circleBtn")) {
 			JRadioButtonMenuItem circleItem = (JRadioButtonMenuItem)getComponent("circleItem");
 			JToggleButton circleBtn = (JToggleButton)getComponent("circleBtn");
 			circleItem.setSelected(true);
 			circleBtn.setSelected(true);
-			map.setDrawMode(DrawMode.CIRCLE);
+			setDrawMode(DrawMode.CIRCLE);
 		} else if (src == getComponent("fillItem") ||
 				src == getComponent("fillBtn")) {
 			JRadioButtonMenuItem fillItem = (JRadioButtonMenuItem)getComponent("fillItem");
 			JToggleButton fillBtn = (JToggleButton)getComponent("fillBtn");
 			fillItem.setSelected(true);
 			fillBtn.setSelected(true);
-			map.setDrawMode(DrawMode.FILL);
+			setDrawMode(DrawMode.FILL);
 		}
 		
 		// TOOLKIT item listeners
@@ -202,8 +190,7 @@ public class FruitListener implements ActionListener,
 			
 			try {
 				readText(file); // read the map file
-				statusPanel.setStatus(confirmStr + "\t");
-				statusPanel.repaint();
+				setStatus(confirmStr + "\t");
 			} catch (Exception e) {
 				System.err.println("ERROR: Could not read file " + file.getPath());
 				e.printStackTrace();
@@ -224,10 +211,8 @@ public class FruitListener implements ActionListener,
 			
 			try {
 				writeText(file);
-				statusPanel.setStatus(confirmStr + "\t");
-				statusPanel.repaint();
-				
-				//map = file;
+				setStatus(confirmStr + "\t");
+				//statusPanel.repaint();
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to write file " + file.getPath());
 				e.printStackTrace();
@@ -246,9 +231,7 @@ public class FruitListener implements ActionListener,
 			
 			try {
 				writeText(file);
-				statusPanel.setStatus(confirmStr);
-				statusPanel.update();
-				
+				setStatus(confirmStr);
 			} catch (Exception e) {
 				System.err.println("ERROR: Unable to write file " + file);
 				e.printStackTrace();
@@ -284,16 +267,29 @@ public class FruitListener implements ActionListener,
 		
 	}
 	
-	private void openTileAction() {
-		
+	/**================================
+	// SHORTCUT METHODS.
+	//=================================*/
+	private void setStatus(String text) {
+		fruitEditor.getStatusPanel().setStatus(text);
 	}
 	
-	private void gridTileAction() {
-		
+	private void setGrid(boolean grid) {
+		fruitEditor.getMapPanel().setGrid(grid);
 	}
 	
-	private void closeTileAction() {
-		
+	private void setMode(EditorMode e) {
+		fruitEditor.getMapPanel().setMode(e);
+	}
+	
+	/*private void setScale(int scale) {
+		Map map = fruitEditor.getMap();
+		map.setScale(scale);
+	}*/
+	
+	private void setDrawMode(DrawMode d) {
+		Map map = fruitEditor.getMap();
+		map.setDrawMode(d);
 	}
 	
 	/**================================
@@ -318,16 +314,23 @@ public class FruitListener implements ActionListener,
 					new FileReader(file));
 			
 			// Read in the map and convert text files to map
-			// Read first line to get width and height
-			// Assume there are two positive integers
+			// Read first line to get tileset pathname
 			String line = reader.readLine();
 			String [] lines = line.split("\\s+");
+			
+			// Fetch tileset pathname
+			String path = line;
+			
+			// Read second line to get width and height
+			// Assume there are two positive integers
+			line = reader.readLine();
 			
 			// Set width and height
 			int cols = Integer.parseInt(lines[0]);
 			int rows = Integer.parseInt(lines[1]);
 			
-			map = new Map(cols, rows);
+			Map map = new Map(cols,rows);
+			Tileset tileset = new Tileset(path);
 			
 			// Read the IDs of tiles next and store them in an int array
 			int [][] ids = new int[rows][cols];
@@ -342,11 +345,8 @@ public class FruitListener implements ActionListener,
 				r++;
 			}
 			
-			
-			// Convert id to tiles
-			//Tile t = new Tile(ids[r][c]);
-			
-			fruitPanel.getMapPanel().setMap(map);
+			fruitEditor.getMapPanel().setMap(map);
+			fruitEditor.getTilePanel().setTileset(tileset);
 			
 			// Close reader to cleanup
 			reader.close();
@@ -361,7 +361,11 @@ public class FruitListener implements ActionListener,
 			// Load writer
 			PrintWriter writer = new PrintWriter(
 				new BufferedWriter(new FileWriter(file)));
-		
+			Map map = fruitEditor.getMap();
+			
+			// Write in tileset used
+			writer.println(fruitEditor.getTileset().getTilesetPath());
+			
 			// Write width and height
 			writer.print(map.getHeight() + " ");
 			writer.println(map.getWidth());
@@ -383,7 +387,6 @@ public class FruitListener implements ActionListener,
 			System.err.println("ERROR: Unable to write file " + file);
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**============================
@@ -416,9 +419,5 @@ public class FruitListener implements ActionListener,
 	
 	private JComponent getComponent(String text) {
 		return fruitEditor.getComponent(text);
-	}
-	
-	private MapPanel getMapPanel() {
-		return fruitPanel.getMapPanel();
 	}
 }
