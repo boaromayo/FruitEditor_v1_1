@@ -107,8 +107,4 @@ public class FruitPanel extends JPanel {
 		mapPanel.update();
 		tilePanel.update();
 	}
-	
-	public void setGrid(boolean gr) {
-		mapPanel.setGrid(gr);
-	}
 }
