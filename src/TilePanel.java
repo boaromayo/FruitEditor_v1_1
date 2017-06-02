@@ -124,7 +124,7 @@ public class TilePanel extends JPanel implements MouseListener,
 	
 	private void disableItems() {
 		//newTileItem.setEnabled(false);
-		openTileItem.setEnabled(false);
+		//openTileItem.setEnabled(false);
 		gridTileItem.setEnabled(false);
 		closeTileItem.setEnabled(false);
 	}
@@ -142,15 +142,14 @@ public class TilePanel extends JPanel implements MouseListener,
 	}
 	
 	public synchronized void draw(Graphics g) {
-		if (fruitEditor.isPanelActive()) {
+		if (isPanelActive()) {
 			if (tileset != null) {
 				tileset.draw(g,
 						(int)viewport.getViewPosition().getX(), 
 						(int)viewport.getViewPosition().getY(), 
 						viewport.getSize());
 			}
-					/*selectedTile.getID()*gridWidth, 
-					selectedTile.getID()*gridHeight);*/
+
 			drawGrid(g);
 			
 			drawCursor(g, mouseX, mouseY);
@@ -200,7 +199,7 @@ public class TilePanel extends JPanel implements MouseListener,
 		Graphics2D g2 = convertTo2d(g);
 		
 		g2.setStroke(new BasicStroke(2));
-		g2.setColor(Color.BLACK);
+		g2.setColor(Color.BLUE);
 		
 		g2.drawRect(tmx, tmy, gridWidth, gridHeight);
 	}
@@ -227,6 +226,8 @@ public class TilePanel extends JPanel implements MouseListener,
 		selectedTile = t.getTile(0,0);
 		
 		setPreferredSize(new Dimension(tilesetWidth,tilesetHeight));
+		
+		update();
 	}
 	
 	public void setSelectedTile(Tile t) {
@@ -239,6 +240,10 @@ public class TilePanel extends JPanel implements MouseListener,
 	
 	public Tile getSelectedTile() {
 		return selectedTile;
+	}
+	
+	public boolean isPanelActive() {
+		return fruitEditor.isPanelActive();
 	}
 	
 	private boolean checkBounds(int x, int y, int w, int h) {
@@ -305,21 +310,19 @@ public class TilePanel extends JPanel implements MouseListener,
 	//=================================**/
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
-		int mx, my;
 		mouseX = e.getX() - (e.getX() % gridWidth);
 		mouseY = e.getY() - (e.getY() % gridHeight);
 		
 		if (btn == MouseEvent.BUTTON1) {
-			mx = mouseX / gridWidth;
-			my = mouseY / gridHeight;
+			int tx = mouseX / gridWidth;
+			int ty = mouseY / gridHeight;
 			
-			if (mouseX >= 0 && mouseX < tilesetWidth && 
-					mouseY >= 0 && mouseY < tilesetHeight) {
-				setSelectedTile(tileset.getTile(my,mx));
+			if (isPanelActive() && checkBounds(tx,ty,
+					tilesetWidth/gridWidth,tilesetHeight/gridHeight)) {
+				setSelectedTile(tileset.getTile(ty,tx));
 			}
-			
 		} else if (btn == MouseEvent.BUTTON3) {
-			if (e.isPopupTrigger() && fruitEditor.isPanelActive()) {
+			if (isPanelActive()) {
 				popupMenu.show(this, mouseX, mouseY);
 			}
 		}
@@ -327,15 +330,12 @@ public class TilePanel extends JPanel implements MouseListener,
 
 	public void mouseReleased(MouseEvent e) {
 		int btn = e.getButton();
-		int mx, my;
-		oldmouseX = e.getX();
-		oldmouseY = e.getY();
 		
 		if (btn == MouseEvent.BUTTON1) {
-			mx = mouseX / gridWidth;
-			my = mouseY / gridHeight;
+			oldmouseX = e.getX();
+			oldmouseY = e.getY();
 		} else if (btn == MouseEvent.BUTTON3) {
-			if (e.isPopupTrigger() && fruitEditor.isPanelActive()) {
+			if (isPanelActive()) {
 				popupMenu.show(this, oldmouseX, oldmouseY);
 			}
 		}
