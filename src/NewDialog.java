@@ -8,6 +8,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import java.beans.*;
+
 public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	// DIALOG.
 	private JDialog newDialog;
@@ -18,14 +20,12 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	
 	// COMPONENTS.
 	private JLabel mapLabel;
-	//private JLabel tileLabel;
 	private JLabel mapWidthLabel;
 	private JLabel mapHeightLabel;
 	private JLabel gridWidthLabel;
 	private JLabel gridHeightLabel;
 	
 	private JTextField mapText;
-	//private JTextField tileText;
 	private JSpinner mapWidthText;
 	private JSpinner mapHeightText;
 	private JSpinner gridWidthText;
@@ -37,7 +37,6 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	private JToggleButton lockBtn;
 	
 	// PROPERTIES.
-	//private String tileFilename;
 	private int mapWidth;
 	private int mapHeight;
 	private int gridWidth;
@@ -60,8 +59,6 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		addComps();
 		
 		// Set specs for new map dialog.
-		//newDialog.pack();
-		
 		newDialog.setTitle(title);
 		newDialog.setSize(WIDTH,HEIGHT);
 
@@ -83,7 +80,6 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		
 		// Initialize labels.
 		mapLabel = makeLabel("Map Name", "mapLabel");
-		//tileLabel = makeLabel("Tileset", "tileLabel");
 		mapWidthLabel = makeLabel("Width:", "mapWidthLabel");
 		mapHeightLabel = makeLabel("Height:", "mapHeightLabel");
 		gridWidthLabel = makeLabel("Grid W:", "gridWidthLabel");
@@ -91,14 +87,13 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		
 		// initialize text fields.
 		mapText = makeTextField("mapText");
-		//tileText = makeTextField("tileText", 30);
 		mapWidthText = makeSpinner(mapWidth, "mapWidthText");
 		mapHeightText = makeSpinner(mapHeight, "mapHeightText");
 		gridWidthText = makeSpinner(gridWidth, "gridWidthText");
 		gridHeightText = makeSpinner(gridHeight, "gridHeightText");
 		
 		// initialize buttons.
-		//browseBtn 	= makeButton("B", "../img/openfile.png", "browseBtn"); // Load open dialog to browse tileset files (*.png, *.jpg)
+		// Load open dialog to browse tileset files (*.png, *.jpg)
 		okBtn  	   	= makeButton("OK", "okBtn");
 		cancelBtn  	= makeButton("Cancel", "cancelBtn");
 		lockBtn		= makeToggleBtn("Lock", "lockBtn");
@@ -163,10 +158,6 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		mapText.setText(name);
 	}
 	
-	/*public void setTilesetFilename(String name) {
-		tileFilename = name;
-	}*/
-	
 	public void setMapWidth(int w) {
 		mapWidth = w;
 		mapWidthText.setValue(w);
@@ -197,14 +188,6 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	public String getMapText() {
 		return mapText.getText();
 	}
-	
-	/*public String getTilesetFilename() {
-		return tileFilename;
-	}*/
-	
-	/*public String getTileset() {
-		return tileText.getText();
-	}*/
 	
 	public int getMapWidth() {
 		return (Integer)mapWidthText.getValue();
@@ -256,7 +239,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		
 		if (name.startsWith("grid")) {
 			spinner = new JSpinner(
-					new SpinnerNumberModel(num, 8, gridWidth*16, 1));
+					new SpinnerNumberModel(num, 8, FruitEditor.GRID_SIZE*16, 1));
 		} else {
 			spinner = new JSpinner(
 					new SpinnerNumberModel(num, num, Map.MAP_SIZE, 1));
@@ -333,6 +316,8 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		}
 	}
 	
+	
+	
 	public void stateChanged(ChangeEvent e) {
 		Object src = e.getSource();
 		
@@ -346,7 +331,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 			} else if (src == gridWidthText) {
 				setGridWidth((Integer)gridWidthText.getValue()); // Set grid width to value in text field.
 				if (lock) {
-					// Also set grid height and its text field to new height if locked.
+					// Set grid height and its text field to new height if locked.
 					setGridHeight((Integer)gridWidthText.getValue());
 				}
 			} else if (src == gridHeightText) {
