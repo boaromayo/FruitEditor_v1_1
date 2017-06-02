@@ -257,7 +257,6 @@ public class MapPanel extends JPanel implements MouseListener,
 		switch (map.drawMode()) {
 		case PENCIL:
 			map.setTile(x, y, fruitEditor.getSelectedTile());
-			update();
 			break;
 		case RECTANGLE:
 			break;
@@ -265,10 +264,11 @@ public class MapPanel extends JPanel implements MouseListener,
 			break;
 		case FILL:
 			//floodFill(x, y, map.getTile(x, y), fruitEditor.getSelectedTile());
-			update();
 		default:
 			break;
 		}
+		
+		update();
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -396,7 +396,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		int ty = mouseY / gridHeight;
 		
 		// Set status panel
-		if (isPanelActive() && checkBounds(tx,ty,map.getWidth(),map.getHeight())) {
+		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
 			fruitEditor.getStatusPanel().setCursorLocation(tx,ty);
 		} else {
 			fruitEditor.getStatusPanel().setCursorLocation();
@@ -406,16 +406,31 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mouseHovered(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
+		/*mouseX = e.getX();
+		mouseY = e.getY();*/
 	}
 	
 	public void mouseDragged(MouseEvent e) {
 		int btn = e.getButton();
+		mouseX = e.getX() - (e.getX() % gridWidth);
+		mouseY = e.getY() - (e.getY() % gridHeight);
+		int tx = mouseX / gridWidth;
+		int ty = mouseY / gridHeight;
 		
-		/*if (btn == MouseEvent.BUTTON1 && map.equals(DrawMode.RECTANGLE)) {
-			
-		}*/
+		// Set status panel
+		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
+			fruitEditor.getStatusPanel().setCursorLocation(tx,ty);
+		} else {
+			fruitEditor.getStatusPanel().setCursorLocation();
+		}
+		
+		// if left-click btn dragged
+		if (btn == MouseEvent.BUTTON1) {
+			if (isPanelActive() && 
+					checkBounds(tx,ty,mapWidth,mapHeight)) {
+				mapPressed(tx,ty);
+			}
+		}
 	}
 	
 	/**================================
@@ -424,16 +439,17 @@ public class MapPanel extends JPanel implements MouseListener,
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
 		
+		// if left-click btn is pressed
 		if (btn == MouseEvent.BUTTON1) {
-			// if left-click btn is pressed
-			mouseX = e.getX();
-			mouseY = e.getY();
+			mouseX = e.getX() - (e.getX() % gridWidth);
+			mouseY = e.getY() - (e.getY() % gridHeight);
+			int tx = mouseX / gridWidth;
+			int ty = mouseY / gridHeight;
 			
-			if (checkBounds(mouseX,mouseY,map.getWidth(),map.getHeight())) {
-				mapPressed(mouseX, mouseY);
+			if (isPanelActive() && 
+					checkBounds(tx,ty,mapWidth,mapHeight)) {
+				mapPressed(tx,ty);
 			}
-			
-			update();
 		} else if (btn == MouseEvent.BUTTON3) {
 			// if right-click btn is pressed
 			mouseX = e.getX();
@@ -464,17 +480,17 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		int btn = e.getButton();
-		int mx, my;
+		/*int btn = e.getButton();
+		int tx, ty;
 		
 		if (btn == MouseEvent.BUTTON1) {
 			mouseX = e.getX();
 			mouseY = e.getY();
-			mx = mouseX / gridWidth;
-			my = mouseY / gridHeight;
+			tx = mouseX / gridWidth;
+			ty = mouseY / gridHeight;
 		}
 		
-		update();
+		update();*/
 	}
 	
 	public void mouseEntered(MouseEvent e) {
