@@ -259,16 +259,38 @@ public class MapPanel extends JPanel implements MouseListener,
 			map.setTile(x, y, fruitEditor.getSelectedTile());
 			break;
 		case RECTANGLE:
+			rectFill(x, y, fruitEditor.getSelectedTile());
 			break;
 		case CIRCLE:
 			break;
 		case FILL:
-			//floodFill(x, y, map.getTile(x, y), fruitEditor.getSelectedTile());
+			floodFill(x, y, map.getTile(x,y), fruitEditor.getSelectedTile());
 		default:
 			break;
 		}
 		
 		update();
+	}
+	
+	private void rectFill(int x, int y, Tile newTile) {
+		int xmax = mouseX - (mouseX % gridWidth); // Set the maximum based on how far the second click is at.
+		int ymax = mouseY - (mouseY % gridHeight);
+		int r, c; // Counters
+		
+		for (r=y; r<=ymax; r++) {
+			for (c=x; c<=xmax; c++) {
+				if (r==y || r==ymax) {
+					map.setTile(x, y, newTile); // Place a tile if on a rectangle's side.
+				} else if (c==x || c==xmax) {
+					map.setTile(x, y, newTile);
+				}
+			}
+		}
+	}
+	
+	private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
+		if (targetTile == newTile)
+			return;
 	}
 	
 	public void setViewport(JViewport vp) {
