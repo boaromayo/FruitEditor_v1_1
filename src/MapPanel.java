@@ -192,13 +192,13 @@ public class MapPanel extends JPanel implements MouseListener,
 						viewport.getSize());
 			
 			}
-			
-			drawCursor(g, mouseX, mouseY);
-			
+						
 			if (grid) {
 				drawGrid(g);
 			}
 		
+			drawCursor(g, mouseX, mouseY);
+			
 			if (editorMode.equals(EditorMode.EVENT_MODE)) {
 				drawEventCursor(g);
 			}
@@ -228,14 +228,16 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	private void drawCursor(Graphics g, int x, int y) {
+		Graphics2D g2 = convertTo2d(g);
 		int mx = x - (x % gridWidth); // set the cursor positions
 		int my = y - (y % gridHeight);
 		
-		g.setColor(Color.BLACK);
+		g2.setColor(Color.BLACK);
+		g2.setStroke(new BasicStroke(1));
 		
 		if (checkBounds(mx,my,
 				mapWidth*gridWidth,mapHeight*gridHeight)) {
-			g.drawRect(mx, my, gridWidth, gridHeight);
+			g2.drawRect(mx, my, gridWidth, gridHeight);
 		}
 	}
 	
