@@ -25,7 +25,7 @@ public class Map {
 	private String name;
 	
 	// TILES.
-	private Tile[][][] fruitTiles;
+	private Tile[][][] mapTiles;
 	
 	// DIMENSIONS.
 	private int mapWidth;
@@ -49,7 +49,7 @@ public class Map {
 	//private Cursor cursor;
 	
 	public Map() {
-		this(8, 8, 24, 24);
+		this(10, 8, 24, 24);
 	}
 	
 	public Map(int width, int height) {
@@ -98,7 +98,7 @@ public class Map {
 	}
 	
 	public void initTiles() { 
-		fruitTiles = new Tile[mapHeight][mapWidth][mapDepth];
+		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 	}
 	
 	public void draw(Graphics g, int x, int y, Dimension size) {
@@ -108,18 +108,18 @@ public class Map {
 		x = Math.max(x, 0);
 		y = Math.max(y, 0);
 		
-		int r = fruitTiles.length;
-		int c = fruitTiles[0].length;
+		int r = mapTiles.length;
+		int c = mapTiles[0].length;
 		
 		r = Math.min(y + (int)size.getHeight(), r);
 		c = Math.min(x + (int)size.getWidth(), c);
 		
-		for (int i=y; i < r; i++) {
-			for (int j=x; j < c; j++) {
-				if (getTile(j,i) != null) {
-					g.drawImage(getTile(j,i).getImage(), 
-							j*gridWidth, 
-							i*gridHeight, 
+		for (int j=y; j < r; j++) {
+			for (int i=x; i < c; i++) {
+				if (getTile(i,j) != null) {
+					g.drawImage(getTile(i,j).getImage(), 
+							i*gridWidth, 
+							j*gridHeight, 
 							gridWidth, 
 							gridHeight, 
 							null);
@@ -159,7 +159,7 @@ public class Map {
 	}
 	
 	public void setTile(int x, int y, int z, Tile t) {
-		fruitTiles[y][x][z] = t;
+		mapTiles[y][x][z] = t;
 	}
 	
 	/**========================================
@@ -196,7 +196,7 @@ public class Map {
 	}
 	
 	public Tile getTile(int x, int y, int z) {
-		return fruitTiles[y][x][z];
+		return mapTiles[y][x][z];
 	}
 	
 	public DrawMode drawMode() {
@@ -214,10 +214,10 @@ public class Map {
 		for (i=0; i < h; i++) {
 			for (j=0; j < w; j++) {
 				for (k=0; k < d; k++) {
-					if (fruitTiles[i][j][k] == null)
+					if (mapTiles[i][j][k] == null)
 						sheet[i][j][k] = -1;
 					else
-						sheet[i][j][k] = fruitTiles[i][j][k].getID();
+						sheet[i][j][k] = mapTiles[i][j][k].getID();
 				}
 			}
 		}
@@ -238,10 +238,10 @@ public class Map {
 		
 		for (i=0; i < r; i++) {
 			for (j=0; j < c; j++) {
-				if (fruitTiles[i][j][layer] == null)
+				if (mapTiles[i][j][layer] == null)
 					sheet[i][j] = -1;
 				else
-					sheet[i][j] = fruitTiles[i][j][layer].getID();
+					sheet[i][j] = mapTiles[i][j][layer].getID();
 			}
 		}
 		

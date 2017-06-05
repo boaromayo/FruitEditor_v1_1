@@ -7,8 +7,10 @@ import java.awt.image.*;
 import java.io.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.filechooser.*;
 
-public class NewTileDialog implements ActionListener {
+public class NewTileDialog implements ActionListener, ChangeListener {
 	// DIALOG.
 	private JDialog tileDialog;
 	
@@ -30,10 +32,13 @@ public class NewTileDialog implements ActionListener {
 	private JButton browseBtn;
 	private JButton okBtn;
 	private JButton cancelBtn;
+	private JToggleButton lockBtn;
 	
 	// PROPERTIES.
 	private int gridWidth;
 	private int gridHeight;
+	
+	private boolean lock = true;
 	
 	private TilePanel tilePanel;
 	
@@ -65,7 +70,7 @@ public class NewTileDialog implements ActionListener {
 	
 	public void init() {
 		// Initialize dimensions.
-		gridWidth = gridHeight = 8;
+		gridWidth = gridHeight = FruitEditor.GRID_SIZE;
 		
 		// Initialize labels.
 		tileLabel = makeLabel("Tileset Name", "tileLabel");
@@ -83,6 +88,9 @@ public class NewTileDialog implements ActionListener {
 		browseBtn = makeButton("Browse...", "browseBtn"); // Load open dialog to browse tileset files.
 		okBtn = makeButton("OK", "okBtn");
 		cancelBtn = makeButton("Cancel", "cancelBtn");
+		lockBtn = makeToggleBtn("Lock", "lockBtn");
+		
+		lockBtn.setSelected(lock);
 	}
 	
 	private void addComps() {
@@ -112,8 +120,11 @@ public class NewTileDialog implements ActionListener {
 		
 		tileDialog.add(sizePanel);
 		
+		btnPanel.setLayout(new GridLayout(1,3,2,2));
+		
 		btnPanel.add(okBtn); // (0,3)
 		btnPanel.add(cancelBtn); // (1,3)
+		btnPanel.add(lockBtn); // (2,3)
 		
 		tileDialog.add(btnPanel);
 	}
@@ -154,6 +165,10 @@ public class NewTileDialog implements ActionListener {
 		gridHeight = getGridHeight();
 	}
 	
+	public void setLock(boolean l) {
+		lock = l;
+	}
+	
 	/**==================================
 	// PROPERTY GETTER METHODS.
 	//===================================**/
@@ -186,6 +201,38 @@ public class NewTileDialog implements ActionListener {
 	/**==================================
 	// HELPER METHODS.
 	//===================================**/
+	/**============================
+	// makeFileChooser() - make file chooser and filter files to take in FruitEditor files.
+	//=============================**/
+	private JFileChooser makeImageFileChooser() {
+		JFileChooser jfc = new JFileChooser("../FruitEditor_v1_1/src/img");
+		
+		// Filter to only basic or low-memory image files (png, bmp, gif, jpg).
+		FileNameExtensionFilter bmpfilter =
+				new FileNameExtensionFilter("PNG Files (*.png)", "png");
+		FileNameExtensionFilter pngfilter =
+				new FileNameExtensionFilter("Bitmap Files (*.bmp)", "bmp");
+		FileNameExtensionFilter jpgfilter = 
+				new FileNameExtensionFilter("JPEG Files (*.jpg)", "jpg", "jpeg");
+		FileNameExtensionFilter giffilter = 
+				new FileNameExtensionFilter("GIF Files (*.gif)", "gif");
+		
+		// Add file filters.
+		jfc.addChoosableFileFilter(bmpfilter);
+		jfc.addChoosableFileFilter(pngfilter);
+		jfc.addChoosableFileFilter(jpgfilter);
+		jfc.addChoosableFileFilter(giffilter);
+		
+		// Accept image files only.
+		jfc.setAcceptAllFileFilterUsed(false);
+		
+		// Set to bitmap file
+		jfc.setFileFilter(bmpfilter);
+		
+		return jfc;
+	}
+	
+	
 	private JLabel makeLabel(String text, String name) {
 		JLabel lbl = new JLabel(text);
 		
@@ -210,9 +257,11 @@ public class NewTileDialog implements ActionListener {
 	
 	private JSpinner makeSpinner(int num, String name) {
 		JSpinner spinner = new JSpinner(
-			new SpinnerNumberModel(num, num, Map.MAP_SIZE, 1));
+			new SpinnerNumberModel(num, 8, FruitEditor.GRID_SIZE*4, 2));
 		
 		spinner.setName(name);
+		spinner.addChangeListener(this);
+		
 		return spinner;
 	}
 	
@@ -226,12 +275,23 @@ public class NewTileDialog implements ActionListener {
 		return btn;
 	}
 	
+	private JToggleButton makeToggleBtn(String text, String name) {
+		JToggleButton btn;
+		
+		btn = new JToggleButton(text);
+		btn.setName(name);
+		btn.addActionListener(this);
+		
+		return btn;
+	}
+	
 	/**=======================================
 	// actionPerformed(actionEvent)
 	//========================================*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
+		File openfile;
 		
 		if (tileDialog.isVisible()) {
 			if (src == okBtn) {
@@ -246,12 +306,9 @@ public class NewTileDialog implements ActionListener {
 							JOptionPane.WARNING_MESSAGE);
 				} else {
 					try {
-						File readfile = new File(getTilesetFilename());
-						BufferedImage bimg = FruitImgBank.get().
-								loadBufferedImage(readfile.getAbsolutePath());
-						//tilePanel.setTileset(bimg); 
-						
-						setTilesetName(null);
+						tilePanel.setTileset(new Tileset(getTilesetFilename(), 
+								getGridWidth(), 
+								getGridHeight()));
 					} catch (Exception fe) {
 						System.err.println("ERROR: File not found. REASON: " + fe.getMessage());
 						fe.printStackTrace();
@@ -260,17 +317,17 @@ public class NewTileDialog implements ActionListener {
 					dispose();
 				}
 			} else if (src == browseBtn) {
-				JFileChooser open = new JFileChooser();
+				JFileChooser open = makeImageFileChooser();
 				
 				int confirm = open.showOpenDialog(null);
 				
 				if (confirm == JFileChooser.APPROVE_OPTION) {
 					try {
 						// the file to be opened
-						File openfile = open.getSelectedFile();
+						openfile = open.getSelectedFile();
 						
 						// set tileset filename and text to the pathname
-						setTilesetFilename(openfile.getAbsolutePath());
+						setTilesetFilename(openfile.getPath());
 						setTilesetName(openfile.getName());
 						
 					} catch (Exception exc) {
@@ -281,6 +338,34 @@ public class NewTileDialog implements ActionListener {
 				}
 			} else if (src == cancelBtn) {
 				dispose();
+			} else if (src == lockBtn) {
+				setLock(lockBtn.isSelected());
+				
+				if (lock) {
+					setGridWidth(FruitEditor.GRID_SIZE);
+					setGridHeight(FruitEditor.GRID_SIZE);
+				}
+			}
+		}
+	}
+	
+	/**=======================================
+	// stateChanged(actionEvent)
+	//========================================*/
+	public void stateChanged(ChangeEvent e) {
+		Object src = e.getSource();
+		
+		if (tileDialog.isVisible()) {
+			if (src == gridWidthText) {
+				setGridWidth((Integer)gridWidthText.getValue());
+				if (lock) {
+					setGridHeight((Integer)gridWidthText.getValue());
+				}
+			} else if (src == gridHeightText) {
+				setGridHeight((Integer)gridHeightText.getValue());
+				if (lock) {
+					setGridWidth((Integer)gridHeightText.getValue());
+				}
 			}
 		}
 	}

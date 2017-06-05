@@ -46,6 +46,9 @@ public class Tileset {
 		gridWidth = FruitEditor.GRID_SIZE;
 		gridHeight = FruitEditor.GRID_SIZE;
 		
+		tilesetImg = FruitImgBank.get().
+				loadBufferedImage(path);
+		
 		tilesetWidth = tilesetImg.getWidth();
 		tilesetHeight = tilesetImg.getHeight();
 		
@@ -53,11 +56,50 @@ public class Tileset {
 		int th = (int)(tilesetHeight / gridHeight);
 		
 		fruitTiles = new Tile[th][tw];
+		
+		loadTileset(path);
 	}
 	
 	public Tileset(String path, String note) {
-		this(path);
+		gridWidth = FruitEditor.GRID_SIZE;
+		gridHeight = FruitEditor.GRID_SIZE;
+		
+		tilesetImg = FruitImgBank.get().
+				loadBufferedImage(path);
+		
+		tilesetWidth = tilesetImg.getWidth();
+		tilesetHeight = tilesetImg.getHeight();
+		
+		int tw = (int)(tilesetWidth / gridWidth);
+		int th = (int)(tilesetHeight / gridHeight);
+		
+		fruitTiles = new Tile[th][tw];
+		
 		loadTileset(path,note);
+	}
+	
+	public Tileset(String path, int gw, int gh) {
+		gridWidth = gw;
+		gridHeight = gh;
+		
+		tilesetImg = FruitImgBank.get().
+				loadBufferedImage(path);
+		
+		tilesetWidth = tilesetImg.getWidth();
+		tilesetHeight = tilesetImg.getHeight();
+		
+		int tw = (int)(tilesetWidth / gridWidth);
+		int th = (int)(tilesetHeight / gridHeight);
+		
+		fruitTiles = new Tile[th][tw];
+		
+		loadTileset(path);
+	}
+	
+	public Tileset(String path, String note, int gw, int gh) {
+		this(path,note);
+		gridWidth = gw;
+		gridHeight = gh;
 	}
 	
 	public void loadTileset(String path) {
@@ -65,9 +107,6 @@ public class Tileset {
 		int i = 0; // Tile id counter.
 		int th = fruitTiles.length;
 		int tw = fruitTiles[0].length;
-		
-		tilesetImg = FruitImgBank.get().
-				loadBufferedImage(path);
 		
 		tilesetPath = path;
 		notePath = "default.txt"; // filler String here
@@ -86,9 +125,6 @@ public class Tileset {
 		int i = 0; // Tile id counter.
 		int th = fruitTiles.length;
 		int tw = fruitTiles[0].length;
-		
-		tilesetImg = FruitImgBank.get().
-				loadBufferedImage(path);
 		
 		tilesetPath = path;
 		notePath = note;
@@ -135,14 +171,16 @@ public class Tileset {
 	
 	public void draw(Graphics g, int x, int y, Dimension size) {
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, gridWidth, gridHeight);
+		g.fillRect(0, 0, tilesetWidth, tilesetHeight);
 		
-		x = Math.max(x, 0);
-		y = Math.max(y, 0);
-		
-		int r = Math.min(y + (int) size.getHeight(), y);
-		int c = Math.min(x + (int) size.getWidth(), x);
+		if (tilesetImg != null) {
+			g.drawImage(tilesetImg, 0, 0, tilesetWidth, tilesetHeight, null);
+		}
 	}
+	
+	public void setGridWidth(int gw) { gridWidth = gw; }
+	
+	public void setGridHeight(int gh) { gridHeight = gh; }
 	
 	public Tile getTile(int r, int c) { return fruitTiles[r][c]; }
 	
@@ -156,6 +194,10 @@ public class Tileset {
 	
 	public int getGridHeight() { return gridHeight; }
 
+	public int getCols() { return fruitTiles[0].length; }
+	
+	public String getTilesetPath() { return tilesetPath; }
+	
 	public BufferedImage[][] getTilesetImages() {
 		return getTilesetImages(tilesetPath);
 	}
@@ -170,7 +212,7 @@ public class Tileset {
 		for (i=0; i < th; i++) {
 			for (j=0; j < tw; j++) {
 				tileImg[i][j] = FruitImgBank.get().
-						loadBufferedImage(path, i, j, gridWidth, gridHeight);
+						loadBufferedImage(path, j*gridWidth, i*gridHeight, gridWidth, gridHeight);
 			}
 		}
 		
@@ -186,7 +228,7 @@ public class Tileset {
 		
 		for (i=0; i < th; i++) {
 			for (j=0; j < tw; j++) {
-				tileImg[i][j] = img.getSubimage(i, j, gridWidth, gridHeight);
+				tileImg[i][j] = img.getSubimage(j*gridWidth, i*gridHeight, gridWidth, gridHeight);
 			}
 		}
 		

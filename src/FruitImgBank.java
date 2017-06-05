@@ -2,6 +2,8 @@ package FruitEditor;
 
 import java.awt.image.*;
 
+import java.io.*;
+
 import javax.swing.*;
 import javax.imageio.*;
 
@@ -51,10 +53,14 @@ public class FruitImgBank {
 	// loadBufferedImage(path) - Load a BufferedImage.
 	//====================================
 	public BufferedImage loadBufferedImage(String path) {
+		File file;
+		FileInputStream fis;
 		BufferedImage img;
 		try {
+			file = new File(path);
+			fis = new FileInputStream(file);
 			System.out.println("Loading image...");
-			img = ImageIO.read(this.getClass().getResource(path));
+			img = ImageIO.read(fis);
 			return img;
 		} catch (Exception e) {
 			System.err.println("ERROR: Unable to load buffered image " + path);
@@ -68,10 +74,14 @@ public class FruitImgBank {
 	// loadBufferedImage(path,x,y,width,height) - Load a BufferedImage, find (x,y), and note the width and height.
 	//====================================
 	public BufferedImage loadBufferedImage(String path, int x, int y, int width, int height) {
+		File file;
+		FileInputStream fis;
 		BufferedImage img;
 		try {
 			System.out.println("Loading image...");
-			img = ImageIO.read(this.getClass().getResource(path));
+			file = new File(path);
+			fis = new FileInputStream(file);
+			img = ImageIO.read(fis);
 			img = img.getSubimage(x, y, width, height);
 			return img;
 		} catch (Exception e) {
