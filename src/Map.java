@@ -49,7 +49,7 @@ public class Map {
 	//private Cursor cursor;
 	
 	public Map() {
-		this(8, 8, 24, 24);
+		this(10, 8, 24, 24);
 	}
 	
 	public Map(int width, int height) {
@@ -114,12 +114,12 @@ public class Map {
 		r = Math.min(y + (int)size.getHeight(), r);
 		c = Math.min(x + (int)size.getWidth(), c);
 		
-		for (int i=y; i < r; i++) {
-			for (int j=x; j < c; j++) {
-				if (getTile(j,i) != null) {
-					g.drawImage(getTile(j,i).getImage(), 
-							j*gridWidth, 
-							i*gridHeight, 
+		for (int j=y; j < r; j++) {
+			for (int i=x; i < c; i++) {
+				if (getTile(i,j) != null) {
+					g.drawImage(getTile(i,j).getImage(), 
+							i*gridWidth, 
+							j*gridHeight, 
 							gridWidth, 
 							gridHeight, 
 							null);
