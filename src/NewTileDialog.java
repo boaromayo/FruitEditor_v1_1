@@ -8,6 +8,7 @@ import java.io.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.*;
 
 public class NewTileDialog implements ActionListener, ChangeListener {
 	// DIALOG.
@@ -200,6 +201,38 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	/**==================================
 	// HELPER METHODS.
 	//===================================**/
+	/**============================
+	// makeFileChooser() - make file chooser and filter files to take in FruitEditor files.
+	//=============================**/
+	private JFileChooser makeImageFileChooser() {
+		JFileChooser jfc = new JFileChooser("../FruitEditor_v1_1/src/img");
+		
+		// Filter to only basic or low-memory image files (png, bmp, gif, jpg).
+		FileNameExtensionFilter bmpfilter =
+				new FileNameExtensionFilter("PNG Files (*.png)", "png");
+		FileNameExtensionFilter pngfilter =
+				new FileNameExtensionFilter("Bitmap Files (*.bmp)", "bmp");
+		FileNameExtensionFilter jpgfilter = 
+				new FileNameExtensionFilter("JPEG Files (*.jpg)", "jpg", "jpeg");
+		FileNameExtensionFilter giffilter = 
+				new FileNameExtensionFilter("GIF Files (*.gif)", "gif");
+		
+		// Add file filters.
+		jfc.addChoosableFileFilter(bmpfilter);
+		jfc.addChoosableFileFilter(pngfilter);
+		jfc.addChoosableFileFilter(jpgfilter);
+		jfc.addChoosableFileFilter(giffilter);
+		
+		// Accept image files only.
+		jfc.setAcceptAllFileFilterUsed(false);
+		
+		// Set to bitmap file
+		jfc.setFileFilter(bmpfilter);
+		
+		return jfc;
+	}
+	
+	
 	private JLabel makeLabel(String text, String name) {
 		JLabel lbl = new JLabel(text);
 		
@@ -258,6 +291,7 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
+		File openfile;
 		
 		if (tileDialog.isVisible()) {
 			if (src == okBtn) {
@@ -272,9 +306,9 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 							JOptionPane.WARNING_MESSAGE);
 				} else {
 					try {
-						tilePanel.setTileset(new Tileset(getTilesetFilename())); 
-						
-						setTilesetName(null);
+						tilePanel.setTileset(new Tileset(getTilesetFilename(), 
+								getGridWidth(), 
+								getGridHeight()));
 					} catch (Exception fe) {
 						System.err.println("ERROR: File not found. REASON: " + fe.getMessage());
 						fe.printStackTrace();
@@ -283,17 +317,17 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 					dispose();
 				}
 			} else if (src == browseBtn) {
-				JFileChooser open = new JFileChooser();
+				JFileChooser open = makeImageFileChooser();
 				
 				int confirm = open.showOpenDialog(null);
 				
 				if (confirm == JFileChooser.APPROVE_OPTION) {
 					try {
 						// the file to be opened
-						File openfile = open.getSelectedFile();
+						openfile = open.getSelectedFile();
 						
 						// set tileset filename and text to the pathname
-						setTilesetFilename(openfile.getAbsolutePath());
+						setTilesetFilename(openfile.getPath());
 						setTilesetName(openfile.getName());
 						
 					} catch (Exception exc) {

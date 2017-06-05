@@ -15,9 +15,6 @@ public class TilePanel extends JPanel implements MouseListener,
 	// FILES.
 	private FruitEditor fruitEditor;
 	
-	// EVENT LISTENER.
-	//private FruitListener fruitListener;
-	
 	// POPUP (or RIGHT-CLICK) MENU.
 	private JPopupMenu popupMenu;
 	
@@ -154,7 +151,15 @@ public class TilePanel extends JPanel implements MouseListener,
 			
 			drawCursor(g, mouseX, mouseY);
 			
-			drawSelectedCursor(g, 0, 0);
+			if (selectedTile.getID() < 0) {
+				drawSelectedCursor(g, 0, 0); // draw cursor at (0,0) if selected tile's id < 0
+			} else {
+				// cursor is drawn based on selected tile's id in the tileset
+				int ix = selectedTile.getID() % tileset.getCols();
+				int iy = selectedTile.getID() / tileset.getCols();
+				
+				drawSelectedCursor(g, ix*gridWidth, iy*gridHeight);
+			}
 		}
 	}
 	
@@ -182,10 +187,12 @@ public class TilePanel extends JPanel implements MouseListener,
 	}
 	
 	private void drawCursor(Graphics g, int x, int y) {
+		Graphics2D g2 = convertTo2d(g);
 		int tmx = x - (x % gridWidth); // snap cursor to grid using x - (x % w)
 		int tmy = y - (y % gridHeight);
 		
 		g.setColor(Color.BLACK);
+		g2.setStroke(new BasicStroke(1));
 		
 		if (checkBounds(tmx,tmy,tilesetWidth,tilesetHeight)) {
 			g.drawRect(tmx, tmy, gridWidth, gridHeight);
@@ -217,21 +224,24 @@ public class TilePanel extends JPanel implements MouseListener,
 		if (t == null)
 			return;
 		
-		fruitEditor.setTileset(t);
-		
 		tileset = t;
 		tilesetWidth = t.getWidth();
 		tilesetHeight = t.getHeight();
+		
+		gridWidth = t.getGridWidth();
+		gridHeight = t.getGridHeight();
 		
 		selectedTile = t.getTile(0,0);
 		
 		setPreferredSize(new Dimension(tilesetWidth,tilesetHeight));
 		
+		fruitEditor.setTileset(t);
+		
 		update();
 	}
 	
 	public void setSelectedTile(Tile t) {
-		selectedTile.setTile(t);
+		selectedTile = t;
 	}
 	
 	public Tileset getTileset() {
@@ -326,6 +336,8 @@ public class TilePanel extends JPanel implements MouseListener,
 				popupMenu.show(this, mouseX, mouseY);
 			}
 		}
+		System.out.println(selectedTile.getID());
+		
 	}
 
 	public void mouseReleased(MouseEvent e) {
