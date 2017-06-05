@@ -396,7 +396,7 @@ public class FruitListener implements ActionListener,
 	// makeFileChooser() - make file chooser and filter files to take in FruitEditor files.
 	//=============================**/
 	private JFileChooser makeFileChooser() {
-		JFileChooser jfc = new JFileChooser();
+		JFileChooser jfc = new JFileChooser("../FruitEditor_v1_1");
 		
 		// FruitEditor and text files only.
 		FileNameExtensionFilter filter = 
@@ -413,6 +413,11 @@ public class FruitListener implements ActionListener,
 		
 		// Set to .fmp file filter
 		jfc.setFileFilter(filter);
+		
+		// Set map name as default file name.
+		if (fruitEditor.getMapPanel().getMapName() != null) {
+			jfc.setSelectedFile(new File(fruitEditor.getMapPanel().getMapName()));
+		}
 		
 		return jfc;
 	}
