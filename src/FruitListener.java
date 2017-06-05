@@ -367,8 +367,8 @@ public class FruitListener implements ActionListener,
 			writer.println(fruitEditor.getTileset().getTilesetPath());
 			
 			// Write width and height
-			writer.print(map.getHeight() + " ");
-			writer.println(map.getWidth());
+			writer.print(map.getWidth() + " ");
+			writer.println(map.getHeight());
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();
