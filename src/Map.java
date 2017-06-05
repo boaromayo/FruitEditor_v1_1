@@ -159,7 +159,7 @@ public class Map {
 	}
 	
 	public void setTile(int x, int y, int z, Tile t) {
-		mapTiles[x][y][z] = t;
+		mapTiles[y][x][z] = t;
 	}
 	
 	/**========================================
@@ -196,7 +196,7 @@ public class Map {
 	}
 	
 	public Tile getTile(int x, int y, int z) {
-		return mapTiles[x][y][z];
+		return mapTiles[y][x][z];
 	}
 	
 	public DrawMode drawMode() {
