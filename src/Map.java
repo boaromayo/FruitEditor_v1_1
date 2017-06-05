@@ -49,7 +49,7 @@ public class Map {
 	//private Cursor cursor;
 	
 	public Map() {
-		this(10, 8, 24, 24);
+		this(8, 8, 24, 24);
 	}
 	
 	public Map(int width, int height) {
