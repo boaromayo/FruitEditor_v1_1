@@ -201,8 +201,6 @@ public class MapPanel extends JPanel implements MouseListener,
 			if (editorMode.equals(EditorMode.EVENT_MODE)) {
 				drawEventCursor(g);
 			}
-			
-			System.out.println("(" + viewport.getViewPosition().x + "," + viewport.getViewPosition().y + ")");
 		}
 	}
 	
