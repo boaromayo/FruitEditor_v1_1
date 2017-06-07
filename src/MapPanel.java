@@ -261,7 +261,6 @@ public class MapPanel extends JPanel implements MouseListener,
 			map.setTile(x, y, fruitEditor.getSelectedTile());
 			break;
 		case RECTANGLE:
-			rectFill(x, y, fruitEditor.getSelectedTile());
 			break;
 		case CIRCLE:
 			break;
@@ -274,18 +273,32 @@ public class MapPanel extends JPanel implements MouseListener,
 		update();
 	}
 	
-	private void rectFill(int x, int y, Tile newTile) {
-		int xmax = mouseX - (mouseX % gridWidth); // Set the maximum based on how far the second click is at.
-		int ymax = mouseY - (mouseY % gridHeight);
+	public void mapPressed(int x1, int y1, int x2, int y2) {
+		switch (map.drawMode()) {
+		case RECTANGLE:
+			rectFill(x1, y1, x2, y2, fruitEditor.getSelectedTile());
+			break;
+		case CIRCLE:
+			break;
+		default:
+			break;
+		}
+		
+		update();
+	}
+	
+	private void rectFill(int x, int y, int xmax, int ymax, Tile newTile) {
+		// Assume that x, y, xmax, and ymax are set to tile coords.
 		int r, c; // Counters
 		
-		for (r=y; r<=ymax; r++) {
-			for (c=x; c<=xmax; c++) {
-				if (r==y || r==ymax) {
-					map.setTile(x, y, newTile); // Place a tile if on a rectangle's side.
-				} else if (c==x || c==xmax) {
-					map.setTile(x, y, newTile);
-				}
+		x = Math.min(x, xmax);
+		y = Math.min(y, ymax);
+		xmax = Math.abs(x - xmax);
+		ymax = Math.abs(y - ymax);
+		
+		for (r=y; r<ymax; r++) {
+			for (c=x; c<xmax; c++) {
+				map.setTile(c,r,newTile);
 			}
 		}
 	}
@@ -438,8 +451,12 @@ public class MapPanel extends JPanel implements MouseListener,
 		int btn = e.getButton();
 		mouseX = e.getX() - (e.getX() % gridWidth);
 		mouseY = e.getY() - (e.getY() % gridHeight);
+		oldmouseX = mouseX;
+		oldmouseY = mouseY;
 		int tx = mouseX / gridWidth;
 		int ty = mouseY / gridHeight;
+		int otx = oldmouseX / gridWidth;
+		int oty = oldmouseY / gridHeight;
 		
 		// Set status panel
 		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -452,7 +469,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (btn == MouseEvent.BUTTON1) {
 			if (isPanelActive() && 
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
-				mapPressed(tx,ty);
+				mapPressed(otx,oty,tx,ty);
 			}
 		}
 	}
@@ -488,10 +505,18 @@ public class MapPanel extends JPanel implements MouseListener,
 	public void mouseReleased(MouseEvent e) {
 		int btn = e.getButton();
 		
+		// if left-click btn released
 		if (btn == MouseEvent.BUTTON1) {
-			// if left-click btn is released
-			oldmouseX = e.getX();
-			oldmouseY = e.getY();
+			oldmouseX = e.getX() - (e.getX() % gridWidth);
+			oldmouseY = e.getY() - (e.getY() % gridHeight);
+			int tx = oldmouseX / gridWidth;
+			int ty = oldmouseY / gridHeight;
+			
+			if (isPanelActive() && 
+					checkBounds(tx,ty,mapWidth,mapHeight)) {
+				mapPressed(tx,ty);
+			}
+				
 		} else if (btn == MouseEvent.BUTTON3) {
 			// if right-click btn is released
 			oldmouseX = e.getX();
