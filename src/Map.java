@@ -105,17 +105,17 @@ public class Map {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, mapWidth*gridWidth, mapHeight*gridHeight);
 		
-		x = Math.max(x, 0);
-		y = Math.max(y, 0);
+		int xmin = Math.max(x / gridWidth, 0);
+		int ymin = Math.max(y / gridHeight, 0);
 		
 		int r = mapTiles.length;
 		int c = mapTiles[0].length;
+
+		int xmax = Math.min((x + (int)size.getWidth()) / gridWidth, c);
+		int ymax = Math.min((y + (int)size.getHeight()) / gridHeight, r);
 		
-		r = Math.min(y + (int)size.getHeight(), r);
-		c = Math.min(x + (int)size.getWidth(), c);
-		
-		for (int j=y; j < r; j++) {
-			for (int i=x; i < c; i++) {
+		for (int j=ymin; j < ymax; j++) {
+			for (int i=xmin; i < xmax; i++) {
 				if (getTile(i,j) != null) {
 					g.drawImage(getTile(i,j).getImage(), 
 							i*gridWidth, 
