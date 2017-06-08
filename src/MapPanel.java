@@ -160,7 +160,6 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	private void disableItems() {
-		shiftItem.setEnabled(false);
 		cutItem.setEnabled(false);
 		copyItem.setEnabled(false);
 		pasteItem.setEnabled(false);
@@ -187,10 +186,9 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (isPanelActive()) {
 			if (map != null) {
 				map.draw(g, 
-						(int)viewport.getViewPosition().getX(), 
+						(int)viewport.getViewPosition().getX(),
 						(int)viewport.getViewPosition().getY(),
 						viewport.getSize());
-			
 			}
 						
 			if (grid) {
@@ -275,6 +273,9 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	public void mapPressed(int x1, int y1, int x2, int y2) {
 		switch (map.drawMode()) {
+		case PENCIL:
+			map.setTile(x1, y1, fruitEditor.getSelectedTile());
+			break;
 		case RECTANGLE:
 			rectFill(x1, y1, x2, y2, fruitEditor.getSelectedTile());
 			break;
@@ -415,7 +416,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (src == renameItem) {
 			new RenameDialog(fruitEditor);
 		} else if (src == shiftItem) {
-			// TODO: Add shift dialog box here.
+			new ShiftDialog(fruitEditor);
 		}
 	}
 	
@@ -469,7 +470,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (btn == MouseEvent.BUTTON1) {
 			if (isPanelActive() && 
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
-				mapPressed(otx,oty,tx,ty);
+				mapPressed(tx,ty,otx,oty);
 			}
 		}
 	}
