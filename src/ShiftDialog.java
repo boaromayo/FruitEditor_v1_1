@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class ShiftDialog extends JDialog implements ActionListener {
+public class ShiftDialog extends JDialog implements ActionListener, ChangeListener {
 	// DIALOG SIZE.
 	private final int WIDTH = 240;
 	private final int HEIGHT = 120;
@@ -94,6 +94,24 @@ public class ShiftDialog extends JDialog implements ActionListener {
 		add(btn);
 	}
 	
+	public void setVerticalShift(int s) {
+		shiftV = s;
+		shiftVText.setValue(s);
+	}
+	
+	public void setHorizontalShift(int s) {
+		shiftH = s;
+		shiftHText.setValue(s);
+	}
+	
+	public int getVerticalShift() {
+		return (Integer)shiftVText.getValue();
+	}
+	
+	public int getHorizontalShift() {
+		return (Integer)shiftHText.getValue();
+	}
+	
 	private JLabel makeLabel(String text, String name) {
 		JLabel lbl = new JLabel(text);
 		lbl.setName(name);
@@ -131,4 +149,16 @@ public class ShiftDialog extends JDialog implements ActionListener {
 			dispose();
 		}
  	}
+	
+	public void stateChanged(ChangeEvent e) {
+		Object src = e.getSource();
+		
+		if (src == shiftVText) {
+			setVerticalShift((Integer)shiftVText.getValue());
+			System.out.println(shiftV); // print for debug purposes
+		} else if (src == shiftHText) {
+			setHorizontalShift((Integer)shiftHText.getValue());
+			System.out.println(shiftH);
+		}
+	}
 }
