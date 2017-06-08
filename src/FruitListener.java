@@ -91,6 +91,11 @@ public class FruitListener implements ActionListener,
 			setGrid(gridBtn.isSelected());
 		}
 		
+		// VIEW -> SHIFT
+		else if (src == getComponent("shiftBtn")) {
+			new ShiftDialog(fruitEditor); // Load Shift Map dialog.
+		}
+		
 		// VIEW -> SCALE item listeners
 		else if (src == getComponent("oneItem") ||
 				src == getComponent("oneBtn")) {
