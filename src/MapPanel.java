@@ -160,7 +160,6 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	private void disableItems() {
-		shiftItem.setEnabled(false);
 		cutItem.setEnabled(false);
 		copyItem.setEnabled(false);
 		pasteItem.setEnabled(false);
@@ -417,7 +416,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (src == renameItem) {
 			new RenameDialog(fruitEditor);
 		} else if (src == shiftItem) {
-			// TODO: Add shift dialog box here.
+			new ShiftDialog(fruitEditor);
 		}
 	}
 	

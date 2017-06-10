@@ -128,6 +128,8 @@ public class FruitEditor /*implements Runnable*/ {
 	private JToggleButton eventModeBtn;
 	// VIEW
 	private JToggleButton gridBtn;
+	// SHIFT
+	private JButton shiftBtn;
 	// DRAW
 	private JToggleButton pencilBtn;
 	private JToggleButton rectBtn;
@@ -641,6 +643,8 @@ public class FruitEditor /*implements Runnable*/ {
 		redoBtn.setEnabled(act);
 	
 		gridBtn.setEnabled(act);
+		
+		shiftBtn.setEnabled(act);
 	
 		oneBtn.setEnabled(act);
 		twoBtn.setEnabled(act);
@@ -736,14 +740,18 @@ public class FruitEditor /*implements Runnable*/ {
 		// VIEW BUTTONS
 		gridBtn = makeButton("G", "", "Show/Hide Grid", 
 				"gridBtn", true);
+		shiftBtn = makeButton("Shift", "Shift Map", "shiftBtn");
 	
 		// Set VIEW button if grid is on.
-		//gridBtn.setSelected(getMapPanel().gridOn());
 		gridBtn.setSelected(true);
 		
-		// Add in VIEW button.
+		// Add in GRID button.
 		mainToolBar.add(gridBtn);
 		// TOOLBAR SEPARATOR.
+		mainToolBar.addSeparator();
+		
+		// Add in SHIFT button.
+		mainToolBar.add(shiftBtn);
 		mainToolBar.addSeparator();
 	}
 	
