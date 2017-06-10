@@ -143,8 +143,8 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 		Object src = e.getSource();
 		
 		if (src == okBtn) {
-			// Use mapPanel to shift map.
-			// For now dispose dialog box.
+			/* TODO: Use mapPanel to shift map.
+			 * For now dispose dialog box. */
 		} else if (src == cancelBtn) {
 			dispose();
 		}
