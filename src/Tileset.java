@@ -182,6 +182,13 @@ public class Tileset {
 	
 	public void setGridHeight(int gh) { gridHeight = gh; }
 	
+	public Tile getTile(int i) {
+		int r = i / getCols();
+		int c = i % getCols();
+		
+		return fruitTiles[r][c];
+	}
+	
 	public Tile getTile(int r, int c) { return fruitTiles[r][c]; }
 	
 	public Tile[][] getTileset() { return fruitTiles; }

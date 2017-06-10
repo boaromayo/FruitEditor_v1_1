@@ -20,26 +20,23 @@ public class Tile {
 	private boolean danger;
 	
 	public Tile() {
-		this.img = null/*FruitImgBank.get().
-				loadBufferedImage("blank.gif")*/;
+		this.img = null;
 		this.id = -1;
 		this.name = "None";
 		this.solid = false;
 		this.transparent = false;
 		this.danger = false;
 		
-		if (img == null) return;
-		
-		imgWidth = img.getWidth();
-		imgHeight = img.getHeight();
+		imgWidth = 0;
+		imgHeight = 0;
 	}
 	
 	public Tile(int id, BufferedImage img, String name) {
 		this();
 		try {
 			this.img = img;
-			this.imgWidth = img.getWidth();
-			this.imgHeight = img.getHeight();
+			imgWidth = img.getWidth();
+			imgHeight = img.getHeight();
 		} catch (RuntimeException e) {
 			System.err.println(
 					"ERROR: Could not find image " + name);
@@ -64,9 +61,10 @@ public class Tile {
 		img = t.getImage();
 		id = t.getID();
 		name = (t.getName() == null) ? "" : t.getName();
-		this.setSolid(t.isSolid());
-		this.setDanger(t.isDangerous());
-		this.setTransparent(t.isTransparent());
+		
+		setSolid(t.isSolid());
+		setDanger(t.isDangerous());
+		setTransparent(t.isTransparent());
 	}
 	
 	public void replace(Tile t1, Tile t2) {
@@ -116,5 +114,4 @@ public class Tile {
 	public boolean isTransparent() { return transparent; }
 	
 	public boolean isDangerous() { return danger; }
-	
 }
