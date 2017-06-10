@@ -317,32 +317,46 @@ public class FruitListener implements ActionListener,
 			// Load reader
 			BufferedReader reader = new BufferedReader(
 					new FileReader(file));
+			Map map;
+			Tileset tileset;
 			
 			// Read in the map and convert text files to map
-			// Read first line to get tileset pathname
+			// Read first line to get map name
 			String line = reader.readLine();
-			String [] lines = line.split("\\s+");
+			
+			String mapName = line;
+			
+			// Read second line to get tileset pathname
+			line = reader.readLine();
 			
 			// Fetch tileset pathname
 			String path = line;
 			
-			// Read second line to get width and height
-			// Assume there are two positive integers
+			// Read second line to get map's parameters (ie, 8 8 32 32, the map and tile sizes)
 			line = reader.readLine();
+			String [] lines = line.split("\\s+");
 			
-			// Set width and height
+			// Set the parameters
 			int cols = Integer.parseInt(lines[0]);
 			int rows = Integer.parseInt(lines[1]);
+			int gw = Integer.parseInt(lines[2]);
+			int gh = Integer.parseInt(lines[3]);
 			
-			Map map = new Map(cols,rows);
-			Tileset tileset = new Tileset(path);
+			map = new Map(cols,rows,gw,gh);
+			tileset = new Tileset(path,gw,gh);
 			
-			// Read the IDs of tiles next and store them in an int array
+			// Read the IDs of tiles next and store them in an array
 			int [][] ids = new int[rows][cols];
 			int r, c;
-			r = c = 0;
+			r = 0;
 			
-			while (!line.isEmpty()) {
+			while (line != null) {
+				line = reader.readLine();
+				
+				if (line == null) 
+					break;
+				
+				lines = line.split("\\s+");
 				for (c = 0; c < lines.length; c++) {
 					ids[r][c] = Integer.parseInt(lines[c]);
 				}
@@ -350,7 +364,18 @@ public class FruitListener implements ActionListener,
 				r++;
 			}
 			
+			// Now make the map based on the list read earlier.
+			for (r = 0; r < rows; r++) {
+				for (c = 0; c < cols; c++) {
+					if (ids[r][c] == -1) // Skip any blank tiles on map 
+						continue; 
+					
+					map.setTile(c,r,tileset.getTile(ids[r][c]));
+				}
+			}
+			
 			fruitEditor.getMapPanel().setMap(map);
+			fruitEditor.getMapPanel().setMapName(mapName);
 			fruitEditor.getTilePanel().setTileset(tileset);
 			
 			// Close reader to cleanup
@@ -368,12 +393,15 @@ public class FruitListener implements ActionListener,
 				new BufferedWriter(new FileWriter(file)));
 			Map map = fruitEditor.getMap();
 			
-			// Write in tileset used
+			// Write in map name and tileset path.
+			writer.println(map.getName());
 			writer.println(fruitEditor.getTileset().getTilesetPath());
 			
-			// Write width and height
+			// Write map parameters in file.
 			writer.print(map.getWidth() + " ");
-			writer.println(map.getHeight());
+			writer.print(map.getHeight() + " ");
+			writer.print(map.getGridWidth() + " ");
+			writer.println(map.getGridHeight());
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();
@@ -416,12 +444,16 @@ public class FruitListener implements ActionListener,
 		// Accept text and .fmp files only
 		jfc.setAcceptAllFileFilterUsed(false);
 		
-		// Set to .fmp file filter
-		jfc.setFileFilter(filter);
+		// Set to txt file filter
+		jfc.setFileFilter(textfilter);
 		
 		// Set map name as default file name.
 		if (fruitEditor.getMapPanel().getMapName() != null) {
-			jfc.setSelectedFile(new File(fruitEditor.getMapPanel().getMapName()));
+			if (jfc.getFileFilter() == filter) {
+				jfc.setSelectedFile(new File(fruitEditor.getMapPanel().getMapName() + ".fmp"));
+			} else if (jfc.getFileFilter() == textfilter) {
+				jfc.setSelectedFile(new File(fruitEditor.getMapPanel().getMapName() + ".txt"));
+			}
 		}
 		
 		return jfc;
