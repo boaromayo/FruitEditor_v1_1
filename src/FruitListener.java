@@ -255,7 +255,7 @@ public class FruitListener implements ActionListener,
 		// If panel active and file blank, prompt user warning.
 		if (fruitEditor.getActiveFile() == null && 
 				fruitEditor.isPanelActive()) {
-			int confirm = JOptionPane.showInternalConfirmDialog(
+			int confirm = JOptionPane.showConfirmDialog(
 				fruitEditor.getFrame(), 
 				"Save before closing?",
 				"Close FruitEditor",
