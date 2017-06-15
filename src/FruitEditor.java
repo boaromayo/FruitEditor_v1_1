@@ -925,6 +925,40 @@ public class FruitEditor {
 	}
 	
 	/**========================================
+	// getMapPanel() - Get MapPanel.
+	//=========================================**/
+	public MapPanel getMapPanel() {
+		if (fruitPanel.getMapPanel() != null)
+			return fruitPanel.getMapPanel();
+		
+		return null;
+	}
+	
+	/**========================================
+	// getTilePanel() - Get TilePanel.
+	//=========================================**/
+	public TilePanel getTilePanel() {
+		return fruitPanel.getTilePanel();
+	}
+	
+	/**========================================
+	// getStatusPanel() - Get StatusPanel.
+	//=========================================**/
+	public StatusPanel getStatusPanel() {
+		if (statusPanel != null)
+			return statusPanel;
+		
+		return null;
+	}
+	
+	/**=======================================
+	// getActiveFile() - Fetch the current file loaded. 
+	//========================================**/
+	public File getActiveFile() {
+		return activeFile;
+	}
+	
+	/**========================================
 	// getMap() - Get map. 
 	//=========================================**/
 	public Map getMap() {
@@ -945,23 +979,6 @@ public class FruitEditor {
 	}
 	
 	/**========================================
-	// getMapPanel() - Get MapPanel.
-	//=========================================**/
-	public MapPanel getMapPanel() {
-		if (fruitPanel.getMapPanel() != null)
-			return fruitPanel.getMapPanel();
-		
-		return null;
-	}
-	
-	/**========================================
-	// getTilePanel() - Get TilePanel.
-	//=========================================**/
-	public TilePanel getTilePanel() {
-		return fruitPanel.getTilePanel();
-	}
-	
-	/**========================================
 	// getSelectedTile() - Get selected tile.
 	//=========================================**/
 	public Tile getSelectedTile() {
@@ -969,27 +986,10 @@ public class FruitEditor {
 	}
 	
 	/**========================================
-	// getStatusPanel() - Get StatusPanel.
-	//=========================================**/
-	public StatusPanel getStatusPanel() {
-		if (statusPanel != null)
-			return statusPanel;
-		
-		return null;
-	}
-	
-	/**========================================
 	// isPanelActive() - Check if panel active.
 	//=========================================**/
 	public boolean isPanelActive() {
 		return panelActive;
-	}
-	
-	/**=======================================
-	// getActiveFile() - Fetch the current file loaded. 
-	//========================================**/
-	public File getActiveFile() {
-		return activeFile;
 	}
 	
 	/**=======================================
