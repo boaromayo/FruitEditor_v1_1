@@ -3,11 +3,13 @@ package FruitEditor;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.io.*;
+
 import javax.swing.*;
 
 import java.util.*;
 
-public class FruitEditor /*implements Runnable*/ {
+public class FruitEditor {
 	// CONSTANTS.
 	public static final int SCREEN_WIDTH = 960;
 	public static final int SCREEN_HEIGHT = 640;
@@ -32,10 +34,13 @@ public class FruitEditor /*implements Runnable*/ {
 	// EVENT LISTENER.
 	private FruitListener fruitListener;
 	
-	// MAP FILE
+	// ACTIVE FILE.
+	private File activeFile;
+	
+	// MAP.
 	private Map map;
 	
-	// TILESET FILE
+	// TILESET.
 	private Tileset tileset;
 	
 	// HASH MAP FOR COMPONENTS.
@@ -154,6 +159,8 @@ public class FruitEditor /*implements Runnable*/ {
 		
 		hash = new HashMap<String, JComponent>();
 		
+		activeFile = null;
+		
 		map = new Map();
 		tileset = new Tileset();
 		
@@ -178,7 +185,8 @@ public class FruitEditor /*implements Runnable*/ {
 		
 		fruitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fruitFrame.setLocationRelativeTo(null);
-		//fruitFrame.setIconImage(FruitImgBank.get().loadBufferedImage("", 0, 0, 20, 20));
+		fruitFrame.addWindowListener(fruitListener);
+		//fruitFrame.setIconImage(FruitImgBank.get().loadBufferedImage("../img/icons/title-icon.gif", 0, 0, 20, 20));
 		fruitFrame.setVisible(true);
 		fruitFrame.setResizable(false);
 	}
@@ -695,11 +703,6 @@ public class FruitEditor /*implements Runnable*/ {
 
 		// TOOLBAR SEPARATOR.
 		mainToolBar.addSeparator();
-		
-		// Add in FILE ActionListeners.
-		/*newBtn.addActionListener(fruitListener);
-		openBtn.addActionListener(fruitListener);
-		saveBtn.addActionListener(fruitListener);*/
 	}
 	
 	private void editToolSetup() {
@@ -869,6 +872,13 @@ public class FruitEditor /*implements Runnable*/ {
 	}
 	
 	/**========================================
+	//  setActiveFile(file) - Write new file onto activeFile.
+	//=========================================**/
+	public void setActiveFile(File file) {
+		activeFile = file;
+	}
+	
+	/**========================================
 	// putComponent(key, value) - Place JComponent into hashmap. 
 	//=========================================*/
 	public void putComponent(String key, JComponent value) {
@@ -973,6 +983,13 @@ public class FruitEditor /*implements Runnable*/ {
 	//=========================================**/
 	public boolean isPanelActive() {
 		return panelActive;
+	}
+	
+	/**=======================================
+	// getActiveFile() - Fetch the current file loaded. 
+	//========================================**/
+	public File getActiveFile() {
+		return activeFile;
 	}
 	
 	/**=======================================

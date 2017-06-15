@@ -13,7 +13,7 @@ import java.util.*;
 import java.beans.*;
 
 public class FruitListener implements ActionListener,
-	ChangeListener, PropertyChangeListener {
+	ChangeListener, PropertyChangeListener, WindowListener {
 	
 	private FruitEditor fruitEditor;
 	
@@ -99,15 +99,31 @@ public class FruitListener implements ActionListener,
 		// VIEW -> SCALE item listeners
 		else if (src == getComponent("oneItem") ||
 				src == getComponent("oneBtn")) {
+			JRadioButtonMenuItem oneItem = (JRadioButtonMenuItem) getComponent("oneItem");
+			JToggleButton oneBtn = (JToggleButton) getComponent("oneBtn");
+			oneItem.setSelected(true);
+			oneBtn.setSelected(true);
 			//setScale(Map.SCALE_ONE);
 		} else if (src == getComponent("twoItem") ||
 				src == getComponent("twoBtn")) {
+			JRadioButtonMenuItem twoItem = (JRadioButtonMenuItem) getComponent("twoItem");
+			JToggleButton twoBtn = (JToggleButton) getComponent("twoBtn");
+			twoItem.setSelected(true);
+			twoBtn.setSelected(true);
 			//setScale(Map.SCALE_TWO);
 		} else if (src == getComponent("fourItem") ||
 				src == getComponent("fourBtn")) {
+			JRadioButtonMenuItem fourItem = (JRadioButtonMenuItem) getComponent("fourItem");
+			JToggleButton fourBtn = (JToggleButton) getComponent("fourBtn");
+			fourItem.setSelected(true);
+			fourBtn.setSelected(true);
 			//setScale(Map.SCALE_FOUR);
 		} else if (src == getComponent("eightItem") ||
 				src == getComponent("eightBtn")) {
+			JRadioButtonMenuItem eightItem = (JRadioButtonMenuItem) getComponent("eightItem");
+			JToggleButton eightBtn = (JToggleButton) getComponent("eightBtn");
+			eightItem.setSelected(true);
+			eightBtn.setSelected(true);
 			//setScale(Map.SCALE_EIGHT);
 		}
 		
@@ -191,37 +207,30 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = open.getSelectedFile();
-			String confirmStr = "Map load complete.";
-			
 			try {
-				readText(file); // read the map file
-				setStatus(confirmStr + "\t");
+				readText(file);
+				fruitEditor.setActiveFile(file);
 			} catch (Exception e) {
-				System.err.println("ERROR: Could not read file " + file.getPath());
+				System.err.println("ERROR: Unable to read file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	/* TODO: This method has redundant functionality.
-	 * Maybe shorten this later. */
 	private void saveAction() {
-		JFileChooser save = makeFileChooser();
+		// If active file is blank, go to save prompt.
+		if (fruitEditor.getActiveFile() == null) {
+			saveAsAction();
+			return;
+		}
 		
-		int confirm = save.showSaveDialog(null);
-		
-		if (confirm == JFileChooser.APPROVE_OPTION) {
-			File file = save.getSelectedFile();
-			String confirmStr = "Map saved.";
-			
-			try {
-				writeText(file);
-				setStatus(confirmStr + "\t");
-				//statusPanel.repaint();
-			} catch (Exception e) {
-				System.err.println("ERROR: Unable to write file " + file.getPath());
-				e.printStackTrace();
-			}
+		File file = fruitEditor.getActiveFile();
+		try {
+			writeText(file);
+			fruitEditor.setActiveFile(file);
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to write file " + file.getPath());
+			e.printStackTrace();
 		}
 	}
 
@@ -232,20 +241,35 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = saveAs.getSelectedFile();
-			String confirmStr = "Map saved as " + file.getName();
-			
 			try {
 				writeText(file);
-				setStatus(confirmStr);
+				fruitEditor.setActiveFile(file);
 			} catch (Exception e) {
-				System.err.println("ERROR: Unable to write file " + file);
+				System.err.println("ERROR: Unable to write file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	private void closeAction() {
-		System.exit(0);
+		// If panel active and file blank, prompt user warning.
+		if (fruitEditor.getActiveFile() == null && 
+				fruitEditor.isPanelActive()) {
+			int confirm = JOptionPane.showInternalConfirmDialog(
+				fruitEditor.getFrame(), 
+				"Save before closing?",
+				"Close FruitEditor",
+				JOptionPane.YES_NO_CANCEL_OPTION);
+		
+			if (confirm == JOptionPane.YES_OPTION) {
+				saveAction();
+				System.exit(0);
+			} else if (confirm == JOptionPane.NO_OPTION) {
+				System.exit(0);
+			}
+		} else {
+			System.exit(0);
+		}
 	}
 	
 	private void undo() {
@@ -275,10 +299,6 @@ public class FruitListener implements ActionListener,
 	/**================================
 	// SHORTCUT METHODS.
 	//=================================*/
-	private void setStatus(String text) {
-		fruitEditor.getStatusPanel().setStatus(text);
-	}
-	
 	private void setGrid(boolean grid) {
 		fruitEditor.getMapPanel().setGrid(grid);
 	}
@@ -307,6 +327,37 @@ public class FruitListener implements ActionListener,
 	public void propertyChange(PropertyChangeEvent e) {
 		// For any action taken, place in a stack of actions
 		actions.add(e);
+	}
+	
+	/**================================
+	// WINDOW METHODS.
+	//=================================**/
+	public void windowOpened(WindowEvent e) {
+		
+	}
+	
+	public void windowClosing(WindowEvent e) {
+		closeAction();
+	}
+	
+	public void windowClosed(WindowEvent e) {
+		
+	}
+	
+	public void windowActivated(WindowEvent e) {
+		
+	}
+	
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+	
+	public void windowIconified(WindowEvent e) {
+		
+	}
+	
+	public void windowDeiconified(WindowEvent e) {
+		
 	}
 	
 	/**===========================

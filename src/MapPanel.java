@@ -330,6 +330,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			setPanelActive(true);
 		}
 		
+		fruitEditor.setActiveFile(null);
 		fruitEditor.update();
 	}
 	
