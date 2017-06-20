@@ -165,7 +165,7 @@ public class TilePanel extends JPanel implements MouseListener,
 	
 	private void drawGrid(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
-		g2.setColor(Color.GRAY);
+		g2.setColor(Color.DARK_GRAY);
 		g2.setStroke(new BasicStroke(1,
 				BasicStroke.CAP_BUTT,
 				BasicStroke.JOIN_BEVEL,

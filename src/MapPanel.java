@@ -304,9 +304,36 @@ public class MapPanel extends JPanel implements MouseListener,
 		}
 	}
 	
+	/**========================================
+	 * floodFill(x,y,targetTile,newTile) - Fill a selected area until it
+	 * reaches a wall in the form of a different tile.
+	 * @param x - starting x location of target
+	 * @param y - starting y location of target
+	 * @param targetTile - The targeted old Tile.
+	 * @param newTile - The new Tile.
+	 * 
+	 * To achieve this effect efficiently, a loop moving east and
+	 * west will be used, like so:
+	 * 	if target tile == new tile return;
+	 *	if tile(x,y) != target tile return;
+	 *	Set q to empty queue.
+	 *	Add node tile to q.
+	 *	Loop for each tile n to q
+	 *		Init west tile and east tile to tile n.
+	 *		Move west tile west until tile west of west tile != target tile.
+	 *		Move east tile east until tile east of east tile != target tile.
+	 *		Loop for each tile between east and west
+	 *			n is set to new tile.
+	 *			if tile north of n == target tile, add to q.
+	 *			if tile south of n == target tile, add to q.
+	 *	Loop until q is finished.
+	 *	return;
+	 *========================================**/
 	private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
 		if (targetTile == newTile)
 			return;
+		
+		
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -407,6 +434,14 @@ public class MapPanel extends JPanel implements MouseListener,
 		return g2;
 	}
 	
+	
+	public void undo() {
+		fruitEditor.update();
+	}
+	
+	public void redo() {
+		fruitEditor.update();
+	}
 	
 	/**=======================================
 	 * actionPerformed(ActionEvent) - Perform ActionEvents.
