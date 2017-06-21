@@ -45,7 +45,7 @@ public class AboutDialog {
 	}
 	
 	private void init() {
-		versionlabel = makeLabel("FruitEditor v0.2.5_02", "versionlabel");
+		versionlabel = makeLabel("FruitEditor v0.2.5_03", "versionlabel");
 		copyrightlabel = makeLabel("(c) 2016-2017 Nico Poblete", "copyrightlabel");
 		iconlabel = makeLabel("Icons made by http://www.aha-soft.com//", "iconlabel");
 	
