@@ -72,8 +72,8 @@ public class MapPanel extends JPanel implements MouseListener,
 		mapWidth = map.getWidth();
 		mapHeight = map.getHeight();
 		
-		gridWidth = map.getGridWidth();
-		gridHeight = map.getGridHeight();
+		gridWidth = map.getTileWidth();
+		gridHeight = map.getTileHeight();
 		
 		mouseX = mouseY = 0;
 		
@@ -348,8 +348,8 @@ public class MapPanel extends JPanel implements MouseListener,
 		mapWidth = m.getWidth();
 		mapHeight = m.getHeight();
 		
-		gridWidth = m.getGridWidth();
-		gridHeight = m.getGridHeight();
+		gridWidth = m.getTileWidth();
+		gridHeight = m.getTileHeight();
 		
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		

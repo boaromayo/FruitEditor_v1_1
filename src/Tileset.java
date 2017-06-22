@@ -20,19 +20,19 @@ public class Tileset {
 	private int tilesetWidth;
 	private int tilesetHeight;
 	
-	// GRID DIMENSIONS.
-	private int gridWidth;
-	private int gridHeight;
+	// TILE DIMENSIONS.
+	private int tileWidth;
+	private int tileHeight;
 	
 	public Tileset() {
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		
-		tilesetWidth = gridWidth;
-		tilesetHeight = gridHeight;
+		tilesetWidth = tileWidth;
+		tilesetHeight = tileHeight;
 		
-		int tw = (int)(tilesetWidth / gridWidth);
-		int th = (int)(tilesetHeight / gridHeight);
+		int tw = (int)(tilesetWidth / tileWidth);
+		int th = (int)(tilesetHeight / tileHeight);
 		
 		fruitTiles = new Tile[th][tw]; // Set number of tiles based on (tileset size / grid size).
 		fruitTiles[0][0] = new Tile(); // Set first tile as blank tile.
@@ -43,8 +43,8 @@ public class Tileset {
 	}
 	
 	public Tileset(String path) {
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		
 		tilesetImg = FruitImgBank.get().
 				loadBufferedImage(path);
@@ -52,17 +52,17 @@ public class Tileset {
 		tilesetWidth = tilesetImg.getWidth();
 		tilesetHeight = tilesetImg.getHeight();
 		
-		int tw = (int)(tilesetWidth / gridWidth);
-		int th = (int)(tilesetHeight / gridHeight);
+		int tw = (int)(tilesetWidth / tileWidth);
+		int th = (int)(tilesetHeight / tileHeight);
 		
 		fruitTiles = new Tile[th][tw];
 		
-		loadTileset(path);
+		initTiles(path);
 	}
 	
 	public Tileset(String path, String note) {
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		
 		tilesetImg = FruitImgBank.get().
 				loadBufferedImage(path);
@@ -70,17 +70,17 @@ public class Tileset {
 		tilesetWidth = tilesetImg.getWidth();
 		tilesetHeight = tilesetImg.getHeight();
 		
-		int tw = (int)(tilesetWidth / gridWidth);
-		int th = (int)(tilesetHeight / gridHeight);
+		int tw = (int)(tilesetWidth / tileWidth);
+		int th = (int)(tilesetHeight / tileHeight);
 		
 		fruitTiles = new Tile[th][tw];
 		
-		loadTileset(path,note);
+		initTiles(path,note);
 	}
 	
 	public Tileset(String path, int gw, int gh) {
-		gridWidth = gw;
-		gridHeight = gh;
+		tileWidth = gw;
+		tileHeight = gh;
 		
 		tilesetImg = FruitImgBank.get().
 				loadBufferedImage(path);
@@ -88,21 +88,21 @@ public class Tileset {
 		tilesetWidth = tilesetImg.getWidth();
 		tilesetHeight = tilesetImg.getHeight();
 		
-		int tw = (int)(tilesetWidth / gridWidth);
-		int th = (int)(tilesetHeight / gridHeight);
+		int tw = (int)(tilesetWidth / tileWidth);
+		int th = (int)(tilesetHeight / tileHeight);
 		
 		fruitTiles = new Tile[th][tw];
 		
-		loadTileset(path);
+		initTiles(path);
 	}
 	
 	public Tileset(String path, String note, int gw, int gh) {
 		this(path,note);
-		gridWidth = gw;
-		gridHeight = gh;
+		tileWidth = gw;
+		tileHeight = gh;
 	}
 	
-	public void loadTileset(String path) {
+	public void initTiles(String path) {
 		int r, c; // Loop counters.
 		int i = 0; // Tile id counter.
 		int th = fruitTiles.length;
@@ -120,7 +120,7 @@ public class Tileset {
 		}
 	}
 	
-	public void loadTileset(String path, String note) {
+	public void initTiles(String path, String note) {
 		int r, c; // Loop counters.
 		int i = 0; // Tile id counter.
 		int th = fruitTiles.length;
@@ -178,9 +178,9 @@ public class Tileset {
 		}
 	}
 	
-	public void setGridWidth(int gw) { gridWidth = gw; }
+	public void setGridWidth(int gw) { tileWidth = gw; }
 	
-	public void setGridHeight(int gh) { gridHeight = gh; }
+	public void setGridHeight(int gh) { tileHeight = gh; }
 	
 	public Tile getTile(int i) {
 		int r = i / getCols();
@@ -197,9 +197,9 @@ public class Tileset {
 	
 	public int getHeight() { return tilesetHeight; }
 	
-	public int getGridWidth() { return gridWidth; }
+	public int getGridWidth() { return tileWidth; }
 	
-	public int getGridHeight() { return gridHeight; }
+	public int getGridHeight() { return tileHeight; }
 
 	public int getCols() { return fruitTiles[0].length; }
 	
@@ -219,7 +219,7 @@ public class Tileset {
 		for (i=0; i < th; i++) {
 			for (j=0; j < tw; j++) {
 				tileImg[i][j] = FruitImgBank.get().
-						loadBufferedImage(path, j*gridWidth, i*gridHeight, gridWidth, gridHeight);
+						loadBufferedImage(path, j*tileWidth, i*tileHeight, tileWidth, tileHeight);
 			}
 		}
 		
@@ -235,7 +235,7 @@ public class Tileset {
 		
 		for (i=0; i < th; i++) {
 			for (j=0; j < tw; j++) {
-				tileImg[i][j] = img.getSubimage(j*gridWidth, i*gridHeight, gridWidth, gridHeight);
+				tileImg[i][j] = img.getSubimage(j*tileWidth, i*tileHeight, tileWidth, tileHeight);
 			}
 		}
 		

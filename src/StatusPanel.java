@@ -40,7 +40,7 @@ public class StatusPanel extends JPanel implements MouseMotionListener {
 		
 		statusLabel = new JLabel("No map selected");
 		currentMapLabel = new JLabel();
-		cursorPosition = new JLabel("(0,0)");
+		cursorPosition = new JLabel();
 		
 		mapX = 0;
 		mapY = 0;
@@ -103,13 +103,8 @@ public class StatusPanel extends JPanel implements MouseMotionListener {
 	}
 	
 	public void mouseMoved(MouseEvent e) {
-		mapX = e.getX() / map.getGridWidth();
-		mapY = e.getY() / map.getGridHeight();
-		
-		/*if (mapName == null)
-			setStatus("No map selected");
-		else
-			setCursorLocation(mapX, mapY);*/
+		mapX = e.getX() / map.getTileWidth();
+		mapY = e.getY() / map.getTileHeight();
 	}
 	
 	public void mouseHovered(MouseEvent e) {

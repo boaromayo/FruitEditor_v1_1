@@ -38,12 +38,12 @@ public class Map {
 	private int scaleHeight;
 	
 	// GRID DIMENSIONS.
-	private int gridWidth;
-	private int gridHeight;
+	//private int gridWidth;
+	//private int gridHeight;
 
 	// TILE DIMENSIONS.
-	//private int tileWidth;
-	//private int tileHeight;
+	private int tileWidth;
+	private int tileHeight;
 	
 	// CURSOR.
 	//private Cursor cursor;
@@ -52,14 +52,19 @@ public class Map {
 		this(8, 8, 24, 24);
 	}
 	
+	public Map(Map map) { // Copy constructor.
+		mapWidth = map.getWidth();
+		mapHeight = map.getHeight();
+		mapDepth = 1;
+		tileWidth = map.getTileWidth();
+	}
+	
 	public Map(int width, int height) {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = 1;
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
-		//tileWidth = FruitEditor.TILE_SIZE;
-		//tileHeight = FruitEditor.TILE_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 
 		initTiles();
@@ -71,10 +76,8 @@ public class Map {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = depth;
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
-		//tileWidth = FruitEditor.TILE_SIZE;
-		//tileHeight = FruitEditor.TILE_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 		
 		initTiles();
@@ -82,14 +85,12 @@ public class Map {
 		setDrawMode(DrawMode.PENCIL);
 	}
 	
-	public Map(int width, int height, int gw, int gh) {
+	public Map(int width, int height, int tw, int th) {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = 1;
-		gridWidth = gw;
-		gridHeight = gh;
-		//tileWidth = FruitEditor.TILE_SIZE;
-		//tileHeight = FruitEditor.TILE_SIZE;
+		tileWidth = tw;
+		tileHeight = th;
 		scaleFactor = 1;
 		
 		initTiles();
@@ -103,25 +104,25 @@ public class Map {
 	
 	public void draw(Graphics g, int x, int y, Dimension size) {
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, mapWidth*gridWidth, mapHeight*gridHeight);
+		g.fillRect(0, 0, mapWidth*tileWidth, mapHeight*tileHeight);
 		
-		int xmin = Math.max(x / gridWidth, 0);
-		int ymin = Math.max(y / gridHeight, 0);
+		int xmin = Math.max(x / tileWidth, 0);
+		int ymin = Math.max(y / tileHeight, 0);
 		
 		int r = mapTiles.length;
 		int c = mapTiles[0].length;
 
-		int xmax = Math.min((x + (int)size.getWidth()) / gridWidth, c);
-		int ymax = Math.min((y + (int)size.getHeight()) / gridHeight, r);
+		int xmax = Math.min((x + (int)size.getWidth()) / tileWidth, c);
+		int ymax = Math.min((y + (int)size.getHeight()) / tileHeight, r);
 		
 		for (int j=ymin; j < ymax; j++) {
 			for (int i=xmin; i < xmax; i++) {
 				if (getTile(i,j) != null) {
 					g.drawImage(getTile(i,j).getImage(), 
-							i*gridWidth, 
-							j*gridHeight, 
-							gridWidth, 
-							gridHeight, 
+							i*tileWidth, 
+							j*tileHeight, 
+							tileWidth, 
+							tileHeight, 
 							null);
 				}
 			}
@@ -136,8 +137,8 @@ public class Map {
 		scaleFactor = s;
 		scaleWidth = (int)(mapWidth / (scaleFactor > 0 ? scaleFactor : 1));
 		scaleHeight = (int)(mapHeight / (scaleFactor > 0 ? scaleFactor : 1));
-		gridWidth /= scaleFactor;
-		gridHeight /= scaleFactor;
+		tileWidth /= scaleFactor;
+		tileHeight /= scaleFactor;
 	}
 	
 	public void setWidth(int w) { mapWidth = w; }
@@ -146,13 +147,9 @@ public class Map {
 	
 	public void setDepth(int d) { mapDepth = d; }
 	
-	public void setGridWidth(int gw) { gridWidth = gw; }
+	public void setTileWidth(int tw) { tileWidth = tw; }
 	
-	public void setGridHeight(int gh) { gridHeight = gh; }
-	
-	//public void setTileWidth(int tw) { tileWidth = tw; }
-	
-	//public void setTileHeight(int th) { tileHeight = th; }
+	public void setTileHeight(int th) { tileHeight = th; }
 	
 	public void setTile(int x, int y, Tile t) {
 		setTile(x,y,0,t); // set first layer by default
@@ -183,13 +180,9 @@ public class Map {
 	
 	public int getLayers() { return mapDepth; }
 	
-	public int getGridWidth() { return gridWidth; }
+	public int getTileWidth() { return tileWidth; }
 	
-	public int getGridHeight() { return gridHeight; }
-	
-	//public int getTileWidth() { return tileWidth; }
-	
-	//public int getTileHeight() { return tileHeight; }
+	public int getTileHeight() { return tileHeight; }
 	
 	public Tile getTile(int x, int y) {
 		return getTile(x,y,0); // get first layer by default
