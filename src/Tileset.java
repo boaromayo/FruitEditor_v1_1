@@ -31,10 +31,10 @@ public class Tileset {
 		tilesetWidth = tileWidth;
 		tilesetHeight = tileHeight;
 		
-		int tw = (int)(tilesetWidth / tileWidth);
-		int th = (int)(tilesetHeight / tileHeight);
+		int rows = (int)(tilesetWidth / tileWidth);
+		int cols = (int)(tilesetHeight / tileHeight);
 		
-		fruitTiles = new Tile[th][tw]; // Set number of tiles based on (tileset size / grid size).
+		fruitTiles = new Tile[rows][cols]; // Set number of tiles based on (tileset size / tile size).
 		fruitTiles[0][0] = new Tile(); // Set first tile as blank tile.
 		
 		tilesetImg = null;
