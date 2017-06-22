@@ -56,8 +56,8 @@ public class TilePanel extends JPanel implements MouseListener,
 		tilesetWidth = tileset.getWidth();
 		tilesetHeight = tileset.getHeight();
 		
-		gridWidth = tileset.getGridWidth();
-		gridHeight = tileset.getGridHeight();
+		gridWidth = tileset.getTileWidth();
+		gridHeight = tileset.getTileHeight();
 		
 		setBounds(0, 0, FruitEditor.SCREEN_WIDTH / 4, FruitEditor.SCREEN_HEIGHT);
 		setPreferredSize(new Dimension(
@@ -228,8 +228,8 @@ public class TilePanel extends JPanel implements MouseListener,
 		tilesetWidth = t.getWidth();
 		tilesetHeight = t.getHeight();
 		
-		gridWidth = t.getGridWidth();
-		gridHeight = t.getGridHeight();
+		gridWidth = t.getTileWidth();
+		gridHeight = t.getTileHeight();
 		
 		selectedTile = t.getTile(0,0);
 		

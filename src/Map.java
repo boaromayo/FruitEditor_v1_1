@@ -36,17 +36,10 @@ public class Map {
 	private int scaleFactor;
 	private int scaleWidth;
 	private int scaleHeight;
-	
-	// GRID DIMENSIONS.
-	//private int gridWidth;
-	//private int gridHeight;
 
 	// TILE DIMENSIONS.
 	private int tileWidth;
 	private int tileHeight;
-	
-	// CURSOR.
-	//private Cursor cursor;
 	
 	public Map() {
 		this(8, 8, 24, 24);
@@ -57,6 +50,12 @@ public class Map {
 		mapHeight = map.getHeight();
 		mapDepth = 1;
 		tileWidth = map.getTileWidth();
+		tileHeight = map.getTileHeight();
+		scaleFactor = map.getScale();
+		
+		initTiles();
+		setScale(scaleFactor);
+		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public Map(int width, int height) {
@@ -198,15 +197,15 @@ public class Map {
 	
 	public int[][][] getMapIntArray() {
 		int[][][] sheet = new int[mapHeight][mapWidth][mapDepth];
-		int h = sheet.length;
-		int w = sheet[0].length;
-		int d = sheet[0][0].length;
+		int rows = sheet.length;
+		int cols = sheet[0].length;
+		int layers = sheet[0][0].length;
 		
 		int i, j, k; // loop counters
 		
-		for (i=0; i < h; i++) {
-			for (j=0; j < w; j++) {
-				for (k=0; k < d; k++) {
+		for (i=0; i < rows; i++) {
+			for (j=0; j < cols; j++) {
+				for (k=0; k < layers; k++) {
 					if (mapTiles[i][j][k] == null)
 						sheet[i][j][k] = -1;
 					else
@@ -224,13 +223,13 @@ public class Map {
 	
 	public int[][] getMapIntArray2(int layer) {
 		int[][] sheet = new int[mapHeight][mapWidth];
-		int r = sheet.length;
-		int c = sheet[0].length;
+		int rows = sheet.length;
+		int cols = sheet[0].length;
 		
 		int i, j; // loop counters
 		
-		for (i=0; i < r; i++) {
-			for (j=0; j < c; j++) {
+		for (i=0; i < rows; i++) {
+			for (j=0; j < cols; j++) {
 				if (mapTiles[i][j][layer] == null)
 					sheet[i][j] = -1;
 				else

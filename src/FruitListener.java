@@ -252,12 +252,12 @@ public class FruitListener implements ActionListener,
 	}
 	
 	private void closeAction() {
-		// If panel active and file blank, prompt user warning.
+		// If panel active and changes made, prompt user warning.
 		if (fruitEditor.getActiveFile() == null && 
 				fruitEditor.isPanelActive()) {
 			int confirm = JOptionPane.showConfirmDialog(
 				fruitEditor.getFrame(), 
-				"Save before closing?",
+				"Save before closing?\nUnsaved changes may be lost.",
 				"Close FruitEditor",
 				JOptionPane.YES_NO_CANCEL_OPTION);
 		
@@ -273,11 +273,11 @@ public class FruitListener implements ActionListener,
 	}
 	
 	private void undo() {
-		fruitEditor.update();
+		fruitEditor.getMapPanel().undo();
 	}
 	
 	private void redo() {
-		fruitEditor.update();
+		fruitEditor.getMapPanel().redo();
 	}
 	
 	private void cutAction() {
@@ -451,8 +451,8 @@ public class FruitListener implements ActionListener,
 			// Write map parameters in file.
 			writer.print(map.getWidth() + " ");
 			writer.print(map.getHeight() + " ");
-			writer.print(map.getGridWidth() + " ");
-			writer.println(map.getGridHeight());
+			writer.print(map.getTileWidth() + " ");
+			writer.println(map.getTileHeight());
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();
