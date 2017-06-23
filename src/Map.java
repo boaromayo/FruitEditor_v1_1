@@ -53,7 +53,7 @@ public class Map {
 		tileHeight = map.getTileHeight();
 		scaleFactor = map.getScale();
 		
-		initTiles();
+		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
 		setDrawMode(DrawMode.PENCIL);
 	}
@@ -66,7 +66,7 @@ public class Map {
 		tileHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 
-		initTiles();
+		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
 		setDrawMode(DrawMode.PENCIL);
 	}
@@ -79,7 +79,7 @@ public class Map {
 		tileHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 		
-		initTiles();
+		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
 		setDrawMode(DrawMode.PENCIL);
 	}
@@ -92,13 +92,9 @@ public class Map {
 		tileHeight = th;
 		scaleFactor = 1;
 		
-		initTiles();
+		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
 		setDrawMode(DrawMode.PENCIL);
-	}
-	
-	public void initTiles() { 
-		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 	}
 	
 	public void draw(Graphics g, int x, int y, Dimension size) {
@@ -128,6 +124,43 @@ public class Map {
 		}
 	}
 	
+	public void resize(int w, int h) {
+		Tile[][][] newMapTiles = new Tile[h][w][mapDepth];
+		
+		mapWidth = w;
+		mapHeight = h;
+		
+		int r = Math.min(mapTiles.length, h);
+		int c = Math.min(mapTiles[0].length, w);
+		
+		for (int j=0; j < r; j++) {
+			for (int i=0; i < c; i++) {
+				newMapTiles[j][i][0] = mapTiles[j][i][0];
+			}
+		}
+		mapTiles = newMapTiles;
+	}
+	
+	public void shift(int tx, int ty) {
+		Tile[][][] newMapTiles = new Tile[mapHeight][mapWidth][mapDepth];
+		
+		int r = newMapTiles.length;
+		int c = newMapTiles[0].length;
+		
+		int xstart = Math.max(0, -tx);
+		int ystart = Math.max(0, -ty);
+		
+		int xend = Math.min(c, c - tx);
+		int yend = Math.min(r, r - ty);
+		
+		for (int j=ystart; j < yend; j++) {
+			for (int i=xstart; i < xend; i++) {
+				newMapTiles[j+ty][i+tx][0] = mapTiles[j][i][0];
+			}
+		}
+		mapTiles = newMapTiles;
+	}
+	
 	public void setName(String n) {
 		name = n;
 	}
@@ -140,9 +173,9 @@ public class Map {
 		tileHeight /= scaleFactor;
 	}
 	
-	public void setWidth(int w) { mapWidth = w; }
+	/*public void setWidth(int w) { mapWidth = w; }
 	
-	public void setHeight(int h) { mapHeight = h; }
+	public void setHeight(int h) { mapHeight = h; }*/
 	
 	public void setDepth(int d) { mapDepth = d; }
 	
@@ -177,7 +210,7 @@ public class Map {
 	
 	public int getHeight() { return mapHeight; }
 	
-	public int getLayers() { return mapDepth; }
+	public int getDepth() { return mapDepth; }
 	
 	public int getTileWidth() { return tileWidth; }
 	

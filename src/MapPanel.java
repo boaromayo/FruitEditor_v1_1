@@ -167,6 +167,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void update() {
+		// Detect that changes are made too.
 		revalidate();
 		repaint();
 	}
@@ -330,10 +331,10 @@ public class MapPanel extends JPanel implements MouseListener,
 	 *	return;
 	 *========================================**/
 	private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
-		if (targetTile == newTile)
+		if (targetTile.equals(newTile))
 			return;
 		
-		
+		update();
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -365,14 +366,31 @@ public class MapPanel extends JPanel implements MouseListener,
 		map.setName(n);
 	}
 	
-	public synchronized void setMapSize(int w, int h) {
+	public synchronized void resizeMap(int w, int h) {
 		mapWidth = w;
 		mapHeight = h;
-		map.setWidth(mapWidth);
-		map.setHeight(mapHeight);
+		map.resize(mapWidth,mapHeight);
 		
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		
+		update();
+	}
+	
+	public synchronized void shiftMap(int dir, int t) {
+		switch(dir) {
+		case 0:
+			map.shift(0, -t);
+			break;
+		case 1:
+			map.shift(-t, 0);
+			break;
+		case 2:
+			map.shift(t, 0);
+			break;
+		case 3:
+			map.shift(0, t);
+			break;
+		}
 		update();
 	}
 	
