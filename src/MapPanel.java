@@ -228,8 +228,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	private void drawCursor(Graphics g, int x, int y) {
 		Graphics2D g2 = convertTo2d(g);
-		int mx = x - (x % gridWidth); // set the cursor positions
-		int my = y - (y % gridHeight);
+		int mx = snap(x, gridWidth); // set the cursor positions
+		int my = snap(y, gridHeight);
 		
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(1));
@@ -242,8 +242,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	private void drawEventCursor(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
-		int tx = cursorX - (cursorX % gridWidth);
-		int ty = cursorY - (cursorY % gridHeight);
+		int tx = snap(cursorX, gridWidth);
+		int ty = snap(cursorY, gridHeight);
 		
 		g2.setStroke(new BasicStroke(3));
 		g2.setColor(Color.BLACK);
