@@ -562,10 +562,10 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		// if left-click btn is pressed
 		if (btn == MouseEvent.BUTTON1) {
-			mouseX = e.getX() - (e.getX() % gridWidth);
-			mouseY = e.getY() - (e.getY() % gridHeight);
-			int tx = mouseX / gridWidth;
-			int ty = mouseY / gridHeight;
+			mouseX = snap(e.getX(), gridWidth);
+			mouseY = snap(e.getY(), gridHeight);
+			int tx = pixelToTile(mouseX,mouseY).x;
+			int ty = pixelToTile(mouseX,mouseY).y;
 			
 			if (isPanelActive() && 
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -587,10 +587,10 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		// if left-click btn released
 		if (btn == MouseEvent.BUTTON1) {
-			oldmouseX = e.getX() - (e.getX() % gridWidth);
-			oldmouseY = e.getY() - (e.getY() % gridHeight);
-			int tx = oldmouseX / gridWidth;
-			int ty = oldmouseY / gridHeight;
+			oldmouseX = snap(e.getX(), gridWidth);
+			oldmouseY = snap(e.getY(), gridHeight);
+			int tx = pixelToTile(oldmouseX,oldmouseY).x;
+			int ty = pixelToTile(oldmouseX,oldmouseY).y;
 			
 			if (isPanelActive() && 
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
