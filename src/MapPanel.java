@@ -167,7 +167,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void update() {
-		// Detect that changes are made too.
+		// TODO: Detect that changes are made too.
 		revalidate();
 		repaint();
 	}
@@ -315,8 +315,9 @@ public class MapPanel extends JPanel implements MouseListener,
 	 * 
 	 * To achieve this effect efficiently, a loop moving east and
 	 * west will be used, like so:
+	 *  let node tile = tile(x,y) on map.
 	 * 	if target tile == new tile return;
-	 *	if tile(x,y) != target tile return;
+	 *	if node tile != target tile return;
 	 *	Set q to empty queue.
 	 *	Add node tile to q.
 	 *	Loop for each tile n to q
@@ -333,6 +334,9 @@ public class MapPanel extends JPanel implements MouseListener,
 	private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
 		if (targetTile.equals(newTile))
 			return;
+		
+		Tile node = map.getTile(x, y);
+		
 		
 		update();
 	}
@@ -395,7 +399,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	/**========================================
-	// setGrid() - Set grid on/off.
+	 * setGrid() - Set grid on/off.
 	//=========================================**/
 	public void setGrid(boolean gr) {
 		grid = gr;
@@ -406,7 +410,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	/**========================================
-	// setMode(mode) - Set mode.
+	 * setMode(mode) - Set mode.
 	//=========================================**/
 	public void setMode(EditorMode m) {
 		editorMode = m;
@@ -421,11 +425,11 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public int getMapX() {
-		return (int)mouseX / gridWidth;
+		return pixelToTile(mouseX,mouseY).x;
 	}
 	
 	public int getMapY() {
-		return (int)mouseY / gridHeight;
+		return pixelToTile(mouseX,mouseY).y;
 	}
 	
 	public String getMapName() {
@@ -462,6 +466,27 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	/**=======================================
+	 * tileToPixel(x,y) - Convert tile to pixel coordinates.
+	//========================================**/
+	public Point tileToPixel(int x, int y) {
+		return new Point(x * gridWidth, y * gridHeight);
+	}
+	
+	/**=======================================
+	 * pixelToTile(x,y) - Convert pixel to tile coordinates.
+	//========================================**/
+	public Point pixelToTile(int x, int y) {
+		return new Point(x / gridWidth, y / gridHeight);
+	}
+	
+	/**=====================================
+	 * snap(n,snap) - Ensures tile snaps to map's grid.
+	//=====================================**/
+	public int snap(int n, int snap) {
+		return n - (n % snap);
+	}
+	
+	/**=======================================
 	 * actionPerformed(ActionEvent) - Perform ActionEvents.
 	//========================================**/
 	public void actionPerformed(ActionEvent e) {
@@ -482,10 +507,10 @@ public class MapPanel extends JPanel implements MouseListener,
 	 * MOUSE MOTION LISTENER METHODS.
 	//========================================**/
 	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX() - (e.getX() % gridWidth);
-		mouseY = e.getY() - (e.getY() % gridHeight);
-		int tx = mouseX / gridWidth; // make the tile coordinates
-		int ty = mouseY / gridHeight;
+		mouseX = snap(e.getX(), gridWidth);
+		mouseY = snap(e.getY(), gridHeight);
+		int tx = pixelToTile(mouseX,mouseY).x; // make the tile coordinates
+		int ty = pixelToTile(mouseX,mouseY).y;
 		
 		// Set status panel
 		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -504,14 +529,14 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	public void mouseDragged(MouseEvent e) {
 		int btn = e.getButton();
-		mouseX = e.getX() - (e.getX() % gridWidth);
-		mouseY = e.getY() - (e.getY() % gridHeight);
+		mouseX = snap(e.getX(), gridWidth);
+		mouseY = snap(e.getY(), gridHeight);
 		oldmouseX = mouseX;
 		oldmouseY = mouseY;
-		int tx = mouseX / gridWidth;
-		int ty = mouseY / gridHeight;
-		int otx = oldmouseX / gridWidth;
-		int oty = oldmouseY / gridHeight;
+		int tx = pixelToTile(mouseX,mouseY).x;
+		int ty = pixelToTile(mouseX,mouseY).y;
+		int otx = pixelToTile(oldmouseX,oldmouseY).x;
+		int oty = pixelToTile(oldmouseX,oldmouseY).y;
 		
 		// Set status panel
 		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
