@@ -99,7 +99,8 @@ public class Map {
 		
 		for (int j=ymin; j < ymax; j++) {
 			for (int i=xmin; i < xmax; i++) {
-				getTile(i,j).draw(g, i*tileWidth, j*tileHeight);
+				if (getTile(i,j) != null)
+					getTile(i,j).draw(g, i*tileWidth, j*tileHeight);
 			}
 		}
 	}
