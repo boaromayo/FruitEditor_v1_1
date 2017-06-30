@@ -45,19 +45,6 @@ public class Map {
 		this(8, 8, 24, 24);
 	}
 	
-	public Map(Map map) { // Copy constructor.
-		mapWidth = map.getWidth();
-		mapHeight = map.getHeight();
-		mapDepth = 1;
-		tileWidth = map.getTileWidth();
-		tileHeight = map.getTileHeight();
-		scaleFactor = map.getScale();
-		
-		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
-		setScale(scaleFactor);
-		setDrawMode(DrawMode.PENCIL);
-	}
-	
 	public Map(int width, int height) {
 		mapWidth = width;
 		mapHeight = height;
@@ -112,14 +99,7 @@ public class Map {
 		
 		for (int j=ymin; j < ymax; j++) {
 			for (int i=xmin; i < xmax; i++) {
-				if (getTile(i,j) != null) {
-					g.drawImage(getTile(i,j).getImage(), 
-							i*tileWidth, 
-							j*tileHeight, 
-							tileWidth, 
-							tileHeight, 
-							null);
-				}
+				getTile(i,j).draw(g, i*tileWidth, j*tileHeight);
 			}
 		}
 	}
@@ -127,8 +107,8 @@ public class Map {
 	public void resize(int w, int h) {
 		Tile[][][] newMapTiles = new Tile[h][w][mapDepth];
 		
-		mapWidth = w;
-		mapHeight = h;
+		setWidth(w);
+		setHeight(h);
 		
 		int r = Math.min(mapTiles.length, h);
 		int c = Math.min(mapTiles[0].length, w);
@@ -173,9 +153,9 @@ public class Map {
 		tileHeight /= scaleFactor;
 	}
 	
-	/*public void setWidth(int w) { mapWidth = w; }
+	public void setWidth(int w) { mapWidth = w; }
 	
-	public void setHeight(int h) { mapHeight = h; }*/
+	public void setHeight(int h) { mapHeight = h; }
 	
 	public void setDepth(int d) { mapDepth = d; }
 	
