@@ -77,10 +77,10 @@ public class Tile {
 		setTransparent(t.isTransparent());
 	}*/
 	
-	public void replace(Tile t1, Tile t2) {
+	public static void replace(Tile t1, Tile t2) {
 		if (t1 == null || t2 == null) return;
 		
-		if (!t1.equals(t2)) {
+		if (!t1.isEqual(t2)) {
 			t1 = t2;
 		}
 	}
@@ -91,8 +91,8 @@ public class Tile {
 	
 	public void setDanger(boolean d) { danger = d; }
 	
-	public boolean equals(Tile t) {
-		if (t == null) return false;
+	public boolean isEqual(Tile t) {
+		if (this == null || t == null) return false;
 		
 		if (this.id == t.id) {
 			return true;
@@ -102,9 +102,11 @@ public class Tile {
 	}
 	
 	public static boolean compareTo(Tile t1, Tile t2) {
-		if (t1 == null && t2 == null) return false;
+		if (t1 == null && t2 == null) return true;
 		
-		return t1.equals(t2);
+		if (t1 == null) return false;
+		
+		return t1.isEqual(t2);
 	}
 	
 	public Tile getTile() { return this; }
