@@ -22,7 +22,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	// EVENT LISTENER.
 	private FruitListener fruitListener;
 	
-	// EDITOR MODE.
+	// MODES.
+	private DrawMode drawMode;
 	private EditorMode editorMode;
 		
 	// POPUP (RIGHT-CLICK) MENU.
@@ -50,6 +51,9 @@ public class MapPanel extends JPanel implements MouseListener,
 	// GRID ON/OFF.
 	private boolean grid = true;
 	
+	// MAP CHANGED.
+	private boolean changed = false;
+	
 	// MOUSE COORDS.
 	private int mouseX;
 	private int mouseY;
@@ -67,13 +71,14 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		fruitListener = f.getListener();
 		
+		drawMode = DrawMode.PENCIL;
 		editorMode = EditorMode.MAP_MODE;
 		
 		mapWidth = map.getWidth();
 		mapHeight = map.getHeight();
 		
-		gridWidth = map.getGridWidth();
-		gridHeight = map.getGridHeight();
+		gridWidth = map.getTileWidth();
+		gridHeight = map.getTileHeight();
 		
 		mouseX = mouseY = 0;
 		
@@ -86,7 +91,6 @@ public class MapPanel extends JPanel implements MouseListener,
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		addKeyListener(this);
-		addPropertyChangeListener(fruitListener);
 		
 		setFocusable(true);
 		requestFocusInWindow();
@@ -167,6 +171,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void update() {
+		// TODO: Detect changes made.
+		changed = true;
 		revalidate();
 		repaint();
 	}
@@ -185,7 +191,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	public synchronized void draw(Graphics g) {	
 		if (isPanelActive()) {
 			if (map != null) {
-				map.draw(g, 
+				map.draw(g,
 						(int)viewport.getViewPosition().getX(),
 						(int)viewport.getViewPosition().getY(),
 						viewport.getSize());
@@ -205,7 +211,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	private void drawGrid(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
-		g2.setColor(Color.GRAY);
+		g2.setColor(Color.DARK_GRAY);
 		g2.setStroke(new BasicStroke(1, 
 				BasicStroke.CAP_BUTT, 
 				BasicStroke.JOIN_BEVEL, 
@@ -227,8 +233,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	private void drawCursor(Graphics g, int x, int y) {
 		Graphics2D g2 = convertTo2d(g);
-		int mx = x - (x % gridWidth); // set the cursor positions
-		int my = y - (y % gridHeight);
+		int mx = snap(x, gridWidth); // set the cursor positions
+		int my = snap(y, gridHeight);
 		
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(1));
@@ -241,8 +247,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	private void drawEventCursor(Graphics g) {
 		Graphics2D g2 = convertTo2d(g);
-		int tx = cursorX - (cursorX % gridWidth);
-		int ty = cursorY - (cursorY % gridHeight);
+		int tx = snap(cursorX, gridWidth);
+		int ty = snap(cursorY, gridHeight);
 		
 		g2.setStroke(new BasicStroke(3));
 		g2.setColor(Color.BLACK);
@@ -254,7 +260,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mapPressed(int x, int y) {
-		switch (map.drawMode()) {
+		switch (drawMode) {
 		case PENCIL:
 			map.setTile(x, y, fruitEditor.getSelectedTile());
 			break;
@@ -272,7 +278,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mapPressed(int x1, int y1, int x2, int y2) {
-		switch (map.drawMode()) {
+		switch (drawMode) {
 		case PENCIL:
 			map.setTile(x1, y1, fruitEditor.getSelectedTile());
 			break;
@@ -304,9 +310,89 @@ public class MapPanel extends JPanel implements MouseListener,
 		}
 	}
 	
+	/**========================================
+	 * floodFill(x,y,targetTile,newTile) - Fill a selected area with a new Tile until it
+	 * reaches a Tile different from the target.
+	 * @param x - starting x location of target
+	 * @param y - starting y location of target
+	 * @param targetTile - The targeted old Tile.
+	 * @param newTile - The new Tile to be set.
+	 * 
+	 * To achieve this effect efficiently, a loop moving east and
+	 * west will be used, like so:
+	 *  let node tile = tile(x,y) on map.
+	 * 	if target tile == new tile return;
+	 *	if node tile != target tile return;
+	 *	Set q to empty queue. (since we assume the map is our queue, we can omit this step)
+	 *	Add node to q.
+	 *	Loop for each element n (int assumed) in q
+	 *		Init integers w (west of node) and e (east of node) to n.
+	 *		Move w west until tile west of w != target tile.
+	 *		Move e east until tile east of e != target tile.
+	 *		Loop for each node n between east and west
+	 *			n tile is set to new tile.
+	 *			if tile north of n == target tile, add to q.
+	 *			if tile south of n == target tile, add to q.
+	 *	Loop until q is finished.
+	 *	return;
+	 *
+	 * Here's the revised algorithm:
+	 *  let node tile = tile(x,y) on map.
+	 *  if target tile == new tile return;
+	 *  if node tile != target tile return;
+	 *  init integer w to n.
+	 *  init integer e east of n.
+	 *  loop
+	 *  	move w west until tile west of w != target tile.
+	 *  loop
+	 *      move e east until tile east of e != target tile.
+	 *  loop for each node n between w and e
+	 *      if tile north of n == target tile, add to recursion stack.
+	 *      if tile south of n == target tile, add to recursion stack.
+	 *  loop until recursion stack is finished.
+	 *  return;
+	//========================================**/
 	private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
-		if (targetTile == newTile)
+		// Use static comparator method to prevent null-case errors.
+		if (Tile.compareTo(targetTile,newTile))
 			return;
+		
+		Tile node = map.getTile(x,y);
+		
+		if (!Tile.compareTo(node,targetTile))
+			return;
+		
+		int w = x; // Set to x instead of x-1 since west will draw newTile where node is.
+		int e = x+1;
+		
+		while (w >= 0 && Tile.compareTo(map.getTile(w,y),targetTile)) {
+			map.setTile(w, y, newTile);
+			w--;
+		}
+		w++; // Back off to prevent from going out-of-bounds.
+		
+		while (e < mapWidth && Tile.compareTo(map.getTile(e,y),targetTile)) {
+			map.setTile(e, y, newTile);
+			e++;
+		}
+		e--;
+		
+		// Recursively draw in newTile for tiles north and south of tile(i,y).
+		for (int i = w; i <= e; i++) {
+			if (y > 0 && y < mapHeight - 1 && 
+					Tile.compareTo(map.getTile(i,y-1),newTile) && 
+					Tile.compareTo(map.getTile(i,y+1),newTile)) {
+				continue;
+			}
+			if (y > 0 && Tile.compareTo(map.getTile(i,y-1),targetTile)) {
+				floodFill(i, y-1, targetTile, newTile);
+			}
+			if (y < mapHeight - 1 && Tile.compareTo(map.getTile(i,y+1),targetTile)) {
+				floodFill(i, y+1, targetTile, newTile);
+			}
+		}
+		
+		update();
 	}
 	
 	public void setViewport(JViewport vp) {
@@ -321,8 +407,8 @@ public class MapPanel extends JPanel implements MouseListener,
 		mapWidth = m.getWidth();
 		mapHeight = m.getHeight();
 		
-		gridWidth = m.getGridWidth();
-		gridHeight = m.getGridHeight();
+		gridWidth = m.getTileWidth();
+		gridHeight = m.getTileHeight();
 		
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		
@@ -330,6 +416,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			setPanelActive(true);
 		}
 		
+		fruitEditor.setActiveFile(null);
 		fruitEditor.update();
 	}
 	
@@ -337,19 +424,36 @@ public class MapPanel extends JPanel implements MouseListener,
 		map.setName(n);
 	}
 	
-	public synchronized void setMapSize(int w, int h) {
+	public synchronized void resizeMap(int w, int h) {
 		mapWidth = w;
 		mapHeight = h;
-		map.setWidth(mapWidth);
-		map.setHeight(mapHeight);
+		map.resize(mapWidth,mapHeight);
 		
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		
 		update();
 	}
 	
+	public synchronized void shiftMap(int dir, int t) {
+		switch(dir) {
+		case 0:
+			map.shift(0, -t);
+			break;
+		case 1:
+			map.shift(-t, 0);
+			break;
+		case 2:
+			map.shift(t, 0);
+			break;
+		case 3:
+			map.shift(0, t);
+			break;
+		}
+		update();
+	}
+	
 	/**========================================
-	// setGrid() - Set grid on/off.
+	 * setGrid() - Set grid on/off.
 	//=========================================**/
 	public void setGrid(boolean gr) {
 		grid = gr;
@@ -360,14 +464,17 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	/**========================================
-	// setMode(mode) - Set mode.
+	// setDrawMode(drawMode) - Set the draw mode.
+	//=========================================**/
+	public void setDrawMode(DrawMode d) {
+		drawMode = d;
+	}
+	
+	/**========================================
+	 * setMode(mode) - Set mode.
 	//=========================================**/
 	public void setMode(EditorMode m) {
 		editorMode = m;
-	}
-	
-	public boolean gridOn() {
-		return grid;
 	}
 	
 	public boolean isPanelActive() {
@@ -375,11 +482,11 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public int getMapX() {
-		return (int)mouseX / gridWidth;
+		return pixelToTile(mouseX,mouseY).x;
 	}
 	
 	public int getMapY() {
-		return (int)mouseY / gridHeight;
+		return pixelToTile(mouseX,mouseY).y;
 	}
 	
 	public String getMapName() {
@@ -392,6 +499,10 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	public int getMapHeight() {
 		return mapHeight;
+	}
+	
+	public boolean hasChanged() {
+		return changed;
 	}
 	
 	// Keep this checkBounds() method private to prevent any interaction with other panels.
@@ -407,6 +518,35 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	
+	public void undo() {
+		fruitEditor.update();
+	}
+	
+	public void redo() {
+		fruitEditor.update();
+	}
+	
+	/**=======================================
+	 * tileToPixel(x,y) - Convert tile to pixel coordinates.
+	//========================================**/
+	public Point tileToPixel(int x, int y) {
+		return new Point(x * gridWidth, y * gridHeight);
+	}
+	
+	/**=======================================
+	 * pixelToTile(x,y) - Convert pixel to tile coordinates.
+	//========================================**/
+	public Point pixelToTile(int x, int y) {
+		return new Point(x / gridWidth, y / gridHeight);
+	}
+	
+	/**=====================================
+	 * snap(n,snap) - Ensures tile snaps to map's grid.
+	//=====================================**/
+	public int snap(int n, int snap) {
+		return n - (n % snap);
+	}
+	
 	/**=======================================
 	 * actionPerformed(ActionEvent) - Perform ActionEvents.
 	//========================================**/
@@ -420,18 +560,14 @@ public class MapPanel extends JPanel implements MouseListener,
 		}
 	}
 	
-	public void propertyChange(PropertyChangeEvent e) {
-		fruitListener.propertyChange(e);
-	}
-	
 	/**=======================================
 	 * MOUSE MOTION LISTENER METHODS.
 	//========================================**/
 	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX() - (e.getX() % gridWidth);
-		mouseY = e.getY() - (e.getY() % gridHeight);
-		int tx = mouseX / gridWidth; // make the tile coordinates
-		int ty = mouseY / gridHeight;
+		mouseX = snap(e.getX(), gridWidth);
+		mouseY = snap(e.getY(), gridHeight);
+		int tx = pixelToTile(mouseX,mouseY).x; // make the tile coordinates
+		int ty = pixelToTile(mouseX,mouseY).y;
 		
 		// Set status panel
 		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -450,14 +586,14 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	public void mouseDragged(MouseEvent e) {
 		int btn = e.getButton();
-		mouseX = e.getX() - (e.getX() % gridWidth);
-		mouseY = e.getY() - (e.getY() % gridHeight);
+		mouseX = snap(e.getX(), gridWidth);
+		mouseY = snap(e.getY(), gridHeight);
 		oldmouseX = mouseX;
 		oldmouseY = mouseY;
-		int tx = mouseX / gridWidth;
-		int ty = mouseY / gridHeight;
-		int otx = oldmouseX / gridWidth;
-		int oty = oldmouseY / gridHeight;
+		int tx = pixelToTile(mouseX,mouseY).x;
+		int ty = pixelToTile(mouseX,mouseY).y;
+		int otx = pixelToTile(oldmouseX,oldmouseY).x;
+		int oty = pixelToTile(oldmouseX,oldmouseY).y;
 		
 		// Set status panel
 		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -483,10 +619,10 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		// if left-click btn is pressed
 		if (btn == MouseEvent.BUTTON1) {
-			mouseX = e.getX() - (e.getX() % gridWidth);
-			mouseY = e.getY() - (e.getY() % gridHeight);
-			int tx = mouseX / gridWidth;
-			int ty = mouseY / gridHeight;
+			mouseX = snap(e.getX(), gridWidth);
+			mouseY = snap(e.getY(), gridHeight);
+			int tx = pixelToTile(mouseX,mouseY).x;
+			int ty = pixelToTile(mouseX,mouseY).y;
 			
 			if (isPanelActive() && 
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -508,10 +644,10 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		// if left-click btn released
 		if (btn == MouseEvent.BUTTON1) {
-			oldmouseX = e.getX() - (e.getX() % gridWidth);
-			oldmouseY = e.getY() - (e.getY() % gridHeight);
-			int tx = oldmouseX / gridWidth;
-			int ty = oldmouseY / gridHeight;
+			oldmouseX = snap(e.getX(), gridWidth);
+			oldmouseY = snap(e.getY(), gridHeight);
+			int tx = pixelToTile(oldmouseX,oldmouseY).x;
+			int ty = pixelToTile(oldmouseX,oldmouseY).y;
 			
 			if (isPanelActive() && 
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -556,15 +692,25 @@ public class MapPanel extends JPanel implements MouseListener,
 	//=================================**/
 	public void keyPressed(KeyEvent e) {
 		if (editorMode.equals(EditorMode.EVENT_MODE)) {
-			
+			/* TODO: Handle event cursor input. */
 		}
 	}
 	
 	public void keyReleased(KeyEvent e) {
-		
+		if (editorMode.equals(EditorMode.EVENT_MODE)) {
+			/* TODO: Handle event cursor input. */
+		}
 	}
 	
 	public void keyTyped(KeyEvent e) {
+		
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeEvent e) {
+		
+	}
+	
+	public void removePropertyChangeListener(PropertyChangeEvent e) {
 		
 	}
 }
