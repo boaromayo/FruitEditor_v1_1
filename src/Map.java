@@ -17,9 +17,6 @@ public class Map {
 	public static final int SCALE_TWO = 2;
 	public static final int SCALE_FOUR = 4;
 	public static final int SCALE_EIGHT = 8;
-
-	// DRAW MODE.
-	private DrawMode drawMode;
 	
 	// MAP NAME.
 	private String name;
@@ -55,7 +52,6 @@ public class Map {
 
 		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
-		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public Map(int width, int height, int depth) {
@@ -68,7 +64,6 @@ public class Map {
 		
 		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
-		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public Map(int width, int height, int tw, int th) {
@@ -81,7 +76,6 @@ public class Map {
 		
 		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
-		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public void draw(Graphics g, int x, int y, Dimension size) {
@@ -172,13 +166,6 @@ public class Map {
 		mapTiles[y][x][z] = t;
 	}
 	
-	/**========================================
-	// setDrawMode(drawMode) - Set the draw mode.
-	//=========================================**/
-	public void setDrawMode(DrawMode d) {
-		drawMode = d;
-	}
-	
 	public String getName() { return name; }
 	
 	public int getScale() { return scaleFactor; }
@@ -203,10 +190,6 @@ public class Map {
 	
 	public Tile getTile(int x, int y, int z) {
 		return mapTiles[y][x][z];
-	}
-	
-	public DrawMode drawMode() {
-		return drawMode;
 	}
 	
 	public int[][][] getMapIntArray() {
