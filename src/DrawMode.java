@@ -2,9 +2,10 @@ package FruitEditor;
 
 public enum DrawMode {
 	PENCIL(0), 
-	RECTANGLE(1), 
-	CIRCLE(2), 
-	FILL(3);
+	LINE(1),
+	RECTANGLE(2), 
+	CIRCLE(3), 
+	FILL(4);
 	
 	private int mode;
 	
