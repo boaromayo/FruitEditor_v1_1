@@ -300,22 +300,24 @@ public class FruitListener implements ActionListener,
 	// SHORTCUT METHODS.
 	//=================================*/
 	private void setGrid(boolean grid) {
-		fruitEditor.getMapPanel().setGrid(grid);
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setGrid(grid);
+	}
+	
+	private void setDrawMode(DrawMode d) {
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setDrawMode(d);
 	}
 	
 	private void setMode(EditorMode e) {
-		fruitEditor.getMapPanel().setMode(e);
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setMode(e);
 	}
 	
 	/*private void setScale(int scale) {
 		Map map = fruitEditor.getMap();
 		map.setScale(scale);
 	}*/
-	
-	private void setDrawMode(DrawMode d) {
-		Map map = fruitEditor.getMap();
-		map.setDrawMode(d);
-	}
 	
 	/**================================
 	// STATE CHANGE METHODS
