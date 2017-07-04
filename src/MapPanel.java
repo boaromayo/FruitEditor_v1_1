@@ -337,16 +337,14 @@ public class MapPanel extends JPanel implements MouseListener,
 	 *	return;
 	 *
 	 * Here's the revised algorithm:
-	 *  let node tile = tile(x,y) on map.
 	 *  if target tile == new tile return;
-	 *  if node tile != target tile return;
-	 *  init integer w to n.
-	 *  init integer e east of n.
+	 *  init integer w to x.
+	 *  init integer e east of x.
 	 *  loop
 	 *  	move w west until tile west of w != target tile.
 	 *  loop
 	 *      move e east until tile east of e != target tile.
-	 *  loop for each node n between w and e
+	 *  loop for each n from w to e
 	 *      if tile north of n == target tile, add to recursion stack.
 	 *      if tile south of n == target tile, add to recursion stack.
 	 *  loop until recursion stack is finished.
@@ -357,12 +355,8 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (Tile.compareTo(targetTile,newTile))
 			return;
 		
-		Tile node = map.getTile(x,y);
-		
-		if (!Tile.compareTo(node,targetTile))
-			return;
-		
-		int w = x; // Set to x instead of x-1 since west will draw newTile where node is.
+		// Set to x instead of x-1 since west will draw newTile where (x,y) is.
+		int w = x;
 		int e = x+1;
 		
 		while (w >= 0 && Tile.compareTo(map.getTile(w,y),targetTile)) {
