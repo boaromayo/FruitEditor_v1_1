@@ -15,7 +15,7 @@ public class Tile {
 	private int id;
 	private String name;
 	
-	// TILE CONDITIONS.
+	// TILE PROPERTIES.
 	private boolean solid;
 	private boolean transparent;
 	private boolean danger;
@@ -80,7 +80,7 @@ public class Tile {
 	public static void replace(Tile t1, Tile t2) {
 		if (t1 == null || t2 == null) return;
 		
-		if (!t1.isEqual(t2)) {
+		if (!t1.equals(t2)) {
 			t1 = t2;
 		}
 	}
@@ -91,7 +91,7 @@ public class Tile {
 	
 	public void setDanger(boolean d) { danger = d; }
 	
-	public boolean isEqual(Tile t) {
+	public boolean equals(Tile t) {
 		if (this == null || t == null) return false;
 		
 		if (this.id == t.id) {
@@ -106,7 +106,7 @@ public class Tile {
 		
 		if (t1 == null) return false;
 		
-		return t1.isEqual(t2);
+		return t1.equals(t2);
 	}
 	
 	public Tile getTile() { return this; }
