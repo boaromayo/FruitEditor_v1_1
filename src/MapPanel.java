@@ -22,7 +22,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	// EVENT LISTENER.
 	private FruitListener fruitListener;
 	
-	// EDITOR MODE.
+	// MODES.
+	private DrawMode drawMode;
 	private EditorMode editorMode;
 		
 	// POPUP (RIGHT-CLICK) MENU.
@@ -67,6 +68,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		fruitListener = f.getListener();
 		
+		drawMode = DrawMode.PENCIL;
 		editorMode = EditorMode.MAP_MODE;
 		
 		mapWidth = map.getWidth();
@@ -255,7 +257,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mapPressed(int x, int y) {
-		switch (map.drawMode()) {
+		switch (drawMode) {
 		case PENCIL:
 			map.setTile(x, y, fruitEditor.getSelectedTile());
 			break;
@@ -273,7 +275,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mapPressed(int x1, int y1, int x2, int y2) {
-		switch (map.drawMode()) {
+		switch (drawMode) {
 		case PENCIL:
 			map.setTile(x1, y1, fruitEditor.getSelectedTile());
 			break;
@@ -410,14 +412,17 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	/**========================================
+	// setDrawMode(drawMode) - Set the draw mode.
+	//=========================================**/
+	public void setDrawMode(DrawMode d) {
+		drawMode = d;
+	}
+
+	/**========================================
 	 * setMode(mode) - Set mode.
 	//=========================================**/
 	public void setMode(EditorMode m) {
 		editorMode = m;
-	}
-	
-	public boolean gridOn() {
-		return grid;
 	}
 	
 	public boolean isPanelActive() {
