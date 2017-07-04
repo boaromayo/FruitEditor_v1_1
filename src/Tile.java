@@ -91,22 +91,22 @@ public class Tile {
 	
 	public void setDanger(boolean d) { danger = d; }
 	
-	public boolean equals(Tile t) {
-		if (this == null || t == null) return false;
-		
-		if (this.id == t.id) {
-			return true;
-		}
-		
-		return false;
-	}
-	
 	public static boolean compareTo(Tile t1, Tile t2) {
 		if (t1 == null && t2 == null) return true;
 		
 		if (t1 == null) return false;
 		
 		return t1.equals(t2);
+	}
+	
+	public boolean equals(Tile t) {
+		if (t == null) return false;
+		
+		if (this.id == t.id) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public Tile getTile() { return this; }
