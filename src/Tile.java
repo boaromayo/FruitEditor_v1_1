@@ -8,8 +8,8 @@ public class Tile {
 	private BufferedImage img;
 	
 	// IMAGE DIMENSIONS.
-	private int imgWidth;
-	private int imgHeight;
+	//private int imgWidth;
+	//private int imgHeight;
 	
 	// ID AND NAME.
 	private int id;
@@ -27,9 +27,6 @@ public class Tile {
 		this.solid = false;
 		this.transparent = false;
 		this.danger = false;
-		
-		imgWidth = 0;
-		imgHeight = 0;
 	}
 	
 	public Tile(Tile t) {
@@ -41,8 +38,6 @@ public class Tile {
 			this.img = img;
 			this.id = id;
 			this.name = name;
-			imgWidth = img.getWidth();
-			imgHeight = img.getHeight();
 		} catch (RuntimeException e) {
 			System.err.println("ERROR: Could not find image " + name);
 			System.exit(1);
@@ -114,10 +109,6 @@ public class Tile {
 	public int getID() { return id; }
 	
 	public String getName() { return name; }
-	
-	public int getWidth() { return imgWidth; }
-	
-	public int getHeight() { return imgHeight; }
 	
 	public boolean isSolid() { return solid; }
 	
