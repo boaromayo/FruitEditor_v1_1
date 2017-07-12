@@ -17,6 +17,12 @@ public class FruitHistory {
 	
 	public void add(FruitCommand cmd) {
 		undoStack.push(cmd);
+		
+		/* If the 'screenshot' taken is different from the top taken from redo stack,
+		 * or if the user makes a different action, clear redo stack. */
+		if (!redoStack.pop().equals(cmd)) {
+			redoStack.clear();
+		}
 	}
 	
 	public void undo() {
