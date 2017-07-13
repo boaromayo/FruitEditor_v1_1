@@ -2,7 +2,7 @@ package FruitEditor;
 
 import java.util.*;
 
-public class FruitHistory {
+public class UndoManager {
 	
 	// UNDO & REDO STACKS.
 	private Stack<FruitCommand> undoStack;
