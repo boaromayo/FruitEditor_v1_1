@@ -31,8 +31,8 @@ public class Tileset {
 		tilesetWidth = tileWidth;
 		tilesetHeight = tileHeight;
 		
-		int rows = (int)(tilesetWidth / tileWidth);
-		int cols = (int)(tilesetHeight / tileHeight);
+		int cols = (int)(tilesetWidth / tileWidth);
+		int rows = (int)(tilesetHeight / tileHeight);
 		
 		fruitTiles = new Tile[rows][cols]; // Set number of tiles based on (tileset size / tile size).
 		fruitTiles[0][0] = new Tile(); // Set first tile as blank tile.
@@ -102,6 +102,25 @@ public class Tileset {
 		tileHeight = th;
 	}
 	
+	public Tileset(String path, int tw, int th, 
+			int offx, int offy, int spacingw, int spacingh) {
+		tileWidth = tw;
+		tileHeight = th;
+		
+		tilesetImg = FruitImgBank.get().
+				loadBufferedImage(path);
+		
+		tilesetWidth = tilesetImg.getWidth();
+		tilesetHeight = tilesetImg.getHeight();
+		
+		int cols = (int)(tilesetWidth / tileWidth);
+		int rows = (int)(tilesetHeight / tileHeight);
+		
+		fruitTiles = new Tile[rows][cols];
+		
+		initTiles(path, offx, offy, spacingw, spacingh);
+	}
+	
 	public void initTiles(String path) {
 		int r, c; // Loop counters.
 		int i = 0; // Tile id counter.
@@ -129,7 +148,7 @@ public class Tileset {
 		tilesetPath = path;
 		notePath = note;
 		
-		BufferedImage[][] tileImg = getTilesetImages(tilesetImg);
+		BufferedImage[][] tileImg = getTilesetImages();
 		
 		try {
 			File noteFile = new File(notePath);
@@ -166,6 +185,26 @@ public class Tileset {
 		} catch (Exception e) {
 			System.err.println("ERROR: Could not read file " + tilesetPath);
 			System.exit(1);
+		}
+	}
+	
+	public void initTiles(String path, int offX, int offY, 
+			int spacingW, int spacingH) {
+		int r, c; // Loop counters.
+		int i = 0; // Tile id counter.
+		int rows = fruitTiles.length;
+		int cols = fruitTiles[0].length;
+		
+		tilesetPath = path;
+		notePath = "default.txt"; // filler String here
+		
+		BufferedImage[][] tileImg = getTilesetImages(tilesetImg, 
+				offX, offY, spacingW, spacingH);
+		
+		for (r=0; r < rows; r++) {
+			for (c=0; c < cols; c++, i++) {
+				fruitTiles[r][c] = new Tile(i, tileImg[r][c], "None");
+			}
 		}
 	}
 	
@@ -206,24 +245,7 @@ public class Tileset {
 	public String getTilesetPath() { return tilesetPath; }
 	
 	public BufferedImage[][] getTilesetImages() {
-		return getTilesetImages(tilesetPath);
-	}
-	
-	private BufferedImage[][] getTilesetImages(String path) {
-		int rows = fruitTiles.length;
-		int cols = fruitTiles[0].length;
-		BufferedImage[][] tileImg = new BufferedImage[rows][cols];
-		
-		int i, j; // Loop counters
-		
-		for (i=0; i < rows; i++) {
-			for (j=0; j < cols; j++) {
-				tileImg[i][j] = FruitImgBank.get().
-						loadBufferedImage(path, j*tileWidth, i*tileHeight, tileWidth, tileHeight);
-			}
-		}
-		
-		return tileImg;
+		return getTilesetImages(tilesetImg);
 	}
 	
 	private BufferedImage[][] getTilesetImages(BufferedImage img) {
@@ -236,6 +258,29 @@ public class Tileset {
 		for (i=0; i < rows; i++) {
 			for (j=0; j < cols; j++) {
 				tileImg[i][j] = img.getSubimage(j*tileWidth, i*tileHeight, tileWidth, tileHeight);
+			}
+		}
+		
+		return tileImg;
+	}
+	
+	private BufferedImage[][] getTilesetImages(BufferedImage img, 
+			int offX, int offY, int spacingW, int spacingH) {
+		int rows = fruitTiles.length;
+		int cols = fruitTiles[0].length;
+		BufferedImage[][] tileImg = new BufferedImage[rows][cols];
+		
+		int tsw = tilesetWidth - offX;
+		int tsh = tilesetHeight - offY;
+		
+		// Override current tileset image to account for spaces and offset
+		tilesetImg = FruitImgBank.get().loadBufferedImage(tilesetPath, offX, offY, tsw, tsh);
+		
+		int i, j; // Loop counters
+		
+		for (i=0; i < rows; i++) {
+			for (j=0; j < cols; j++) {
+				tileImg[i][j] = img.getSubimage(j*tileWidth+spacingW, i*tileHeight+spacingH, tileWidth, tileHeight);
 			}
 		}
 		
