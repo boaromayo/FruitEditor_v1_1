@@ -10,7 +10,7 @@ public class UndoManager {
 	
 	/* Stack sets to capture and keep track of 
 	 * 'action screenshots' in the editor. */
-	public FruitHistory() {
+	public UndoManager() {
 		undoStack = new Stack<FruitCommand>();
 		redoStack = new Stack<FruitCommand>();
 	}
