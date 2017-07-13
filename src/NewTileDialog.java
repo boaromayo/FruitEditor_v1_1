@@ -26,8 +26,8 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	private JLabel gridHeightLabel;
 	private JLabel offsetXLabel;
 	private JLabel offsetYLabel;
-	private JLabel spacingVertLabel;
-	private JLabel spacingHorizLabel;
+	private JLabel paddingVertLabel;
+	private JLabel paddingHorizLabel;
 	
 	private JTextField tilesetText;
 	private JTextField tilesetFileText;
@@ -35,8 +35,8 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	private JSpinner gridHeightText;
 	private JSpinner offsetXText;
 	private JSpinner offsetYText;
-	private JSpinner spacingVertText;
-	private JSpinner spacingHorizText;
+	private JSpinner paddingVertText;
+	private JSpinner paddingHorizText;
 	
 	private JButton browseBtn;
 	private JButton okBtn;
@@ -48,8 +48,8 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	private int gridHeight;
 	private int offsetX;
 	private int offsetY;
-	private int spacingV;
-	private int spacingH;
+	private int paddingV;
+	private int paddingH;
 	
 	private boolean lock = true;
 	
@@ -92,8 +92,8 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		gridHeightLabel = makeLabel("Grid H:", "gridHeight");
 		offsetXLabel = makeLabel("X offset:", "offsetX");
 		offsetYLabel = makeLabel("Y offset:", "offsetY");
-		spacingVertLabel = makeLabel("Vertical:", "spacingV");
-		spacingHorizLabel = makeLabel("Horizontal:", "spacingH");
+		paddingVertLabel = makeLabel("Vertical:", "spacingV");
+		paddingHorizLabel = makeLabel("Horizontal:", "spacingH");
 		
 		// Initialize text fields.
 		tilesetText = makeTextField("tilesetText");
@@ -102,8 +102,8 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		gridHeightText = makeSpinner(gridHeight, "gridHeightText");
 		offsetXText = makeSpinner(offsetX, "offsetXText");
 		offsetYText = makeSpinner(offsetY, "offsetYText");
-		spacingVertText = makeSpinner(spacingV, "spacingVText");
-		spacingHorizText = makeSpinner(spacingH, "spacingHText");
+		paddingVertText = makeSpinner(paddingV, "spacingVText");
+		paddingHorizText = makeSpinner(paddingH, "spacingHText");
 		
 		// Initialize buttons.
 		browseBtn = makeButton("Browse...", "browseBtn"); // Load open dialog to browse tileset files.
@@ -161,10 +161,10 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		spacingPanel.setBorder(new TitledBorder("Spacing"));
 		spacingPanel.setLayout(new GridLayout(4,1));
 		
-		spacingPanel.add(spacingVertLabel);
-		spacingPanel.add(spacingVertText);
-		spacingPanel.add(spacingHorizLabel);
-		spacingPanel.add(spacingHorizText);
+		spacingPanel.add(paddingVertLabel);
+		spacingPanel.add(paddingVertText);
+		spacingPanel.add(paddingHorizLabel);
+		spacingPanel.add(paddingHorizText);
 		
 		three.add(spacingPanel);
 		
@@ -225,13 +225,13 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		//offsetYText.setValue(offsetY);
 	}
 	
-	public void setVertSpacing(int sy) {
-		spacingV = sy;
+	public void setVertPadding(int sy) {
+		paddingV = sy;
 		//spacingVertText.setValue(spacingV);
 	}
 	
-	public void setHorizSpacing(int sx) {
-		spacingH = sx;
+	public void setHorizPadding(int sx) {
+		paddingH = sx;
 		//spacingHorizText.setValue(spacingH);
 	}
 	
@@ -439,9 +439,9 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	private void setupTileset() {
 		try {
 			if (offsetX > 0 || offsetY > 0 || 
-					spacingV > 0 || spacingH > 0) {
+					paddingV > 0 || paddingH > 0) {
 				tilePanel.setTileset(new Tileset(getTilesetFilename(),
-						gridWidth, gridHeight, offsetX, offsetY, spacingH, spacingV));
+						gridWidth, gridHeight, offsetX, offsetY, paddingH, paddingV));
 			} else {
 				tilePanel.setTileset(new Tileset(getTilesetFilename(), 
 						gridWidth, gridHeight));
@@ -475,10 +475,10 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 				setOffsetX((Integer)offsetXText.getValue());
 			} else if (src == offsetYText) {
 				setOffsetY((Integer)offsetYText.getValue());
-			} else if (src == spacingHorizText) {
-				setHorizSpacing((Integer)spacingHorizText.getValue());
-			} else if (src == spacingVertText) {
-				setVertSpacing((Integer)spacingVertText.getValue());
+			} else if (src == paddingHorizText) {
+				setHorizPadding((Integer)paddingHorizText.getValue());
+			} else if (src == paddingVertText) {
+				setVertPadding((Integer)paddingVertText.getValue());
 			}
 		}
 	}
