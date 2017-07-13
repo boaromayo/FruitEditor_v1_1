@@ -198,8 +198,7 @@ public class Tileset {
 		tilesetPath = path;
 		notePath = "default.txt"; // filler String here
 		
-		BufferedImage[][] tileImg = getTilesetImages(tilesetImg, 
-				offX, offY, spacingW, spacingH);
+		BufferedImage[][] tileImg = getTilesetImages(offX, offY, spacingW, spacingH);
 		
 		for (r=0; r < rows; r++) {
 			for (c=0; c < cols; c++, i++) {
@@ -244,11 +243,7 @@ public class Tileset {
 	
 	public String getTilesetPath() { return tilesetPath; }
 	
-	public BufferedImage[][] getTilesetImages() {
-		return getTilesetImages(tilesetImg);
-	}
-	
-	private BufferedImage[][] getTilesetImages(BufferedImage img) {
+	private BufferedImage[][] getTilesetImages() {
 		int rows = fruitTiles.length;
 		int cols = fruitTiles[0].length;
 		BufferedImage[][] tileImg = new BufferedImage[rows][cols];
@@ -257,15 +252,14 @@ public class Tileset {
 		
 		for (i=0; i < rows; i++) {
 			for (j=0; j < cols; j++) {
-				tileImg[i][j] = img.getSubimage(j*tileWidth, i*tileHeight, tileWidth, tileHeight);
+				tileImg[i][j] = tilesetImg.getSubimage(j*tileWidth, i*tileHeight, tileWidth, tileHeight);
 			}
 		}
 		
 		return tileImg;
 	}
 	
-	private BufferedImage[][] getTilesetImages(BufferedImage img, 
-			int offX, int offY, int spacingW, int spacingH) {
+	private BufferedImage[][] getTilesetImages(int offX, int offY, int spacingW, int spacingH) {
 		int rows = fruitTiles.length;
 		int cols = fruitTiles[0].length;
 		BufferedImage[][] tileImg = new BufferedImage[rows][cols];
@@ -280,7 +274,7 @@ public class Tileset {
 		
 		for (i=0; i < rows; i++) {
 			for (j=0; j < cols; j++) {
-				tileImg[i][j] = img.getSubimage(j*tileWidth+spacingW, i*tileHeight+spacingH, tileWidth, tileHeight);
+				tileImg[i][j] = tilesetImg.getSubimage((j*tileWidth)+spacingW, (i*tileHeight)+spacingH, tileWidth, tileHeight);
 			}
 		}
 		
