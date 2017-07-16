@@ -167,22 +167,18 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	
 	public void setMapWidth(int w) {
 		mapWidth = w;
-		mapWidthText.setValue(w);
 	}
 	
 	public void setMapHeight(int h) {
 		mapHeight = h;
-		mapHeightText.setValue(h);
 	}
 	
 	public void setTileWidth(int tw) {
 		tileWidth = tw;
-		tileWidthText.setValue(tw);
 	}
 	
 	public void setTileHeight(int th) {
 		tileHeight = th;
-		tileHeightText.setValue(th);
 	}
 	
 	public void setLock(boolean l) {
