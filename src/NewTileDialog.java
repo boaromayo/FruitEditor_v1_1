@@ -199,12 +199,10 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	
 	public void setGridWidth(int gw) {
 		gridWidth = gw;
-		//gridWidthText.setValue(gridWidth);
 	}
 	
 	public void setGridHeight(int gh) {
 		gridHeight = gh;
-		//gridHeightText.setValue(gridHeight);
 	}
 	
 	public void setGridWidthFromText() {
@@ -217,22 +215,18 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	
 	public void setOffsetX(int ox) {
 		offsetX = ox;
-		//offsetXText.setValue(offsetX);
 	}
 	
 	public void setOffsetY(int oy) {
 		offsetY = oy;
-		//offsetYText.setValue(offsetY);
 	}
 	
 	public void setVertPadding(int sy) {
 		paddingV = sy;
-		//spacingVertText.setValue(spacingV);
 	}
 	
 	public void setHorizPadding(int sx) {
 		paddingH = sx;
-		//spacingHorizText.setValue(spacingH);
 	}
 	
 	public void setLock(boolean l) {
