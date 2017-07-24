@@ -10,6 +10,5 @@ package FruitEditor;
  *=====================================*/
 public interface FruitCommand {
 	public abstract void execute();
-	public abstract void undo(); // TODO: Can I take this out? Let History class handle undo/redo actions?
-	public abstract void redo(); // TODO: Can I take this out?
+	public abstract String getActionString();
 }
