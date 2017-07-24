@@ -20,8 +20,10 @@ public class UndoManager {
 		
 		/* If the 'screenshot' taken is different from the top taken from redo stack,
 		 * or if the user makes a different action, clear redo stack. */
-		if (!redoStack.pop().equals(cmd)) {
-			redoStack.clear();
+		if (redoable()) {
+			if (!redoStack.pop().equals(cmd)) {
+				redoStack.clear();
+			}
 		}
 	}
 	
@@ -29,14 +31,16 @@ public class UndoManager {
 		if (undoable()) {
 			FruitCommand cmd = undoStack.pop();
 			cmd.execute();
+			System.out.println("Undid action " + cmd.getActionString());
 			redoStack.push(cmd);
 		}
 	}
 	
 	public void redo() {
 		if (redoable()) {
-			FruitCommand cmd = redoStack.pop();
+			FruitCommand cmd = (FruitCommand)redoStack.pop();
 			cmd.execute();
+			System.out.println("Redid action " + cmd.getActionString());
 			undoStack.push(cmd);
 		}
 	}
@@ -52,9 +56,5 @@ public class UndoManager {
 	
 	public boolean redoable() {
 		return !(redoStack.isEmpty());
-	}
-	
-	public boolean hasChanged() {
-		return !(undoStack.isEmpty()) || !(redoStack.isEmpty());
 	}
 }
