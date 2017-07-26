@@ -221,8 +221,12 @@ public class RenameDialog implements ActionListener, ChangeListener {
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// refactor the map name and size
-					mapPanel.setMapName(getMapText());
-					mapPanel.setMapSize(getMapWidth(), getMapHeight());
+					if (getMapText() != mapPanel.getMapName())
+						mapPanel.setMapName(getMapText());
+					
+					if (getMapWidth() != mapPanel.getMapWidth() || 
+							getMapHeight() != mapPanel.getMapHeight())
+						mapPanel.resizeMap(getMapWidth(), getMapHeight());
 					
 					setMapText(null); // Leave map text field blank.
 					
