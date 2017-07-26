@@ -29,7 +29,7 @@ public class UndoManager {
 	
 	public void undo() {
 		if (undoable()) {
-			FruitCommand cmd = undoStack.pop();
+			FruitCommand cmd = (FruitCommand)undoStack.pop();
 			cmd.execute();
 			System.out.println("Undid action " + cmd.getActionString());
 			redoStack.push(cmd);
