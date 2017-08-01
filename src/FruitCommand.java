@@ -9,6 +9,7 @@ package FruitEditor;
  *  and on the tileset (loading, closing) are counted.
  *=====================================*/
 public interface FruitCommand {
-	public abstract void execute();
+	public abstract void undo();
+	public abstract void redo();
 	public abstract String getActionString();
 }
