@@ -37,5 +37,4 @@ public class MapRenameCommand implements FruitCommand {
 	public String getActionString() {
 		return change;
 	}
-
 }
