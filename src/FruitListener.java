@@ -12,18 +12,12 @@ import java.util.*;
 
 import java.beans.*;
 
-public class FruitListener implements ActionListener,
-	ChangeListener, PropertyChangeListener, WindowListener {
+public class FruitListener implements ActionListener, WindowListener {
 	
 	private FruitEditor fruitEditor;
 	
-	//private Stack<ChangeEvent> changes;
-	private Stack<PropertyChangeEvent> actions;
-	
 	public FruitListener(FruitEditor f) {
 		fruitEditor = f;
-		
-		actions = new Stack<PropertyChangeEvent>();
 	}
 	
 	/**==========================
@@ -154,6 +148,13 @@ public class FruitListener implements ActionListener,
 			pencilItem.setSelected(true);
 			pencilBtn.setSelected(true);
 			setDrawMode(DrawMode.PENCIL);
+		} else if (src == getComponent("lineItem") ||
+				src == getComponent("lineBtn")) {
+			JRadioButtonMenuItem lineItem = (JRadioButtonMenuItem)getComponent("lineItem");
+			JToggleButton lineBtn = (JToggleButton)getComponent("lineBtn");
+			lineItem.setSelected(true);
+			lineBtn.setSelected(true);
+			setDrawMode(DrawMode.LINE);
 		} else if (src == getComponent("rectItem") ||
 				src == getComponent("rectBtn")) {
 			JRadioButtonMenuItem rectItem = (JRadioButtonMenuItem)getComponent("rectItem");
@@ -252,9 +253,8 @@ public class FruitListener implements ActionListener,
 	}
 	
 	private void closeAction() {
-		// If panel active and changes made, prompt user warning.
-		if (fruitEditor.getActiveFile() == null && 
-				fruitEditor.isPanelActive()) {
+		// If changes made, prompt user warning.
+		if (undoable()) {
 			int confirm = JOptionPane.showConfirmDialog(
 				fruitEditor.getFrame(), 
 				"Save before closing?\nUnsaved changes may be lost.",
@@ -263,21 +263,23 @@ public class FruitListener implements ActionListener,
 		
 			if (confirm == JOptionPane.YES_OPTION) {
 				saveAction();
-				System.exit(0);
+				fruitEditor.getFrame().dispose();
 			} else if (confirm == JOptionPane.NO_OPTION) {
-				System.exit(0);
+				fruitEditor.getFrame().dispose();
 			}
 		} else {
-			System.exit(0);
+			fruitEditor.getFrame().dispose();
 		}
 	}
 	
 	private void undo() {
-		fruitEditor.getMapPanel().undo();
+		UndoManager um = fruitEditor.getUndoManager();
+		um.undo();
 	}
 	
 	private void redo() {
-		fruitEditor.getMapPanel().redo();
+		UndoManager um = fruitEditor.getUndoManager();
+		um.redo();
 	}
 	
 	private void cutAction() {
@@ -319,16 +321,8 @@ public class FruitListener implements ActionListener,
 		map.setScale(scale);
 	}*/
 	
-	/**================================
-	// STATE CHANGE METHODS
-	//=================================**/
-	public void stateChanged(ChangeEvent e) {
-		
-	}
-	
-	public void propertyChange(PropertyChangeEvent e) {
-		// For any action taken, place in a stack of actions
-		actions.add(e);
+	private boolean undoable() {
+		return fruitEditor.undoable();
 	}
 	
 	/**================================
@@ -343,7 +337,9 @@ public class FruitListener implements ActionListener,
 	}
 	
 	public void windowClosed(WindowEvent e) {
-		
+		UndoManager um = fruitEditor.getUndoManager();
+		um.clear();
+		System.exit(0);
 	}
 	
 	public void windowActivated(WindowEvent e) {
@@ -428,7 +424,7 @@ public class FruitListener implements ActionListener,
 			}
 			
 			fruitEditor.getMapPanel().setMap(map);
-			fruitEditor.getMapPanel().setMapName(mapName);
+			map.setName(mapName);
 			fruitEditor.getTilePanel().setTileset(tileset);
 			
 			// Close reader to cleanup
