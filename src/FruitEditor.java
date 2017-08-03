@@ -34,6 +34,9 @@ public class FruitEditor {
 	// EVENT LISTENER.
 	private FruitListener fruitListener;
 	
+	// HISTORY.
+	private UndoManager undoManager;
+	
 	// ACTIVE FILE.
 	private File activeFile;
 	
@@ -99,6 +102,7 @@ public class FruitEditor {
 	private JCheckBoxMenuItem gridItem;
 	// MENU: DRAW
 	private JRadioButtonMenuItem pencilItem;
+	private JRadioButtonMenuItem lineItem;
 	private JRadioButtonMenuItem rectItem;
 	private JRadioButtonMenuItem circleItem;
 	private JRadioButtonMenuItem fillItem;
@@ -137,6 +141,7 @@ public class FruitEditor {
 	private JButton shiftBtn;
 	// DRAW
 	private JToggleButton pencilBtn;
+	private JToggleButton lineBtn;
 	private JToggleButton rectBtn;
 	private JToggleButton circleBtn;
 	private JToggleButton fillBtn;
@@ -148,11 +153,6 @@ public class FruitEditor {
 	
 	public FruitEditor() {
 		fruitFrame = new JFrame();
-		
-		if (isPanelActive())
-			fruitFrame.setTitle("FruitEditor - " + map.getName() + ".fmp");
-		else
-			fruitFrame.setTitle("FruitEditor");
 		
 		fruitFrame.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
 		fruitFrame.setLayout(new BorderLayout());
@@ -166,9 +166,12 @@ public class FruitEditor {
 		
 		// Initialize panels.
 		panelSetup();
-				
+		
 		// Initialize event listener.
 		fruitListener = new FruitListener(this);
+		
+		// Initialize undo/redo history.
+		undoManager = new UndoManager();
 				
 		// Setup the editor menu.
 		menuSetup();
@@ -180,15 +183,17 @@ public class FruitEditor {
 		toggleTools(panelActive);
 		toggleSave(panelActive);
 		toggleMenus(panelActive);
+		toggleUndo(undoable());
+		toggleRedo(redoable());
 		
 		fruitFrame.pack();
 		
-		fruitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		fruitFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		fruitFrame.setLocationRelativeTo(null);
 		fruitFrame.addWindowListener(fruitListener);
 		//fruitFrame.setIconImage(FruitImgBank.get().loadBufferedImage("../img/icons/title-icon.gif", 0, 0, 20, 20));
-		fruitFrame.setVisible(true);
 		fruitFrame.setResizable(false);
+		fruitFrame.setVisible(true);
 	}
 	
 	/* TODO: May get rid of this since it's not needed. 
@@ -376,9 +381,9 @@ public class FruitEditor {
 		deleteItem = new JMenuItem("Delete");		// EDIT -> DELETE
 		
 		// Add in EDIT ActionListeners.
-		/*undoItem.addActionListener(fruitListener);
+		undoItem.addActionListener(fruitListener);
 		redoItem.addActionListener(fruitListener);
-		cutItem.addActionListener(fruitListener);
+		/*cutItem.addActionListener(fruitListener);
 		copyItem.addActionListener(fruitListener);
 		pasteItem.addActionListener(fruitListener);
 		deleteItem.addActionListener(fruitListener);*/
@@ -398,6 +403,9 @@ public class FruitEditor {
 		copyItem.setName("copyItem");
 		pasteItem.setName("pasteItem");
 		deleteItem.setName("deleteItem");
+		
+		// Add edits into actionmap.
+		//((JPanel))
 		
 		// Add in components.
 		editMenu.add(undoItem);
@@ -531,30 +539,35 @@ public class FruitEditor {
 		drawgrp = new ButtonGroup();
 		// DRAW MENU ITEMS
 		pencilItem 	= new JRadioButtonMenuItem("Pencil");			// DRAW -> PENCIL
+		lineItem    = new JRadioButtonMenuItem("Line");				// DRAW -> LINE
 		rectItem   	= new JRadioButtonMenuItem("Rectangle");		// DRAW -> RECTANGLE
 		circleItem	= new JRadioButtonMenuItem("Circle");			// DRAW -> CIRCLE
 		fillItem	= new JRadioButtonMenuItem("Flood Fill");		// DRAW -> FILL
 		
 		// Add in DRAW ActionListeners.
 		pencilItem.addActionListener(fruitListener);
+		lineItem.addActionListener(fruitListener);
 		rectItem.addActionListener(fruitListener);
 		circleItem.addActionListener(fruitListener);
 		fillItem.addActionListener(fruitListener);
 		
 		// Set names for components.
 		pencilItem.setName("pencilItem");
+		lineItem.setName("lineItem");
 		rectItem.setName("rectItem");
 		circleItem.setName("circleItem");
 		fillItem.setName("fillItem");
 		
 		// Add DRAW items to group.
 		drawgrp.add(pencilItem);
+		drawgrp.add(lineItem);
 		drawgrp.add(rectItem);
 		drawgrp.add(circleItem);
 		drawgrp.add(fillItem);
 		
 		// Add in menu components.
 		drawMenu.add(pencilItem);
+		drawMenu.add(lineItem);
 		drawMenu.add(rectItem);
 		drawMenu.add(circleItem);
 		drawMenu.add(fillItem);
@@ -564,6 +577,7 @@ public class FruitEditor {
 		
 		// Add components to hashmap.
 		hash.put(pencilItem.getName(), pencilItem);
+		hash.put(lineItem.getName(), lineItem);
 		hash.put(rectItem.getName(), rectItem);
 		hash.put(circleItem.getName(), circleItem);
 		hash.put(fillItem.getName(), fillItem);
@@ -647,9 +661,6 @@ public class FruitEditor {
 		pasteBtn.setEnabled(act);
 		deleteBtn.setEnabled(act);
 	
-		undoBtn.setEnabled(act);
-		redoBtn.setEnabled(act);
-	
 		gridBtn.setEnabled(act);
 		
 		shiftBtn.setEnabled(act);
@@ -663,6 +674,7 @@ public class FruitEditor {
 		eventModeBtn.setEnabled(act);
 	
 		pencilBtn.setEnabled(act);
+		lineBtn.setEnabled(act);
 		rectBtn.setEnabled(act);
 		circleBtn.setEnabled(act);
 		fillBtn.setEnabled(act);
@@ -670,6 +682,20 @@ public class FruitEditor {
 		//cherryBtn.setEnabled(act);
 		//orangeBtn.setEnabled(act);
 		//limeBtn.setEnabled(act);
+	}
+	
+	/**=========================================
+	// toggleUndo() - Enable undo if stack has any saved actions.
+	//==========================================**/
+	public void toggleUndo(boolean act) {
+		undoBtn.setEnabled(act);
+	}
+	
+	/**=========================================
+	// toggleRedo() - Enable redo if stack has any saved actions.
+	//==========================================**/
+	public void toggleRedo(boolean act) {
+		redoBtn.setEnabled(act);
 	}
 	
 	/**=========================================
@@ -811,12 +837,14 @@ public class FruitEditor {
 		drawBtnGrp	= new ButtonGroup();
 		// DRAW BUTTONS
 		pencilBtn 	= makeButton("Penc", "", "Pencil", "pencilBtn", true);
+		lineBtn		= makeButton("Line", "", "Line", "lineBtn", true);
 		rectBtn		= makeButton("Rect", "", "Rectangle", "rectBtn", true);
 		circleBtn	= makeButton("Circ", "", "Circle", "circleBtn", true);
 		fillBtn		= makeButton("Fill", "", "Flood Fill", "fillBtn", true);
 		
 		// Add in DRAW buttons to group.
 		drawBtnGrp.add(pencilBtn);
+		drawBtnGrp.add(lineBtn);
 		drawBtnGrp.add(rectBtn);
 		drawBtnGrp.add(circleBtn);
 		drawBtnGrp.add(fillBtn);
@@ -826,6 +854,7 @@ public class FruitEditor {
 		
 		// Add in DRAW buttons.
 		mainToolBar.add(pencilBtn);
+		mainToolBar.add(lineBtn);
 		mainToolBar.add(rectBtn);
 		mainToolBar.add(circleBtn);
 		mainToolBar.add(fillBtn);
@@ -851,6 +880,16 @@ public class FruitEditor {
 	// SET METHODS.
 	//=========================================**/
 	/**========================================
+	// setTitle(title) - Set current map's title.
+	//=========================================**/
+	private void setTitle(String title) {
+		if (isPanelActive())
+			fruitFrame.setTitle(title);
+		else
+			fruitFrame.setTitle("FruitEditor");
+	}
+	
+	/**========================================
 	// setMap(m) - Set the map.
 	//=========================================**/
 	public void setMap(Map m) {
@@ -869,6 +908,10 @@ public class FruitEditor {
 	//=========================================**/
 	public void setPanelActive(boolean act) {
 		panelActive = act;
+	}
+	
+	public void addChanges(FruitCommand cmd) {
+		undoManager.add(cmd);
 	}
 	
 	/**========================================
@@ -951,6 +994,21 @@ public class FruitEditor {
 		return null;
 	}
 	
+	public UndoManager getUndoManager() {
+		if (undoManager != null)
+			return undoManager;
+		
+		return null;
+	}
+	
+	public boolean undoable() {
+		return undoManager.undoable();
+	}
+	
+	public boolean redoable() {
+		return undoManager.redoable();
+	}
+	
 	/**=======================================
 	// getActiveFile() - Fetch the current file loaded. 
 	//========================================**/
@@ -996,16 +1054,21 @@ public class FruitEditor {
 	// UPDATE METHOD. 
 	//========================================**/
 	public void update() {
+		setTitle("FruitEditor - " + map.getName());
+		
 		toggleMenus(panelActive);
 		toggleTools(panelActive);
 		toggleSave(panelActive);
-		
+
 		menuBar.repaint();
 		toolbarPanel.repaint();
 		fruitPanel.update();
 		statusPanel.update();
 		fruitFrame.repaint();
 		validate();
+		
+		toggleUndo(undoable());
+		toggleRedo(redoable());
 	}
 	
 	public void validate() {
