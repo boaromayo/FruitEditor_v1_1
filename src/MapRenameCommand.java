@@ -11,10 +11,10 @@ public class MapRenameCommand implements FruitCommand {
 	// CHANGE EXPLANATION.
 	private String change = "map rename change";
 	
-	public MapRenameCommand(Map m, String oldName, String newName) {
+	public MapRenameCommand(Map m, String name) {
 		map = m;
-		mapOldName = oldName;
-		mapNewName = newName;
+		mapOldName = m.getName();
+		mapNewName = name;
 	}
 	
 	@Override
