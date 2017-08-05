@@ -4,28 +4,37 @@ public class TilesetCommand implements FruitCommand {
 	// TILE PANEL & TILESET.
 	private TilePanel tilePanel;
 	private Tileset tileset;
+	private Tileset prevTileset;
 	
 	// CHANGE EXPLANATION.
-	private String change;
+	private String change = "tileset change";
 	
 	public TilesetCommand(TilePanel tp) {
 		tilePanel = tp;
 		tileset = tp.getTileset();
-		change = "tileset change";
 	}
 	
-	public TilesetCommand(TilePanel tp, String chg) {
+	public TilesetCommand(TilePanel tp, Tileset prev) {
 		tilePanel = tp;
 		tileset = tp.getTileset();
-		change = chg;
+		prevTileset = prev;
 	}
 	
-	public void execute() {
+	@Override
+	public void undo() {
 		if (tileset != null) {
 			tilePanel.setTileset(tileset);
 		}
 	}
 	
+	@Override
+	public void redo() {
+		if (prevTileset != null) {
+			tilePanel.setTileset(prevTileset);
+		}
+	}
+	
+	@Override
 	public String getActionString() {
 		return change;
 	}
