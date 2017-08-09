@@ -166,6 +166,41 @@ public class Map {
 		mapTiles[y][x][z] = t;
 	}
 	
+	public void setTiles(int[][] ids, Tileset t) {
+		setTiles(ids,t,0); // set all tiles in first layer as default
+	}
+	
+	public void setTiles(int[][] ids, Tileset t, int layer) {
+		if (ids != null) {
+			int rows = ids.length;
+			int cols = ids[0].length;
+			
+			int i, j; // Loop counters
+			
+			for (i=0; i < rows; i++)
+				for (j=0; j < cols; j++)
+					mapTiles[i][j][layer] = t.getTile(ids[i][j]);
+		}
+	}
+	
+	public void setAll(int[][][] ids, Tileset t) {
+		if (ids != null) {
+			int rows = ids.length;
+			int cols = ids[0].length;
+			int layers = ids[0][0].length;
+			
+			int i, j, k; // Loop counters
+			
+			for (i=0; i < rows; i++) {
+				for (j=0; j < cols; j++) {
+					for (k=0; k < layers; k++) {
+						mapTiles[i][j][k] = t.getTile(ids[i][j][k]);
+					}
+				}
+			}
+		}
+	}
+	
 	public String getName() { return name; }
 	
 	public int getScale() { return scaleFactor; }

@@ -251,9 +251,9 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mapPressed(int x, int y) {
+		int [][][] mapIds = map.getMapIntArray();
 		switch (drawMode) {
 		case PENCIL:
-			fruitEditor.addChanges(new MapChangeCommand(this,map));
 			map.setTile(x, y, fruitEditor.getSelectedTile());
 			break;
 		case FILL:
@@ -262,6 +262,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		default:
 			break;
 		}
+		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
 		update();
 	}
 	
@@ -485,7 +486,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	public synchronized void resizeMap(int w, int h) {
 		if (isPanelActive())
-			fruitEditor.addChanges(new MapResizeCommand(this,map,w,h));
+			fruitEditor.addChanges(new MapResizeCommand(map,w,h));
 		
 		mapWidth = w;
 		mapHeight = h;
@@ -686,14 +687,6 @@ public class MapPanel extends JPanel implements MouseListener,
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
 				mapPressed(tx,ty);
 			}
-		} else if (btn == MouseEvent.BUTTON3) {
-			// if right-click btn is pressed
-			/*mouseX = e.getX();
-			mouseY = e.getY();
-			if (isPanelActive() &&
-					checkBounds(mouseX,mouseY,mapWidth*gridWidth,mapHeight*gridHeight)) {
-				popupMenu.show(this, mouseX, mouseY);
-			}*/
 		}
 	}
 
@@ -704,14 +697,6 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (btn == MouseEvent.BUTTON1) {
 			mouseX = snap(e.getX(), gridWidth);
 			mouseY = snap(e.getY(), gridHeight);
-		} else if (btn == MouseEvent.BUTTON3) {
-			// if right-click btn is released
-			/*oldmouseX = e.getX();
-			oldmouseY = e.getY();
-			if (isPanelActive() &&
-					checkBounds(oldmouseX,oldmouseY,mapWidth*gridWidth,mapHeight*gridHeight)) {
-				popupMenu.show(this, oldmouseX, oldmouseY);
-			}*/
 		}
 	}
 	
