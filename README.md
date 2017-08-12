@@ -1,6 +1,6 @@
 # FruitEditor (v1_1)
 
-![Img sample](http://i.imgur.com/IHVPzn5.png =320x240)
+<img src="http://i.imgur.com/IHVPzn5.png" alt="fe sample" width="50%" height="50%" />
 
 A tile-based map editor created in Java. 
 
