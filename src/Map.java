@@ -179,7 +179,10 @@ public class Map {
 			
 			for (i=0; i < rows; i++)
 				for (j=0; j < cols; j++)
-					mapTiles[i][j][layer] = t.getTile(ids[i][j]);
+					if (ids[i][j] < 0)
+						mapTiles[i][j][layer] = null;
+					else
+						mapTiles[i][j][layer] = t.getTile(ids[i][j]);
 		}
 	}
 	
@@ -194,7 +197,10 @@ public class Map {
 			for (i=0; i < rows; i++) {
 				for (j=0; j < cols; j++) {
 					for (k=0; k < layers; k++) {
-						mapTiles[i][j][k] = t.getTile(ids[i][j][k]);
+						if (ids[i][j][k] < 0)
+							mapTiles[i][j][k] = null;
+						else
+							mapTiles[i][j][k] = t.getTile(ids[i][j][k]);
 					}
 				}
 			}
