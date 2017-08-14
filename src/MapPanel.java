@@ -498,9 +498,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public synchronized void shiftMap(int dir, int t) {
-		if (isPanelActive())
-			fruitEditor.addChanges(new MapShiftCommand(this,map,dir,t));
-		
+		int [][][] mapIds = map.getMapIntArray();
 		switch(dir) {
 		case 0:
 			map.shift(0, -t);
@@ -515,7 +513,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			map.shift(0, t);
 			break;
 		}
-		
+		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
 		update();
 	}
 	
