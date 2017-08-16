@@ -12,7 +12,7 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 	private final int HEIGHT = 120;
 	
 	// LIMIT.
-	private final int MAP_SHIFT = 99;
+	private final int MAP_SHIFT_LIMIT = 99;
 	
 	// COMPONENTS.
 	private JLabel directionLabel;
@@ -26,10 +26,10 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 	private JButton cancelBtn;
 	
 	// PROPERTIES.
-	private static final int UP = 0;
-	private static final int LEFT = 1;
-	private static final int RIGHT = 2;
-	private static final int DOWN = 3;
+	public static final int UP = 0;
+	public static final int LEFT = 1;
+	public static final int RIGHT = 2;
+	public static final int DOWN = 3;
 	
 	private int direction;
 	private int shift;
@@ -146,7 +146,7 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 		JSpinner spinner;
 		
 		spinner = new JSpinner(
-				new SpinnerNumberModel(n, 0, MAP_SHIFT, 1));
+				new SpinnerNumberModel(n, 0, MAP_SHIFT_LIMIT, 1));
 		
 		spinner.setName(name);
 		spinner.addChangeListener(this);
