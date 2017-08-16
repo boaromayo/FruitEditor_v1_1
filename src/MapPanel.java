@@ -414,8 +414,9 @@ public class MapPanel extends JPanel implements MouseListener,
 	//========================================**/
 	// for version 0.2.6
 	/*private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
-	  	fruitEditor.addChanges(new MapCommand(fruitEditor,map,this,"flood fill"));
-		
+	 	// Mark current ids of map before change.
+	  	int [][][] mapIds = map.getMapIntArray();
+	  	
 		// Use static comparator method to prevent null-case errors.
 		if (Tile.compareTo(targetTile,newTile))
 			return;
@@ -450,6 +451,7 @@ public class MapPanel extends JPanel implements MouseListener,
 				floodFill(i, y+1, targetTile, newTile);
 			}
 		}
+		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
 	}*/
 	
 	public void setViewport(JViewport vp) {
@@ -461,8 +463,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		map = m;
 		
-		mapWidth = m.getWidth();
-		mapHeight = m.getHeight();
+		setMapSize(m.getWidth(),m.getHeight());
 		
 		gridWidth = m.getTileWidth();
 		gridHeight = m.getTileHeight();
@@ -486,11 +487,10 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	public synchronized void resizeMap(int w, int h) {
 		if (isPanelActive())
-			fruitEditor.addChanges(new MapResizeCommand(map,w,h));
+			fruitEditor.addChanges(new MapResizeCommand(this,map,w,h));
 		
-		mapWidth = w;
-		mapHeight = h;
-		map.resize(w,h);
+		setMapSize(w,h);
+		map.resize(mapWidth,mapHeight);
 		
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		
@@ -515,6 +515,14 @@ public class MapPanel extends JPanel implements MouseListener,
 		}
 		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
 		update();
+	}
+	
+	/**========================================
+	 * setMapSize() - Set panel size.
+	//=========================================**/
+	public void setMapSize(int w, int h) {
+		mapWidth = w;
+		mapHeight = h;
 	}
 	
 	/**========================================

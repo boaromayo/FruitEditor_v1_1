@@ -102,8 +102,8 @@ public class Map {
 	public void resize(int w, int h) {
 		Tile[][][] newMapTiles = new Tile[h][w][mapDepth];
 		
-		setWidth(w);
-		setHeight(h);
+		mapWidth = w;
+		mapHeight = h;
 		
 		int r = Math.min(mapTiles.length, h);
 		int c = Math.min(mapTiles[0].length, w);
@@ -147,16 +147,6 @@ public class Map {
 		tileWidth /= scaleFactor;
 		tileHeight /= scaleFactor;
 	}
-	
-	public void setWidth(int w) { mapWidth = w; }
-	
-	public void setHeight(int h) { mapHeight = h; }
-	
-	public void setDepth(int d) { mapDepth = d; }
-	
-	public void setTileWidth(int tw) { tileWidth = tw; }
-	
-	public void setTileHeight(int th) { tileHeight = th; }
 	
 	public void setTile(int x, int y, Tile t) {
 		setTile(x,y,0,t); // set first layer by default
