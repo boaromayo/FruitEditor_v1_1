@@ -500,16 +500,16 @@ public class MapPanel extends JPanel implements MouseListener,
 	public synchronized void shiftMap(int dir, int t) {
 		int [][][] mapIds = map.getMapIntArray();
 		switch(dir) {
-		case 0:
+		case ShiftDialog.UP:
 			map.shift(0, -t);
 			break;
-		case 1:
+		case ShiftDialog.LEFT:
 			map.shift(-t, 0);
 			break;
-		case 2:
+		case ShiftDialog.RIGHT:
 			map.shift(t, 0);
 			break;
-		case 3:
+		case ShiftDialog.DOWN:
 			map.shift(0, t);
 			break;
 		}
