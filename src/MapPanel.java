@@ -76,7 +76,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		// Setup right-click menu.
 		popupSetup();
 		
-		setPreferredSize(new Dimension(map.getWidth()*gridWidth, map.getHeight()*gridHeight));
+		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		setLayout(new FlowLayout());
 		
 		setFocusable(true);
