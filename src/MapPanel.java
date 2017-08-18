@@ -463,7 +463,8 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		map = m;
 		
-		setMapSize(m.getWidth(),m.getHeight());
+		mapWidth = m.getWidth();
+		mapHeight = m.getHeight();
 		
 		gridWidth = m.getTileWidth();
 		gridHeight = m.getTileHeight();
@@ -489,7 +490,8 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (isPanelActive())
 			fruitEditor.addChanges(new MapResizeCommand(this,map,w,h));
 		
-		setMapSize(w,h);
+		mapWidth = w;
+		mapHeight = h;
 		map.resize(mapWidth,mapHeight);
 		
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
