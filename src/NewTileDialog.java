@@ -158,7 +158,7 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		
 		three.add(offsetPanel);
 		
-		spacingPanel.setBorder(new TitledBorder("Spacing"));
+		spacingPanel.setBorder(new TitledBorder("Padding"));
 		spacingPanel.setLayout(new GridLayout(4,1));
 		
 		spacingPanel.add(paddingVertLabel);
