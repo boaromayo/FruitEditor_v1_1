@@ -188,8 +188,8 @@ public class TilePanel extends JPanel implements MouseListener,
 	
 	private void drawCursor(Graphics g, int x, int y) {
 		Graphics2D g2 = convertTo2d(g);
-		int tmx = x - (x % gridWidth); // snap cursor to grid using x - (x % w)
-		int tmy = y - (y % gridHeight);
+		int tmx = snap(x, gridWidth);
+		int tmy = snap(y, gridHeight);
 		
 		g.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(1));
@@ -200,8 +200,8 @@ public class TilePanel extends JPanel implements MouseListener,
 	}
 	
 	private void drawSelectedCursor(Graphics g, int x, int y) {
-		int tmx = x - (x % gridWidth);
-		int tmy = y - (y % gridHeight);
+		int tmx = snap(x, gridWidth);
+		int tmy = snap(y, gridHeight);
 		
 		Graphics2D g2 = convertTo2d(g);
 		
@@ -244,6 +244,10 @@ public class TilePanel extends JPanel implements MouseListener,
 		selectedTile = t;
 	}
 	
+	public int getGridWidth() { return gridWidth; }
+	
+	public int getGridHeight() { return gridHeight; }
+	
 	public Tileset getTileset() {
 		return tileset;
 	}
@@ -256,6 +260,20 @@ public class TilePanel extends JPanel implements MouseListener,
 		return fruitEditor.isPanelActive();
 	}
 	
+	/**=======================================
+	 * pixelToTile(x,y) - Convert pixel to tile coordinates.
+	//========================================**/
+	public Point pixelToTile(int x, int y) {
+		return new Point(x / gridWidth, y / gridHeight);
+	}
+	
+	/**=====================================
+	 * snap(n,snap) - Ensures tile snaps to map's grid.
+	//=====================================**/
+	public int snap(int n, int snap) {
+		return n - (n % snap);
+	}
+	
 	private boolean checkBounds(int x, int y, int w, int h) {
 		return (x >= 0 && x < w && y >= 0 && y < h);
 	}
@@ -265,10 +283,6 @@ public class TilePanel extends JPanel implements MouseListener,
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		return g2;
-	}
-	
-	public void propertyChange(PropertyChangeEvent e) {
-		
 	}
 	
 	/**=======================================
@@ -300,11 +314,11 @@ public class TilePanel extends JPanel implements MouseListener,
 	}
 	
 	public void mouseHovered(MouseEvent e) {
-		mouseX = e.getX() - (e.getX() % gridWidth); // snap to grid
-		mouseY = e.getY() - (e.getY() % gridHeight);
-		int r = mouseX / gridWidth;
-		int c = mouseY / gridHeight;
-		Tile hoveredTile = tileset.getTile(r, c);
+		mouseX = snap(e.getX(), gridWidth); // snap to grid
+		mouseY = snap(e.getY(), gridHeight);
+		int r = pixelToTile(mouseX,mouseY).y;
+		int c = pixelToTile(mouseX,mouseY).x;
+		Tile hoveredTile = tileset.getTile(r,c);
 		String tileName = hoveredTile.getName() != null ? hoveredTile.getName() : "No Tile";
 		
 		// Make a tool tip text of the hovered over tile.
@@ -320,12 +334,12 @@ public class TilePanel extends JPanel implements MouseListener,
 	//=================================**/
 	public void mousePressed(MouseEvent e) {
 		int btn = e.getButton();
-		mouseX = e.getX() - (e.getX() % gridWidth);
-		mouseY = e.getY() - (e.getY() % gridHeight);
+		mouseX = snap(e.getX(), gridWidth);
+		mouseY = snap(e.getY(), gridHeight);
 		
 		if (btn == MouseEvent.BUTTON1) {
-			int tx = mouseX / gridWidth;
-			int ty = mouseY / gridHeight;
+			int tx = pixelToTile(mouseX,mouseY).x;
+			int ty = pixelToTile(mouseX,mouseY).y;
 			
 			if (isPanelActive() && checkBounds(tx,ty,
 					tilesetWidth/gridWidth,tilesetHeight/gridHeight)) {
@@ -344,8 +358,8 @@ public class TilePanel extends JPanel implements MouseListener,
 		int btn = e.getButton();
 		
 		if (btn == MouseEvent.BUTTON1) {
-			oldmouseX = e.getX();
-			oldmouseY = e.getY();
+			oldmouseX = snap(e.getX(), gridWidth);
+			oldmouseY = snap(e.getY(), gridHeight);
 		} else if (btn == MouseEvent.BUTTON3) {
 			if (isPanelActive()) {
 				popupMenu.show(this, oldmouseX, oldmouseY);
