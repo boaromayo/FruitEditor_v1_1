@@ -13,7 +13,7 @@ public class GridTileDialog implements ActionListener, ChangeListener {
 	
 	// DIALOG SIZE.
 	private final int WIDTH = 360;
-	private final int HEIGHT = 280;
+	private final int HEIGHT = 200;
 	
 	// COMPONENTS.
 	private JLabel gridWidthLabel;
@@ -109,6 +109,8 @@ public class GridTileDialog implements ActionListener, ChangeListener {
 		JPanel offsetPanel = new JPanel();
 		JPanel paddingPanel = new JPanel();
 		JPanel btnPanel = new JPanel();
+		
+		all.setLayout(new GridLayout(1,3));
 		
 		gridPanel.setBorder(new TitledBorder("Grid Size"));
 		gridPanel.setLayout(new GridLayout(4,1));
