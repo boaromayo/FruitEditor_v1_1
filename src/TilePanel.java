@@ -122,7 +122,7 @@ public class TilePanel extends JPanel implements MouseListener,
 	private void disableItems() {
 		//newTileItem.setEnabled(false);
 		//openTileItem.setEnabled(false);
-		gridTileItem.setEnabled(false);
+		//gridTileItem.setEnabled(false);
 		closeTileItem.setEnabled(false);
 	}
 	
@@ -294,7 +294,7 @@ public class TilePanel extends JPanel implements MouseListener,
 		if (src == openTileItem) {
 			new NewTileDialog(fruitEditor);
 		} else if (src == gridTileItem) {
-			
+			new GridTileDialog(fruitEditor);
 		} else if (src == closeTileItem) {
 			
 		}
