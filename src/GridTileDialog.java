@@ -270,6 +270,8 @@ public class GridTileDialog implements ActionListener, ChangeListener {
 		Tileset tileset = tilePanel.getTileset();
 		tilePanel.setTileset(new Tileset(tileset.getTilesetPath(), 
 				gridWidth, gridHeight, offsetX, offsetY, paddingV, paddingH));
+		
+		dispose();
 	}
 	
 	@Override
