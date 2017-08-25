@@ -181,34 +181,21 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		tileHeight = th;
 	}
 	
+	public void adjustTileWidthText() {
+		tileWidthText.setValue(tileWidth);
+	}
+	
+	public void adjustTileHeightText() {
+		tileHeightText.setValue(tileHeight);
+	}
+	
 	public void setLock(boolean l) {
 		lock = l;
 	}
 	
-	/**==================================
-	// PROPERTY GETTER METHODS.
-	//===================================**/
 	public String getMapText() {
 		return mapText.getText();
 	}
-	
-	public int getMapWidth() {
-		return (Integer)mapWidthText.getValue();
-	}
-	
-	public int getMapHeight() {
-		return (Integer)mapHeightText.getValue();
-	}
-	
-	public int getTileWidth() {
-		return (Integer)tileWidthText.getValue();
-	}
-	
-	public int getTileHeight() {
-		return (Integer)tileHeightText.getValue();
-	}
-	
-	public boolean isSizeLocked() { return lock; }
  	
 	/**==================================
 	// HELPER METHODS.
@@ -297,6 +284,8 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 				if (lock) {
 					setTileWidth(FruitEditor.GRID_SIZE);
 					setTileHeight(FruitEditor.GRID_SIZE);
+					adjustTileWidthText();
+					adjustTileHeightText();
 				}
 			}
 		}
@@ -319,11 +308,13 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 				if (lock) {
 					// Set grid height and its text field to new height if locked.
 					setTileHeight((Integer)tileWidthText.getValue());
+					adjustTileHeightText();
 				}
 			} else if (src == tileHeightText) {
 				setTileHeight((Integer)tileHeightText.getValue());
 				if (lock) {
 					setTileWidth((Integer)tileHeightText.getValue());
+					adjustTileWidthText();
 				}
 			}
 		}
@@ -374,8 +365,8 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		} else {
 			// prep the new map
 			// updates are taken care of in the map panel's map setting method
-			mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
-					getTileWidth(), getTileHeight()));
+			mapPanel.setMap(new Map(mapWidth, mapHeight, 
+					tileWidth, tileHeight));
 			mapPanel.setMapName(getMapText());
 			
 			setMapText(null); // Leave map text field blank.

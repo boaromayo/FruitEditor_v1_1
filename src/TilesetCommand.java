@@ -1,36 +1,31 @@
 package FruitEditor;
 
 public class TilesetCommand implements FruitCommand {
-	// TILE PANEL & TILESET.
+	// TILESETS & TILE PANEL.
 	private TilePanel tilePanel;
-	private Tileset tileset;
-	private Tileset prevTileset;
+	private Tileset oldtileset;
+	private Tileset newtileset;
 	
 	// CHANGE EXPLANATION.
 	private String change = "tileset change";
 	
-	public TilesetCommand(TilePanel tp) {
+	public TilesetCommand(TilePanel tp, Tileset tiles) {
 		tilePanel = tp;
-		tileset = tp.getTileset();
-	}
-	
-	public TilesetCommand(TilePanel tp, Tileset prev) {
-		tilePanel = tp;
-		tileset = tp.getTileset();
-		prevTileset = prev;
+		oldtileset = tp.getTileset();
+		newtileset = tiles;
 	}
 	
 	@Override
 	public void undo() {
-		if (tileset != null) {
-			tilePanel.setTileset(tileset);
+		if (oldtileset != null) {
+			tilePanel.setTileset(oldtileset,false);
 		}
 	}
 	
 	@Override
 	public void redo() {
-		if (prevTileset != null) {
-			tilePanel.setTileset(prevTileset);
+		if (newtileset != null) {
+			tilePanel.setTileset(newtileset,false);
 		}
 	}
 	

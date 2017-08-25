@@ -205,12 +205,12 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		gridHeight = gh;
 	}
 	
-	public void setGridWidthFromText() {
-		gridWidth = getGridWidth();
+	public void adjustGridWidthText() {
+		gridWidthText.setValue(gridWidth);
 	}
 	
-	public void setGridHeightFromText() {
-		gridHeight = getGridHeight();
+	public void adjustGridHeightText() {
+		gridHeightText.setValue(gridHeight);
 	}
 	
 	public void setOffsetX(int ox) {
@@ -252,14 +252,6 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 			return "NONE";
 		
 		return tt;
-	}
-	
-	public int getGridWidth() {
-		return (Integer)gridWidthText.getValue();
-	}
-	
-	public int getGridHeight() {
-		return (Integer)gridHeightText.getValue();
 	}
 	
 	/**==================================
@@ -435,10 +427,10 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 			if (offsetX > 0 || offsetY > 0 || 
 					paddingV > 0 || paddingH > 0) {
 				tilePanel.setTileset(new Tileset(getTilesetFilename(),
-						gridWidth, gridHeight, offsetX, offsetY, paddingH, paddingV));
+						gridWidth, gridHeight, offsetX, offsetY, paddingH, paddingV), true);
 			} else {
 				tilePanel.setTileset(new Tileset(getTilesetFilename(), 
-						gridWidth, gridHeight));
+						gridWidth, gridHeight), true);
 			}
 		} catch (Exception fe) {
 			System.err.println("ERROR: File not found. REASON: " + fe.getMessage());
@@ -459,11 +451,13 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 				setGridWidth((Integer)gridWidthText.getValue());
 				if (lock) {
 					setGridHeight((Integer)gridWidthText.getValue());
+					adjustGridHeightText();
 				}
 			} else if (src == gridHeightText) {
 				setGridHeight((Integer)gridHeightText.getValue());
 				if (lock) {
 					setGridWidth((Integer)gridHeightText.getValue());
+					adjustGridWidthText();
 				}
 			} else if (src == offsetXText) {
 				setOffsetX((Integer)offsetXText.getValue());

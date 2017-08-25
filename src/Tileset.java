@@ -216,10 +216,6 @@ public class Tileset {
 		}
 	}
 	
-	public void setTileWidth(int tw) { tileWidth = tw; }
-	
-	public void setTileHeight(int th) { tileHeight = th; }
-	
 	public Tile getTile(int i) {
 		int r = i / getCols();
 		int c = i % getCols();
@@ -229,7 +225,7 @@ public class Tileset {
 	
 	public Tile getTile(int r, int c) { return fruitTiles[r][c]; }
 	
-	public Tile[][] getTileset() { return fruitTiles; }
+	public Tile[][] getTiles() { return fruitTiles; }
 	
 	public int getWidth() { return tilesetWidth; }
 	

@@ -221,8 +221,16 @@ public class TilePanel extends JPanel implements MouseListener,
 	}
 	
 	public void setTileset(Tileset t) {
+		setTileset(t,false);
+	}
+	
+	public void setTileset(Tileset t, boolean chg) {
 		if (t == null)
 			return;
+		
+		if (isPanelActive() && chg) {
+			fruitEditor.addChanges(new TilesetCommand(this,t));
+		}
 		
 		tileset = t;
 		tilesetWidth = t.getWidth();
