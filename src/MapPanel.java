@@ -480,7 +480,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void setMapName(String n) {
-		if (isPanelActive())
+		if (isPanelActive() && map.getName() != null)
 			fruitEditor.addChanges(new MapRenameCommand(map,n));
 		
 		map.setName(n);
