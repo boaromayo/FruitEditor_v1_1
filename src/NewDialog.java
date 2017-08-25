@@ -7,29 +7,28 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import java.beans.*;
+import javax.swing.border.*;
 
 public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	// DIALOG.
 	private JDialog newDialog;
 	
 	// DIALOG SIZE.
-	private final int WIDTH = 500;
-	private final int HEIGHT = 200;
+	private final int WIDTH = 480;
+	private final int HEIGHT = 180;
 	
 	// COMPONENTS.
 	private JLabel mapLabel;
 	private JLabel mapWidthLabel;
 	private JLabel mapHeightLabel;
-	private JLabel gridWidthLabel;
-	private JLabel gridHeightLabel;
+	private JLabel tileWidthLabel;
+	private JLabel tileHeightLabel;
 	
 	private JTextField mapText;
 	private JSpinner mapWidthText;
 	private JSpinner mapHeightText;
-	private JSpinner gridWidthText;
-	private JSpinner gridHeightText;
+	private JSpinner tileWidthText;
+	private JSpinner tileHeightText;
 	
 	//private JButton browseBtn;
 	private JButton okBtn;
@@ -39,8 +38,8 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	// PROPERTIES.
 	private int mapWidth;
 	private int mapHeight;
-	private int gridWidth;
-	private int gridHeight;
+	private int tileWidth;
+	private int tileHeight;
 	
 	private boolean lock = true;
 
@@ -65,8 +64,8 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		newDialog.setModalityType(ModalityType.DOCUMENT_MODAL);
 		newDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		newDialog.setLocationRelativeTo(null);
-		newDialog.setVisible(true);
 		newDialog.setResizable(false);
+		newDialog.setVisible(true);
 		newDialog.setFocusable(true);
 		newDialog.requestFocus();
 	}
@@ -75,22 +74,22 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		// Initialize dimensions.
 		mapWidth = 8;
 		mapHeight = 8;
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		
 		// Initialize labels.
 		mapLabel = makeLabel("Map Name", "mapLabel");
 		mapWidthLabel = makeLabel("Width:", "mapWidthLabel");
 		mapHeightLabel = makeLabel("Height:", "mapHeightLabel");
-		gridWidthLabel = makeLabel("Grid W:", "gridWidthLabel");
-		gridHeightLabel = makeLabel("Grid H:", "gridHeightLabel");
+		tileWidthLabel = makeLabel("TileW:", "tileWidthLabel");
+		tileHeightLabel = makeLabel("TileH:", "tileHeightLabel");
 		
 		// initialize text fields.
 		mapText = makeTextField("mapText");
 		mapWidthText = makeSpinner(mapWidth, "mapWidthText");
 		mapHeightText = makeSpinner(mapHeight, "mapHeightText");
-		gridWidthText = makeSpinner(gridWidth, "gridWidthText");
-		gridHeightText = makeSpinner(gridHeight, "gridHeightText");
+		tileWidthText = makeSpinner(tileWidth, "tileWidthText");
+		tileHeightText = makeSpinner(tileHeight, "tileHeightText");
 		
 		// initialize buttons.
 		// Load open dialog to browse tileset files (*.png, *.jpg)
@@ -105,43 +104,51 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	// addComps() - Add components
 	//===================================**/
 	private void addComps() {
-		newDialog.setLayout(new GridLayout(3,1,2,2));
-		JPanel one = new JPanel();
-		//JPanel two = new JPanel();
-		JPanel size = new JPanel();
+		newDialog.setLayout(new BoxLayout(newDialog.getContentPane(), 
+				BoxLayout.PAGE_AXIS));
+		JPanel one = new JPanel(); // panel for map name
+		JPanel size = new JPanel(); //panel for sizes
+		JPanel size1 = new JPanel(); // panel for map size
+		JPanel size2 = new JPanel(); // panel for tile size
 		JPanel btn = new JPanel();
 		
+		one.setLayout(new FlowLayout());
 		one.add(mapLabel); // (0,0)
 		one.add(mapText); // (1,0)
 		
 		newDialog.add(one);
 		
-		//two.add(tileLabel); // (0,1)
-		//two.add(tileText); // (1,1)
-		//two.add(browseBtn); // (2,1)
+		size.setLayout(new GridLayout(1,2));
 		
-		//newdialog.add(two);
+		size1.setBorder(new TitledBorder("Map Size"));
+		size1.setLayout(new GridLayout(2,2));
 		
-		size.setLayout(new GridLayout(2,4,8,1));
+		size1.add(mapWidthLabel); // (0,1)
+		size1.add(mapHeightLabel); // (1,1)
+		size1.add(mapWidthText); // (0,2)
+		size1.add(mapHeightText); // (1,2)
 		
-		size.add(mapWidthLabel); // (0,2)
-		size.add(mapHeightLabel); // (1,2)
-		size.add(gridWidthLabel); // (2,2)
-		size.add(gridHeightLabel); // (3,2)
-		size.add(mapWidthText); // (4,2)
-		size.add(mapHeightText); // (5,2)
-		size.add(gridWidthText); // (6,2)
-		size.add(gridHeightText); // (7,2)
+		size.add(size1);
+		
+		size2.setBorder(new TitledBorder("Tile Size"));
+		size2.setLayout(new GridLayout(2,2));
+		
+		size2.add(tileWidthLabel); // (2,1)
+		size2.add(tileHeightLabel); // (3,1)
+		size2.add(tileWidthText); // (2,2)
+		size2.add(tileHeightText); // (3,2)
+		
+		size.add(size2);
 		
 		newDialog.add(size);
 		
-		btn.setLayout(new GridLayout(1,3,2,2));
+		btn.setLayout(new FlowLayout());
 		
 		btn.add(okBtn); // (0,3)
 		btn.add(cancelBtn); // (1,3)
 		btn.add(lockBtn); // (2,3)
 		
-		newDialog.add(btn);
+		newDialog.add(btn, BorderLayout.SOUTH);
 	}
 	
 	/**==================================
@@ -160,52 +167,35 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	
 	public void setMapWidth(int w) {
 		mapWidth = w;
-		mapWidthText.setValue(w);
 	}
 	
 	public void setMapHeight(int h) {
 		mapHeight = h;
-		mapHeightText.setValue(h);
 	}
 	
-	public void setGridWidth(int gw) {
-		gridWidth = gw;
-		gridWidthText.setValue(gw);
+	public void setTileWidth(int tw) {
+		tileWidth = tw;
 	}
 	
-	public void setGridHeight(int gh) {
-		gridHeight = gh;
-		gridHeightText.setValue(gh);
+	public void setTileHeight(int th) {
+		tileHeight = th;
+	}
+	
+	public void adjustTileWidthText() {
+		tileWidthText.setValue(tileWidth);
+	}
+	
+	public void adjustTileHeightText() {
+		tileHeightText.setValue(tileHeight);
 	}
 	
 	public void setLock(boolean l) {
 		lock = l;
 	}
 	
-	/**==================================
-	// PROPERTY GETTER METHODS.
-	//===================================**/
 	public String getMapText() {
 		return mapText.getText();
 	}
-	
-	public int getMapWidth() {
-		return (Integer)mapWidthText.getValue();
-	}
-	
-	public int getMapHeight() {
-		return (Integer)mapHeightText.getValue();
-	}
-	
-	public int getGridWidth() {
-		return (Integer)gridWidthText.getValue();
-	}
-	
-	public int getGridHeight() {
-		return (Integer)gridHeightText.getValue();
-	}
-	
-	public boolean isSizeLocked() { return lock; }
  	
 	/**==================================
 	// HELPER METHODS.
@@ -237,7 +227,7 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 	private JSpinner makeSpinner(int num, String name) {
 		JSpinner spinner;
 		
-		if (name.startsWith("grid")) {
+		if (name.startsWith("tile")) {
 			spinner = new JSpinner(
 					new SpinnerNumberModel(num, 8, FruitEditor.GRID_SIZE*16, 1));
 		} else {
@@ -276,23 +266,6 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		return btn;
 	}
 	
-	/*private JButton makeButton(String text, String icon, String name) {
-		JButton btn;
-		
-		// Add button, load text if unable to load icon.
-		try {
-			btn = new JButton(FruitImgBank.get().loadIconImage(icon));
-		} catch (Exception e) {
-			btn = new JButton(text);
-		}
-		
-		btn.setName(name);
-		btn.addActionListener(this);
-		btn.addKeyListener(this);
-		
-		return btn;
-	}*/
-	
 	/**=======================================
 	// actionPerformed(actionEvent)
 	//========================================*/
@@ -309,8 +282,10 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 				setLock(lockBtn.isSelected());
 				
 				if (lock) {
-					setGridWidth(FruitEditor.GRID_SIZE);
-					setGridHeight(FruitEditor.GRID_SIZE);
+					setTileWidth(FruitEditor.GRID_SIZE);
+					setTileHeight(FruitEditor.GRID_SIZE);
+					adjustTileWidthText();
+					adjustTileHeightText();
 				}
 			}
 		}
@@ -328,16 +303,18 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 			} else if (src == mapHeightText) {
 				setMapHeight((Integer)mapHeightText.getValue());
 				System.out.println(mapHeight); // test debug here
-			} else if (src == gridWidthText) {
-				setGridWidth((Integer)gridWidthText.getValue()); // Set grid width to value in text field.
+			} else if (src == tileWidthText) {
+				setTileWidth((Integer)tileWidthText.getValue()); // Set grid width to value in text field.
 				if (lock) {
 					// Set grid height and its text field to new height if locked.
-					setGridHeight((Integer)gridWidthText.getValue());
+					setTileHeight((Integer)tileWidthText.getValue());
+					adjustTileHeightText();
 				}
-			} else if (src == gridHeightText) {
-				setGridHeight((Integer)gridHeightText.getValue());
+			} else if (src == tileHeightText) {
+				setTileHeight((Integer)tileHeightText.getValue());
 				if (lock) {
-					setGridWidth((Integer)gridHeightText.getValue());
+					setTileWidth((Integer)tileHeightText.getValue());
+					adjustTileWidthText();
 				}
 			}
 		}
@@ -388,8 +365,8 @@ public class NewDialog implements ActionListener, ChangeListener, KeyListener {
 		} else {
 			// prep the new map
 			// updates are taken care of in the map panel's map setting method
-			mapPanel.setMap(new Map(getMapWidth(), getMapHeight(), 
-					getGridWidth(), getGridHeight()));
+			mapPanel.setMap(new Map(mapWidth, mapHeight, 
+					tileWidth, tileHeight));
 			mapPanel.setMapName(getMapText());
 			
 			setMapText(null); // Leave map text field blank.

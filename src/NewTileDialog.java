@@ -7,6 +7,7 @@ import java.awt.image.*;
 import java.io.*;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
 
@@ -16,18 +17,26 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	
 	// DIALOG SIZE.
 	private final int WIDTH = 560;
-	private final int HEIGHT = 200;
+	private final int HEIGHT = 320;
 	
 	// COMPONENTS.
 	private JLabel tileLabel;
 	private JLabel tileFileLabel;
 	private JLabel gridWidthLabel;
 	private JLabel gridHeightLabel;
+	private JLabel offsetXLabel;
+	private JLabel offsetYLabel;
+	private JLabel paddingVertLabel;
+	private JLabel paddingHorizLabel;
 	
 	private JTextField tilesetText;
 	private JTextField tilesetFileText;
 	private JSpinner gridWidthText;
 	private JSpinner gridHeightText;
+	private JSpinner offsetXText;
+	private JSpinner offsetYText;
+	private JSpinner paddingVertText;
+	private JSpinner paddingHorizText;
 	
 	private JButton browseBtn;
 	private JButton okBtn;
@@ -37,6 +46,10 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	// PROPERTIES.
 	private int gridWidth;
 	private int gridHeight;
+	private int offsetX;
+	private int offsetY;
+	private int paddingV;
+	private int paddingH;
 	
 	private boolean lock = true;
 	
@@ -63,9 +76,9 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		tileDialog.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
 		tileDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		tileDialog.setLocationRelativeTo(null);
+		tileDialog.setResizable(false);
 		tileDialog.setVisible(true);
 		tileDialog.setFocusable(true);
-		tileDialog.setResizable(false);
 	}
 	
 	public void init() {
@@ -77,12 +90,20 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		tileFileLabel = makeLabel("Filename", "tileFileLabel");
 		gridWidthLabel = makeLabel("Grid W:", "gridWidth");
 		gridHeightLabel = makeLabel("Grid H:", "gridHeight");
+		offsetXLabel = makeLabel("X offset:", "offsetX");
+		offsetYLabel = makeLabel("Y offset:", "offsetY");
+		paddingVertLabel = makeLabel("Vertical:", "spacingV");
+		paddingHorizLabel = makeLabel("Horizontal:", "spacingH");
 		
 		// Initialize text fields.
 		tilesetText = makeTextField("tilesetText");
 		tilesetFileText = makeTextField("tilesetFileText");
 		gridWidthText = makeSpinner(gridWidth, "gridWidthText");
 		gridHeightText = makeSpinner(gridHeight, "gridHeightText");
+		offsetXText = makeSpinner(offsetX, "offsetXText");
+		offsetYText = makeSpinner(offsetY, "offsetYText");
+		paddingVertText = makeSpinner(paddingV, "spacingVText");
+		paddingHorizText = makeSpinner(paddingH, "spacingHText");
 		
 		// Initialize buttons.
 		browseBtn = makeButton("Browse...", "browseBtn"); // Load open dialog to browse tileset files.
@@ -94,10 +115,14 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	}
 	
 	private void addComps() {
-		tileDialog.setLayout(new GridLayout(4,1,2,2));
+		tileDialog.setLayout(new BoxLayout(tileDialog.getContentPane(), 
+				BoxLayout.PAGE_AXIS));
 		JPanel one = new JPanel();
 		JPanel two = new JPanel();
+		JPanel three = new JPanel();
 		JPanel sizePanel = new JPanel();
+		JPanel offsetPanel = new JPanel();
+		JPanel spacingPanel = new JPanel();
 		JPanel btnPanel = new JPanel();
 		
 		one.add(tileLabel); // (0,0)
@@ -111,22 +136,47 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		
 		tileDialog.add(two);
 		
-		sizePanel.setLayout(new GridLayout(2,2,8,1));
+		three.setLayout(new GridLayout(1,3));
+		
+		sizePanel.setBorder(new TitledBorder("Tile Size"));
+		sizePanel.setLayout(new GridLayout(4,1));
 		
 		sizePanel.add(gridWidthLabel); // (0,2)
-		sizePanel.add(gridHeightLabel); // (1,2)
-		sizePanel.add(gridWidthText); // (2,2)
+		sizePanel.add(gridWidthText); // (1,2)
+		sizePanel.add(gridHeightLabel); // (2,2)
 		sizePanel.add(gridHeightText); //(3,2)
 		
-		tileDialog.add(sizePanel);
+		three.add(sizePanel);
 		
-		btnPanel.setLayout(new GridLayout(1,3,2,2));
+		offsetPanel.setBorder(new TitledBorder("Offset"));
+		offsetPanel.setLayout(new GridLayout(4,1));
+		
+		offsetPanel.add(offsetXLabel);
+		offsetPanel.add(offsetXText);
+		offsetPanel.add(offsetYLabel);
+		offsetPanel.add(offsetYText);
+		
+		three.add(offsetPanel);
+		
+		spacingPanel.setBorder(new TitledBorder("Padding"));
+		spacingPanel.setLayout(new GridLayout(4,1));
+		
+		spacingPanel.add(paddingVertLabel);
+		spacingPanel.add(paddingVertText);
+		spacingPanel.add(paddingHorizLabel);
+		spacingPanel.add(paddingHorizText);
+		
+		three.add(spacingPanel);
+		
+		tileDialog.add(three);
+		
+		btnPanel.setLayout(new FlowLayout());
 		
 		btnPanel.add(okBtn); // (0,3)
 		btnPanel.add(cancelBtn); // (1,3)
 		btnPanel.add(lockBtn); // (2,3)
 		
-		tileDialog.add(btnPanel);
+		tileDialog.add(btnPanel, BorderLayout.SOUTH);
 	}
 	
 	/**==================================
@@ -149,20 +199,34 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	
 	public void setGridWidth(int gw) {
 		gridWidth = gw;
-		gridWidthText.setValue(gridWidth);
 	}
 	
 	public void setGridHeight(int gh) {
 		gridHeight = gh;
+	}
+	
+	public void adjustGridWidthText() {
+		gridWidthText.setValue(gridWidth);
+	}
+	
+	public void adjustGridHeightText() {
 		gridHeightText.setValue(gridHeight);
 	}
 	
-	public void setGridWidthFromText() {
-		gridWidth = getGridWidth();
+	public void setOffsetX(int ox) {
+		offsetX = ox;
 	}
 	
-	public void setGridHeightFromText() {
-		gridHeight = getGridHeight();
+	public void setOffsetY(int oy) {
+		offsetY = oy;
+	}
+	
+	public void setVertPadding(int sy) {
+		paddingV = sy;
+	}
+	
+	public void setHorizPadding(int sx) {
+		paddingH = sx;
 	}
 	
 	public void setLock(boolean l) {
@@ -188,14 +252,6 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 			return "NONE";
 		
 		return tt;
-	}
-	
-	public int getGridWidth() {
-		return (Integer)gridWidthText.getValue();
-	}
-	
-	public int getGridHeight() {
-		return (Integer)gridHeightText.getValue();
 	}
 	
 	/**==================================
@@ -256,8 +312,15 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 	}
 	
 	private JSpinner makeSpinner(int num, String name) {
-		JSpinner spinner = new JSpinner(
-			new SpinnerNumberModel(num, 8, FruitEditor.GRID_SIZE*4, 2));
+		JSpinner spinner;
+		
+		if (name.startsWith("grid")) {
+			spinner = new JSpinner(
+					new SpinnerNumberModel(num, 8, FruitEditor.GRID_SIZE*4, 2));
+		} else {
+			spinner = new JSpinner(
+					new SpinnerNumberModel(num, 0, 99, 1));
+		}
 		
 		spinner.setName(name);
 		spinner.addChangeListener(this);
@@ -295,27 +358,7 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		
 		if (tileDialog.isVisible()) {
 			if (src == okBtn) {
-				// if tileset filename and/or tileset name is blank,
-				// put warning, else
-				// set up tile panel for tilesets
-				if (getTilesetFilename().equals("") || 
-						getTilesetFilename().matches("\\s+")) {
-					JOptionPane.showMessageDialog(tileDialog, 
-							"No file for tileset loaded.", 
-							"Tileset File", 
-							JOptionPane.WARNING_MESSAGE);
-				} else {
-					try {
-						tilePanel.setTileset(new Tileset(getTilesetFilename(), 
-								getGridWidth(), 
-								getGridHeight()));
-					} catch (Exception fe) {
-						System.err.println("ERROR: File not found. REASON: " + fe.getMessage());
-						fe.printStackTrace();
-					}
-					
-					dispose();
-				}
+				loadTileset();
 			} else if (src == browseBtn) {
 				JFileChooser open = makeImageFileChooser();
 				
@@ -349,6 +392,54 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 		}
 	}
 	
+	private void loadTileset() {
+		// if tileset filename and/or tileset name is blank,
+		// put warning, else
+		// set up tile panel for tilesets
+		if (getTilesetFilename().equals("") || 
+				getTilesetFilename().matches("\\s+")) {
+			JOptionPane.showMessageDialog(tileDialog, 
+					"No file for tileset loaded.", 
+					"Tileset File", 
+					JOptionPane.WARNING_MESSAGE);
+		} else {
+			/* TODO: If tileset grid size != map grid size, prompt user. 
+			 * Exception is only when tileset is blank. 
+			 * When a new map is formed, the tileset panel assumes that there is a tileset. */
+			if (gridWidth != tilePanel.getTileset().getTileWidth() ||
+					gridHeight != tilePanel.getTileset().getTileHeight()) {
+				int confirm = JOptionPane.showConfirmDialog(tileDialog,
+						"New tileset's grid sizes will change. Change anyway?",
+						"Grid Size Change",
+						JOptionPane.WARNING_MESSAGE);
+				
+				if (confirm == JOptionPane.OK_OPTION) {
+					setupTileset();
+				}
+			} else {
+				setupTileset();
+			}
+		}
+	}
+	
+	private void setupTileset() {
+		try {
+			if (offsetX > 0 || offsetY > 0 || 
+					paddingV > 0 || paddingH > 0) {
+				tilePanel.setTileset(new Tileset(getTilesetFilename(),
+						gridWidth, gridHeight, offsetX, offsetY, paddingH, paddingV), true);
+			} else {
+				tilePanel.setTileset(new Tileset(getTilesetFilename(), 
+						gridWidth, gridHeight), true);
+			}
+		} catch (Exception fe) {
+			System.err.println("ERROR: File not found. REASON: " + fe.getMessage());
+			fe.printStackTrace();
+		}
+		
+		dispose();
+	}
+	
 	/**=======================================
 	// stateChanged(actionEvent)
 	//========================================*/
@@ -360,12 +451,22 @@ public class NewTileDialog implements ActionListener, ChangeListener {
 				setGridWidth((Integer)gridWidthText.getValue());
 				if (lock) {
 					setGridHeight((Integer)gridWidthText.getValue());
+					adjustGridHeightText();
 				}
 			} else if (src == gridHeightText) {
 				setGridHeight((Integer)gridHeightText.getValue());
 				if (lock) {
 					setGridWidth((Integer)gridHeightText.getValue());
+					adjustGridWidthText();
 				}
+			} else if (src == offsetXText) {
+				setOffsetX((Integer)offsetXText.getValue());
+			} else if (src == offsetYText) {
+				setOffsetY((Integer)offsetYText.getValue());
+			} else if (src == paddingHorizText) {
+				setHorizPadding((Integer)paddingHorizText.getValue());
+			} else if (src == paddingVertText) {
+				setVertPadding((Integer)paddingVertText.getValue());
 			}
 		}
 	}

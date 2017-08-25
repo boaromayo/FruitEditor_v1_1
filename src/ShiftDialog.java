@@ -6,27 +6,33 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class ShiftDialog extends JDialog implements ActionListener, ChangeListener {
+public class ShiftDialog extends JDialog implements ActionListener, ChangeListener, ItemListener {
 	// DIALOG SIZE.
 	private final int WIDTH = 240;
 	private final int HEIGHT = 120;
 	
 	// LIMIT.
-	private final int MAP_SHIFT = 99;
+	private final int MAP_SHIFT_LIMIT = 99;
 	
 	// COMPONENTS.
-	private JLabel shiftVLabel;
-	private JLabel shiftHLabel;
+	private JLabel directionLabel;
+	private JLabel shiftLabel;
 	
-	private JSpinner shiftVText;
-	private JSpinner shiftHText;
+	private JComboBox directionBox;
+	
+	private JSpinner shiftText;
 	
 	private JButton okBtn;
 	private JButton cancelBtn;
 	
 	// PROPERTIES.
-	private int shiftV;
-	private int shiftH;
+	public static final int UP = 0;
+	public static final int LEFT = 1;
+	public static final int RIGHT = 2;
+	public static final int DOWN = 3;
+	
+	private int direction;
+	private int shift;
 	
 	private MapPanel mapPanel;
 	
@@ -51,65 +57,66 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		setVisible(true);
 		setFocusable(true);
-		setResizable(false);
 	}
 	
 	private void init() {
-		// Initialize shifts.
-		shiftV = 0;
-		shiftH = 0;
+		// Initialize shift settings.
+		direction = DOWN;
+		shift = 0;
 		
 		// Initialize components.
-		shiftVLabel = makeLabel("Up/Down", "shiftV");
-		shiftHLabel = makeLabel("Left/Right", "shiftH");
+		directionLabel = makeLabel("Direction:", "directionLabel");
+		shiftLabel = makeLabel("Value:", "shiftLabel");
 		
-		shiftVText = makeSpinner(shiftV, "shiftVText");
-		shiftHText = makeSpinner(shiftH, "shiftHText");
+		directionBox = makeComboBox(direction, "directionBox");
+		
+		shiftText = makeSpinner(shift, "shiftText");
 		
 		okBtn = makeButton("OK", "okBtn");
 		cancelBtn = makeButton("Cancel", "cancelBtn");
 	}
 	
 	private void addComps() {
-		setLayout(new GridLayout(3,2));
+		setLayout(new GridLayout(1,2));
+		JPanel west = new JPanel();
 		JPanel one = new JPanel();
 		JPanel two = new JPanel();
 		JPanel btn = new JPanel();
 		
-		one.add(shiftVLabel); // (0,0)
-		one.add(shiftHLabel); // (1,0)
+		west.setLayout(new GridLayout(2,1));
 		
-		add(one);
+		one.setLayout(new GridLayout(2,1));
 		
-		two.add(shiftVText); // (0,1)
-		two.add(shiftHText); // (1,1)
+		one.add(directionLabel); // (0,0)
+		one.add(directionBox); // (0,1)
 		
-		add(two);
+		west.add(one);
 		
-		btn.add(okBtn); // (0,2)
-		btn.add(cancelBtn); // (1,2)
+		two.setLayout(new GridLayout(2,1));
+		
+		two.add(shiftLabel); // (0,2)
+		two.add(shiftText); // (0,3)
+		
+		west.add(two);
+		
+		add(west);
+		
+		btn.add(okBtn); // (1,0)
+		btn.add(cancelBtn); // (1,1)
 		
 		add(btn);
 	}
 	
-	public void setVerticalShift(int s) {
-		shiftV = s;
-		shiftVText.setValue(s);
+	public void setShift(int n) {
+		shift = n;
+		shiftText.setValue(n);
 	}
 	
-	public void setHorizontalShift(int s) {
-		shiftH = s;
-		shiftHText.setValue(s);
-	}
-	
-	public int getVerticalShift() {
-		return (Integer)shiftVText.getValue();
-	}
-	
-	public int getHorizontalShift() {
-		return (Integer)shiftHText.getValue();
+	public void setDirection(int dir) {
+		direction = dir;
 	}
 	
 	private JLabel makeLabel(String text, String name) {
@@ -118,13 +125,31 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 		return lbl;
 	}
 	
+	private JComboBox makeComboBox(int dir, String name) {
+		JComboBox comboBox;
+		
+		comboBox = new JComboBox();
+		
+		comboBox.addItem("Up");
+		comboBox.addItem("Left");
+		comboBox.addItem("Right");
+		comboBox.addItem("Down");
+		
+		comboBox.setSelectedIndex(dir);
+		comboBox.setName(name);
+		comboBox.addItemListener(this);
+		
+		return comboBox;
+	}
+	
 	private JSpinner makeSpinner(int n, String name) {
 		JSpinner spinner;
 		
 		spinner = new JSpinner(
-				new SpinnerNumberModel(n, -MAP_SHIFT, MAP_SHIFT, 1));
+				new SpinnerNumberModel(n, 0, MAP_SHIFT_LIMIT, 1));
 		
 		spinner.setName(name);
+		spinner.addChangeListener(this);
 		
 		return spinner;
 	}
@@ -143,8 +168,8 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 		Object src = e.getSource();
 		
 		if (src == okBtn) {
-			/* TODO: Use mapPanel to shift map.
-			 * For now dispose dialog box. */
+			mapPanel.shiftMap(direction,shift);
+			dispose();
 		} else if (src == cancelBtn) {
 			dispose();
 		}
@@ -153,12 +178,18 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 	public void stateChanged(ChangeEvent e) {
 		Object src = e.getSource();
 		
-		if (src == shiftVText) {
-			setVerticalShift((Integer)shiftVText.getValue());
-			System.out.println(shiftV); // print for debug purposes
-		} else if (src == shiftHText) {
-			setHorizontalShift((Integer)shiftHText.getValue());
-			System.out.println(shiftH);
+		if (src == shiftText) {
+			setShift((Integer)shiftText.getValue());
+			System.out.println(shift); // print for debug purposes
+		}
+	}
+
+	public void itemStateChanged(ItemEvent e) {
+		Object src = e.getSource();
+		
+		if (src == directionBox) {
+			setDirection(directionBox.getSelectedIndex());
+			System.out.println(direction);
 		}
 	}
 }

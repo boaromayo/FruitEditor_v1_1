@@ -12,18 +12,12 @@ import java.util.*;
 
 import java.beans.*;
 
-public class FruitListener implements ActionListener,
-	ChangeListener, PropertyChangeListener {
+public class FruitListener implements ActionListener, WindowListener {
 	
 	private FruitEditor fruitEditor;
 	
-	//private Stack<ChangeEvent> changes;
-	private Stack<PropertyChangeEvent> actions;
-	
 	public FruitListener(FruitEditor f) {
 		fruitEditor = f;
-		
-		actions = new Stack<PropertyChangeEvent>();
 	}
 	
 	/**==========================
@@ -99,15 +93,31 @@ public class FruitListener implements ActionListener,
 		// VIEW -> SCALE item listeners
 		else if (src == getComponent("oneItem") ||
 				src == getComponent("oneBtn")) {
+			JRadioButtonMenuItem oneItem = (JRadioButtonMenuItem) getComponent("oneItem");
+			JToggleButton oneBtn = (JToggleButton) getComponent("oneBtn");
+			oneItem.setSelected(true);
+			oneBtn.setSelected(true);
 			//setScale(Map.SCALE_ONE);
 		} else if (src == getComponent("twoItem") ||
 				src == getComponent("twoBtn")) {
+			JRadioButtonMenuItem twoItem = (JRadioButtonMenuItem) getComponent("twoItem");
+			JToggleButton twoBtn = (JToggleButton) getComponent("twoBtn");
+			twoItem.setSelected(true);
+			twoBtn.setSelected(true);
 			//setScale(Map.SCALE_TWO);
 		} else if (src == getComponent("fourItem") ||
 				src == getComponent("fourBtn")) {
+			JRadioButtonMenuItem fourItem = (JRadioButtonMenuItem) getComponent("fourItem");
+			JToggleButton fourBtn = (JToggleButton) getComponent("fourBtn");
+			fourItem.setSelected(true);
+			fourBtn.setSelected(true);
 			//setScale(Map.SCALE_FOUR);
 		} else if (src == getComponent("eightItem") ||
 				src == getComponent("eightBtn")) {
+			JRadioButtonMenuItem eightItem = (JRadioButtonMenuItem) getComponent("eightItem");
+			JToggleButton eightBtn = (JToggleButton) getComponent("eightBtn");
+			eightItem.setSelected(true);
+			eightBtn.setSelected(true);
 			//setScale(Map.SCALE_EIGHT);
 		}
 		
@@ -138,6 +148,13 @@ public class FruitListener implements ActionListener,
 			pencilItem.setSelected(true);
 			pencilBtn.setSelected(true);
 			setDrawMode(DrawMode.PENCIL);
+		} else if (src == getComponent("lineItem") ||
+				src == getComponent("lineBtn")) {
+			JRadioButtonMenuItem lineItem = (JRadioButtonMenuItem)getComponent("lineItem");
+			JToggleButton lineBtn = (JToggleButton)getComponent("lineBtn");
+			lineItem.setSelected(true);
+			lineBtn.setSelected(true);
+			setDrawMode(DrawMode.LINE);
 		} else if (src == getComponent("rectItem") ||
 				src == getComponent("rectBtn")) {
 			JRadioButtonMenuItem rectItem = (JRadioButtonMenuItem)getComponent("rectItem");
@@ -191,37 +208,30 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = open.getSelectedFile();
-			String confirmStr = "Map load complete.";
-			
 			try {
-				readText(file); // read the map file
-				setStatus(confirmStr + "\t");
+				readText(file);
+				fruitEditor.setActiveFile(file);
 			} catch (Exception e) {
-				System.err.println("ERROR: Could not read file " + file.getPath());
+				System.err.println("ERROR: Unable to read file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	/* TODO: This method has redundant functionality.
-	 * Maybe shorten this later. */
 	private void saveAction() {
-		JFileChooser save = makeFileChooser();
+		// If active file is blank, go to save prompt.
+		if (fruitEditor.getActiveFile() == null) {
+			saveAsAction();
+			return;
+		}
 		
-		int confirm = save.showSaveDialog(null);
-		
-		if (confirm == JFileChooser.APPROVE_OPTION) {
-			File file = save.getSelectedFile();
-			String confirmStr = "Map saved.";
-			
-			try {
-				writeText(file);
-				setStatus(confirmStr + "\t");
-				//statusPanel.repaint();
-			} catch (Exception e) {
-				System.err.println("ERROR: Unable to write file " + file.getPath());
-				e.printStackTrace();
-			}
+		File file = fruitEditor.getActiveFile();
+		try {
+			writeText(file);
+			fruitEditor.setActiveFile(file);
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to write file " + file.getPath());
+			e.printStackTrace();
 		}
 	}
 
@@ -232,28 +242,44 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = saveAs.getSelectedFile();
-			String confirmStr = "Map saved as " + file.getName();
-			
 			try {
 				writeText(file);
-				setStatus(confirmStr);
+				fruitEditor.setActiveFile(file);
 			} catch (Exception e) {
-				System.err.println("ERROR: Unable to write file " + file);
+				System.err.println("ERROR: Unable to write file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	private void closeAction() {
-		System.exit(0);
+		// If changes made, prompt user warning.
+		if (undoable()) {
+			int confirm = JOptionPane.showConfirmDialog(
+				fruitEditor.getFrame(), 
+				"Save before closing?\nUnsaved changes may be lost.",
+				"Close FruitEditor",
+				JOptionPane.YES_NO_CANCEL_OPTION);
+		
+			if (confirm == JOptionPane.YES_OPTION) {
+				saveAction();
+				fruitEditor.getFrame().dispose();
+			} else if (confirm == JOptionPane.NO_OPTION) {
+				fruitEditor.getFrame().dispose();
+			}
+		} else {
+			fruitEditor.getFrame().dispose();
+		}
 	}
 	
 	private void undo() {
-		fruitEditor.update();
+		UndoManager um = fruitEditor.getUndoManager();
+		um.undo();
 	}
 	
 	private void redo() {
-		fruitEditor.update();
+		UndoManager um = fruitEditor.getUndoManager();
+		um.redo();
 	}
 	
 	private void cutAction() {
@@ -275,16 +301,19 @@ public class FruitListener implements ActionListener,
 	/**================================
 	// SHORTCUT METHODS.
 	//=================================*/
-	private void setStatus(String text) {
-		fruitEditor.getStatusPanel().setStatus(text);
+	private void setGrid(boolean grid) {
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setGrid(grid);
 	}
 	
-	private void setGrid(boolean grid) {
-		fruitEditor.getMapPanel().setGrid(grid);
+	private void setDrawMode(DrawMode d) {
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setDrawMode(d);
 	}
 	
 	private void setMode(EditorMode e) {
-		fruitEditor.getMapPanel().setMode(e);
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setMode(e);
 	}
 	
 	/*private void setScale(int scale) {
@@ -292,21 +321,41 @@ public class FruitListener implements ActionListener,
 		map.setScale(scale);
 	}*/
 	
-	private void setDrawMode(DrawMode d) {
-		Map map = fruitEditor.getMap();
-		map.setDrawMode(d);
+	private boolean undoable() {
+		return fruitEditor.undoable();
 	}
 	
 	/**================================
-	// STATE CHANGE METHODS
+	// WINDOW METHODS.
 	//=================================**/
-	public void stateChanged(ChangeEvent e) {
+	public void windowOpened(WindowEvent e) {
 		
 	}
 	
-	public void propertyChange(PropertyChangeEvent e) {
-		// For any action taken, place in a stack of actions
-		actions.add(e);
+	public void windowClosing(WindowEvent e) {
+		closeAction();
+	}
+	
+	public void windowClosed(WindowEvent e) {
+		UndoManager um = fruitEditor.getUndoManager();
+		um.clear();
+		System.exit(0);
+	}
+	
+	public void windowActivated(WindowEvent e) {
+		
+	}
+	
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+	
+	public void windowIconified(WindowEvent e) {
+		
+	}
+	
+	public void windowDeiconified(WindowEvent e) {
+		
 	}
 	
 	/**===========================
@@ -375,7 +424,7 @@ public class FruitListener implements ActionListener,
 			}
 			
 			fruitEditor.getMapPanel().setMap(map);
-			fruitEditor.getMapPanel().setMapName(mapName);
+			map.setName(mapName);
 			fruitEditor.getTilePanel().setTileset(tileset);
 			
 			// Close reader to cleanup
@@ -400,8 +449,8 @@ public class FruitListener implements ActionListener,
 			// Write map parameters in file.
 			writer.print(map.getWidth() + " ");
 			writer.print(map.getHeight() + " ");
-			writer.print(map.getGridWidth() + " ");
-			writer.println(map.getGridHeight());
+			writer.print(map.getTileWidth() + " ");
+			writer.println(map.getTileHeight());
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();
