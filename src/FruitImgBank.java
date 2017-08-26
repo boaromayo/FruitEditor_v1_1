@@ -61,6 +61,7 @@ public class FruitImgBank {
 			fis = new FileInputStream(file);
 			System.out.println("Loading image...");
 			img = ImageIO.read(fis);
+			fis.close();
 			return img;
 		} catch (Exception e) {
 			System.err.println("ERROR: Unable to load buffered image " + path);
@@ -83,6 +84,7 @@ public class FruitImgBank {
 			fis = new FileInputStream(file);
 			img = ImageIO.read(fis);
 			img = img.getSubimage(x, y, width, height);
+			fis.close();
 			return img;
 		} catch (Exception e) {
 			System.err.println("ERROR: Unable to load buffered image " + path);

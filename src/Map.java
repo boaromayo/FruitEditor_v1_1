@@ -17,9 +17,6 @@ public class Map {
 	public static final int SCALE_TWO = 2;
 	public static final int SCALE_FOUR = 4;
 	public static final int SCALE_EIGHT = 8;
-
-	// DRAW MODE.
-	private DrawMode drawMode;
 	
 	// MAP NAME.
 	private String name;
@@ -36,17 +33,10 @@ public class Map {
 	private int scaleFactor;
 	private int scaleWidth;
 	private int scaleHeight;
-	
-	// GRID DIMENSIONS.
-	private int gridWidth;
-	private int gridHeight;
 
 	// TILE DIMENSIONS.
-	//private int tileWidth;
-	//private int tileHeight;
-	
-	// CURSOR.
-	//private Cursor cursor;
+	private int tileWidth;
+	private int tileHeight;
 	
 	public Map() {
 		this(8, 8, 24, 24);
@@ -56,76 +46,94 @@ public class Map {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = 1;
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
-		//tileWidth = FruitEditor.TILE_SIZE;
-		//tileHeight = FruitEditor.TILE_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 
-		initTiles();
+		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
-		setDrawMode(DrawMode.PENCIL);
 	}
 	
 	public Map(int width, int height, int depth) {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = depth;
-		gridWidth = FruitEditor.GRID_SIZE;
-		gridHeight = FruitEditor.GRID_SIZE;
-		//tileWidth = FruitEditor.TILE_SIZE;
-		//tileHeight = FruitEditor.TILE_SIZE;
+		tileWidth = FruitEditor.GRID_SIZE;
+		tileHeight = FruitEditor.GRID_SIZE;
 		scaleFactor = 1;
 		
-		initTiles();
+		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
 		setScale(scaleFactor);
-		setDrawMode(DrawMode.PENCIL);
 	}
 	
-	public Map(int width, int height, int gw, int gh) {
+	public Map(int width, int height, int tw, int th) {
 		mapWidth = width;
 		mapHeight = height;
 		mapDepth = 1;
-		gridWidth = gw;
-		gridHeight = gh;
-		//tileWidth = FruitEditor.TILE_SIZE;
-		//tileHeight = FruitEditor.TILE_SIZE;
+		tileWidth = tw;
+		tileHeight = th;
 		scaleFactor = 1;
 		
-		initTiles();
-		setScale(scaleFactor);
-		setDrawMode(DrawMode.PENCIL);
-	}
-	
-	public void initTiles() { 
 		mapTiles = new Tile[mapHeight][mapWidth][mapDepth];
+		setScale(scaleFactor);
 	}
 	
 	public void draw(Graphics g, int x, int y, Dimension size) {
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, mapWidth*gridWidth, mapHeight*gridHeight);
+		g.fillRect(0, 0, mapWidth*tileWidth, mapHeight*tileHeight);
 		
-		x = Math.max(x, 0);
-		y = Math.max(y, 0);
+		int xmin = Math.max(x / tileWidth, 0);
+		int ymin = Math.max(y / tileHeight, 0);
 		
 		int r = mapTiles.length;
 		int c = mapTiles[0].length;
+
+		int xmax = Math.min((x + (int)size.getWidth()) / tileWidth, c);
+		int ymax = Math.min((y + (int)size.getHeight()) / tileHeight, r);
 		
-		r = Math.min(y + (int)size.getHeight(), r);
-		c = Math.min(x + (int)size.getWidth(), c);
-		
-		for (int j=y; j < r; j++) {
-			for (int i=x; i < c; i++) {
-				if (getTile(i,j) != null) {
-					g.drawImage(getTile(i,j).getImage(), 
-							i*gridWidth, 
-							j*gridHeight, 
-							gridWidth, 
-							gridHeight, 
-							null);
-				}
+		for (int j=ymin; j < ymax; j++) {
+			for (int i=xmin; i < xmax; i++) {
+				if (getTile(i,j) != null)
+					getTile(i,j).draw(g, i*tileWidth, j*tileHeight);
 			}
 		}
+	}
+	
+	public void resize(int w, int h) {
+		Tile[][][] newMapTiles = new Tile[h][w][mapDepth];
+		
+		mapWidth = w;
+		mapHeight = h;
+		
+		int r = Math.min(mapTiles.length, h);
+		int c = Math.min(mapTiles[0].length, w);
+		
+		for (int j=0; j < r; j++) {
+			for (int i=0; i < c; i++) {
+				newMapTiles[j][i][0] = mapTiles[j][i][0];
+			}
+		}
+		mapTiles = newMapTiles;
+	}
+	
+	public void shift(int tx, int ty) {
+		Tile[][][] newMapTiles = new Tile[mapHeight][mapWidth][mapDepth];
+		
+		int r = newMapTiles.length;
+		int c = newMapTiles[0].length;
+		
+		int xstart = Math.max(0, -tx);
+		int ystart = Math.max(0, -ty);
+		
+		int xend = Math.min(c, c - tx);
+		int yend = Math.min(r, r - ty);
+		
+		for (int j=ystart; j < yend; j++) {
+			for (int i=xstart; i < xend; i++) {
+				newMapTiles[j+ty][i+tx][0] = mapTiles[j][i][0];
+			}
+		}
+		mapTiles = newMapTiles;
 	}
 	
 	public void setName(String n) {
@@ -136,23 +144,9 @@ public class Map {
 		scaleFactor = s;
 		scaleWidth = (int)(mapWidth / (scaleFactor > 0 ? scaleFactor : 1));
 		scaleHeight = (int)(mapHeight / (scaleFactor > 0 ? scaleFactor : 1));
-		gridWidth /= scaleFactor;
-		gridHeight /= scaleFactor;
+		tileWidth /= scaleFactor;
+		tileHeight /= scaleFactor;
 	}
-	
-	public void setWidth(int w) { mapWidth = w; }
-	
-	public void setHeight(int h) { mapHeight = h; }
-	
-	public void setDepth(int d) { mapDepth = d; }
-	
-	public void setGridWidth(int gw) { gridWidth = gw; }
-	
-	public void setGridHeight(int gh) { gridHeight = gh; }
-	
-	//public void setTileWidth(int tw) { tileWidth = tw; }
-	
-	//public void setTileHeight(int th) { tileHeight = th; }
 	
 	public void setTile(int x, int y, Tile t) {
 		setTile(x,y,0,t); // set first layer by default
@@ -162,11 +156,45 @@ public class Map {
 		mapTiles[y][x][z] = t;
 	}
 	
-	/**========================================
-	// setDrawMode(drawMode) - Set the draw mode.
-	//=========================================**/
-	public void setDrawMode(DrawMode d) {
-		drawMode = d;
+	public void setTiles(int[][] ids, Tileset t) {
+		setTiles(ids,t,0); // set all tiles in first layer as default
+	}
+	
+	public void setTiles(int[][] ids, Tileset t, int layer) {
+		if (ids != null) {
+			int rows = ids.length;
+			int cols = ids[0].length;
+			
+			int i, j; // Loop counters
+			
+			for (i=0; i < rows; i++)
+				for (j=0; j < cols; j++)
+					if (ids[i][j] < 0)
+						mapTiles[i][j][layer] = null;
+					else
+						mapTiles[i][j][layer] = t.getTile(ids[i][j]);
+		}
+	}
+	
+	public void setAll(int[][][] ids, Tileset t) {
+		if (ids != null) {
+			int rows = ids.length;
+			int cols = ids[0].length;
+			int layers = ids[0][0].length;
+			
+			int i, j, k; // Loop counters
+			
+			for (i=0; i < rows; i++) {
+				for (j=0; j < cols; j++) {
+					for (k=0; k < layers; k++) {
+						if (ids[i][j][k] < 0)
+							mapTiles[i][j][k] = null;
+						else
+							mapTiles[i][j][k] = t.getTile(ids[i][j][k]);
+					}
+				}
+			}
+		}
 	}
 	
 	public String getName() { return name; }
@@ -181,15 +209,11 @@ public class Map {
 	
 	public int getHeight() { return mapHeight; }
 	
-	public int getLayers() { return mapDepth; }
+	public int getDepth() { return mapDepth; }
 	
-	public int getGridWidth() { return gridWidth; }
+	public int getTileWidth() { return tileWidth; }
 	
-	public int getGridHeight() { return gridHeight; }
-	
-	//public int getTileWidth() { return tileWidth; }
-	
-	//public int getTileHeight() { return tileHeight; }
+	public int getTileHeight() { return tileHeight; }
 	
 	public Tile getTile(int x, int y) {
 		return getTile(x,y,0); // get first layer by default
@@ -199,21 +223,17 @@ public class Map {
 		return mapTiles[y][x][z];
 	}
 	
-	public DrawMode drawMode() {
-		return drawMode;
-	}
-	
 	public int[][][] getMapIntArray() {
 		int[][][] sheet = new int[mapHeight][mapWidth][mapDepth];
-		int h = sheet.length;
-		int w = sheet[0].length;
-		int d = sheet[0][0].length;
+		int rows = sheet.length;
+		int cols = sheet[0].length;
+		int layers = sheet[0][0].length;
 		
 		int i, j, k; // loop counters
 		
-		for (i=0; i < h; i++) {
-			for (j=0; j < w; j++) {
-				for (k=0; k < d; k++) {
+		for (i=0; i < rows; i++) {
+			for (j=0; j < cols; j++) {
+				for (k=0; k < layers; k++) {
 					if (mapTiles[i][j][k] == null)
 						sheet[i][j][k] = -1;
 					else
@@ -231,13 +251,13 @@ public class Map {
 	
 	public int[][] getMapIntArray2(int layer) {
 		int[][] sheet = new int[mapHeight][mapWidth];
-		int r = sheet.length;
-		int c = sheet[0].length;
+		int rows = sheet.length;
+		int cols = sheet[0].length;
 		
 		int i, j; // loop counters
 		
-		for (i=0; i < r; i++) {
-			for (j=0; j < c; j++) {
+		for (i=0; i < rows; i++) {
+			for (j=0; j < cols; j++) {
 				if (mapTiles[i][j][layer] == null)
 					sheet[i][j] = -1;
 				else

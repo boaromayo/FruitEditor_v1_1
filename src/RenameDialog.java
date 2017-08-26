@@ -221,8 +221,12 @@ public class RenameDialog implements ActionListener, ChangeListener {
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// refactor the map name and size
-					mapPanel.setMapName(getMapText());
-					mapPanel.setMapSize(getMapWidth(), getMapHeight());
+					if (!(mapPanel.getMapName().equals(getMapText())))
+						mapPanel.setMapName(getMapText());
+					
+					if (getMapWidth() != mapPanel.getMapWidth() || 
+							getMapHeight() != mapPanel.getMapHeight())
+						mapPanel.resizeMap(getMapWidth(), getMapHeight());
 					
 					setMapText(null); // Leave map text field blank.
 					
@@ -240,10 +244,10 @@ public class RenameDialog implements ActionListener, ChangeListener {
 		if (renameDialog.isVisible()) {
 			if (src == mapWidthText) {
 				setMapWidth((Integer)mapWidthText.getValue());
-				System.out.println(mapWidth); // test debug here
+				System.out.println(mapWidth); // debug only
 			} else if (src == mapHeightText) {
 				setMapHeight((Integer)mapHeightText.getValue());
-				System.out.println(mapHeight); // test debug here
+				System.out.println(mapHeight); // debug only
 			}
 		}
 	}

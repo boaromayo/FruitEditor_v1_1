@@ -12,15 +12,12 @@ import java.io.*;
 import java.util.*;
 
 public class MapPanel extends JPanel implements MouseListener, 
-	MouseMotionListener, KeyListener, ActionListener {
+	MouseMotionListener, ActionListener {
 	// FILES.
 	private FruitEditor fruitEditor;
 	
 	// MAP.
 	private Map map;
-	
-	// EVENT LISTENER.
-	private FruitListener fruitListener;
 	
 	// MODES.
 	private DrawMode drawMode;
@@ -57,8 +54,6 @@ public class MapPanel extends JPanel implements MouseListener,
 	// MOUSE COORDS.
 	private int mouseX;
 	private int mouseY;
-	private int oldmouseX;
-	private int oldmouseY;
 	
 	// CURSOR COORDS.
 	private int cursorX;
@@ -68,8 +63,6 @@ public class MapPanel extends JPanel implements MouseListener,
 		fruitEditor = f;
 		
 		map = f.getMap();
-		
-		fruitListener = f.getListener();
 		
 		drawMode = DrawMode.PENCIL;
 		editorMode = EditorMode.MAP_MODE;
@@ -81,19 +74,20 @@ public class MapPanel extends JPanel implements MouseListener,
 		gridHeight = map.getTileHeight();
 		
 		mouseX = mouseY = 0;
+		cursorX = cursorY = 0;
 		
 		// Setup right-click menu.
 		popupSetup();
-	
+		
 		setPreferredSize(new Dimension(mapWidth*gridWidth, mapHeight*gridHeight));
 		setLayout(new FlowLayout());
 		
-		addMouseListener(this);
-		addMouseMotionListener(this);
-		addKeyListener(this);
-		
 		setFocusable(true);
 		requestFocusInWindow();
+		
+		addKeyListener(new KeyClass());
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 	
 	private void popupSetup() {
@@ -139,16 +133,18 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	private void editSetup() {
+		FruitListener fl = fruitEditor.getListener();
+		
 		// RIGHT CLICK MENU -> EDIT ITEMS.
 		cutItem = new JMenuItem("Cut"); 		// CUT
 		copyItem = new JMenuItem("Copy"); 		// COPY
 		pasteItem = new JMenuItem("Paste"); 	// PASTE
 		deleteItem = new JMenuItem("Delete"); 	// DELETE
 		
-		cutItem.addActionListener(fruitListener);
-		copyItem.addActionListener(fruitListener);
-		pasteItem.addActionListener(fruitListener);
-		deleteItem.addActionListener(fruitListener);
+		cutItem.addActionListener(fl);
+		copyItem.addActionListener(fl);
+		pasteItem.addActionListener(fl);
+		deleteItem.addActionListener(fl);
 		
 		// Set names for components.
 		cutItem.setName("cutRt");
@@ -204,7 +200,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			drawCursor(g, mouseX, mouseY);
 			
 			if (editorMode.equals(EditorMode.EVENT_MODE)) {
-				drawEventCursor(g);
+				drawEventCursor(g, cursorX, cursorY);
 			}
 		}
 	}
@@ -245,12 +241,12 @@ public class MapPanel extends JPanel implements MouseListener,
 		}
 	}
 	
-	private void drawEventCursor(Graphics g) {
+	private void drawEventCursor(Graphics g, int x, int y) {
 		Graphics2D g2 = convertTo2d(g);
-		int tx = snap(cursorX, gridWidth);
-		int ty = snap(cursorY, gridHeight);
+		int tx = snap(x, gridWidth);
+		int ty = snap(y, gridHeight);
 		
-		g2.setStroke(new BasicStroke(3));
+		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		
 		if (checkBounds(tx,ty,
@@ -260,23 +256,92 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void mapPressed(int x, int y) {
+		int [][][] mapIds = map.getMapIntArray();
 		switch (drawMode) {
 		case PENCIL:
 			map.setTile(x, y, fruitEditor.getSelectedTile());
 			break;
-		case RECTANGLE:
-			break;
-		case CIRCLE:
-			break;
 		case FILL:
-			floodFill(x, y, map.getTile(x,y), fruitEditor.getSelectedTile());
+			//floodFill(x, y, map.getTile(x,y), fruitEditor.getSelectedTile());
+			break;
 		default:
 			break;
 		}
-		
+		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
 		update();
 	}
 	
+	public void mapDragged(int x1, int y1, int x2, int y2) {
+		switch (drawMode) {
+		case PENCIL:
+			map.setTile(x1, y1, fruitEditor.getSelectedTile());
+			break;
+		case LINE:
+			//lineFill(x1, y1, x2, y2, map.getTile(x1,y1), fruitEditor.getSelectedTile());
+			break;
+		case RECTANGLE:
+			//rectFill(x1, y1, x2, y2, map.getTile(x1,y1), fruitEditor.getSelectedTile());
+			break;
+		case CIRCLE:
+			break;
+		default:
+			break;
+		}
+		update();
+	}
+	
+	/**=======================================
+	 * lineFill(x1,y1,x2,y2,newTile) - Draw a "line" of newTiles from (x1,y1) to (x2,y2).
+	 * @param x1 - starting x location
+	 * @param y1 - starting y location
+	 * @param x2 - ending x location
+	 * @param y2 - ending y location
+	 * @param newTile - The new Tile to be set
+	 * 
+	 * The integer version of Bresenham's line algorithm will be used to
+	 * draw the "line", like so:
+	 *  set deltax = (x2 - x1)
+	 *  set deltay = (y2 - y1)
+	 *  set D = dy*2 - dx
+	 *  set y to y1
+	 *  loop for each x from x1 to x2
+	 *  	draw new tile(x,y)
+	 *  	if derror >= 0 then
+	 *  		increment y by 1
+	 *  		decrease derror by dx*2
+	 *  	increment derror by dy*2
+	 *  return;
+	 * 
+	//========================================**/
+	// for version 0.2.6
+	/*private void lineFill(int x1, int y1, int x2, int y2, Tile oldTile, Tile newTile) {
+		int dx = Math.abs(x1 - x2);
+		int dy = Math.abs(y1 - y2);
+		int d = dy*2 - dx;
+		int e = 0;
+		int y = y1;
+		
+		if (dx >= dy) {
+			for (int x = x1; x < x2; x++) {
+				map.setTile(x,y,newTile);
+				e += dy;
+				if (d > 0) {
+					y++;
+					d -= dx*2;
+					e += dy - dx;
+				}
+				d += dy*2;
+			}
+		} else {
+			for (int x = x1; x < x2; x++) {
+				map.setTile(x,y,newTile);
+				e += dy;
+				if (d > 0) {
+					y--;
+					d += dx*2;
+					e -= dy - dx;
+				}
+=======
 	public void mapPressed(int x1, int y1, int x2, int y2) {
 		switch (drawMode) {
 		case PENCIL:
@@ -308,7 +373,39 @@ public class MapPanel extends JPanel implements MouseListener,
 				map.setTile(c,r,newTile);
 			}
 		}
-	}
+	}*/
+	
+	/**========================================
+	 * rectFill(x1,y1,x2,y2,newTile) - Fill a rectangle of newTiles starting
+	 * from (x1,y1) and end with a width of x2-x1 and a height of y2-y1 at (x2,y2).
+	 * @param x1 - starting x location
+	 * @param y1 - starting y location
+	 * @param x2 - ending x location
+	 * @param y2 - ending y location
+	 * 
+	 * The algorithm is based on tips4java.wordpress.com's solution
+	 * for drawing filled rectangles via mouse.
+	//=========================================**/
+	// for version 0.2.6
+	/*private void rectFill(int x1, int y1, int x2, int y2, Tile oldTile, Tile newTile) {
+		// Assume that (x1,y1), and (x2,y2) are tile coords.
+		int r, c;
+		
+		int x, y, w, h; // Parameters of the rect.
+		
+		x = Math.min(x1,x2);
+		y = Math.min(y1,y2);
+		w = Math.abs(x1 - x2);
+		h = Math.abs(y1 - y2);
+		
+		System.out.println("(" + x + "," + y + ") (" + w + " x " + h + ")");
+		
+		for (r = y; r < h; r++) {
+			for (c = x; c < w; c++) {
+				map.setTile(c,r,newTile);
+			}
+		}
+	}*/
 	
 	/**========================================
 	 * floodFill(x,y,targetTile,newTile) - Fill a selected area with a new Tile until it
@@ -350,7 +447,11 @@ public class MapPanel extends JPanel implements MouseListener,
 	 *  loop until recursion stack is finished.
 	 *  return;
 	//========================================**/
-	private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
+	// for version 0.2.6
+	/*private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
+	 	// Mark current ids of map before change.
+	  int [][][] mapIds = map.getMapIntArray();
+	  	
 		// Use static comparator method to prevent null-case errors.
 		if (Tile.compareTo(targetTile,newTile))
 			return;
@@ -385,9 +486,8 @@ public class MapPanel extends JPanel implements MouseListener,
 				floodFill(i, y+1, targetTile, newTile);
 			}
 		}
-		
-		update();
-	}
+		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
+	}*/
 	
 	public void setViewport(JViewport vp) {
 		viewport = vp;
@@ -415,10 +515,16 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void setMapName(String n) {
+		if (isPanelActive() && map.getName() != null)
+			fruitEditor.addChanges(new MapRenameCommand(map,n));
+		
 		map.setName(n);
 	}
 	
 	public synchronized void resizeMap(int w, int h) {
+		if (isPanelActive())
+			fruitEditor.addChanges(new MapResizeCommand(this,map,w,h));
+
 		mapWidth = w;
 		mapHeight = h;
 		map.resize(mapWidth,mapHeight);
@@ -429,23 +535,33 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public synchronized void shiftMap(int dir, int t) {
+		int [][][] mapIds = map.getMapIntArray();
 		switch(dir) {
-		case 0:
+		case ShiftDialog.UP:
 			map.shift(0, -t);
 			break;
-		case 1:
+		case ShiftDialog.LEFT:
 			map.shift(-t, 0);
 			break;
-		case 2:
+		case ShiftDialog.RIGHT:
 			map.shift(t, 0);
 			break;
-		case 3:
+		case ShiftDialog.DOWN:
 			map.shift(0, t);
 			break;
 		}
+		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
 		update();
 	}
 	
+	/**========================================
+	 * setMapSize(w,h) - Set map panel size.
+	//=========================================**/
+	public void setMapSize(int w, int h) {
+		mapWidth = w;
+		mapHeight = h;
+	}
+  
 	/**========================================
 	 * setGrid() - Set grid on/off.
 	//=========================================**/
@@ -511,6 +627,26 @@ public class MapPanel extends JPanel implements MouseListener,
 		return g2;
 	}
 	
+	/**=======================================
+	 * tileToPixel(x,y) - Convert tile to pixel coordinates.
+	//========================================**/
+	public Point tileToPixel(int x, int y) {
+		return new Point(x * gridWidth, y * gridHeight);
+	}
+	
+	/**=======================================
+	 * pixelToTile(x,y) - Convert pixel to tile coordinates.
+	//========================================**/
+	public Point pixelToTile(int x, int y) {
+		return new Point(x / gridWidth, y / gridHeight);
+	}
+	
+	/**=====================================
+	 * snap(n,snap) - Ensures tile snaps to map's grid.
+	//=====================================**/
+	public int snap(int n, int snap) {
+		return n - (n % snap);
+	}
 	
 	public void undo() {
 		fruitEditor.update();
@@ -573,21 +709,15 @@ public class MapPanel extends JPanel implements MouseListener,
 		fruitEditor.update();
 	}
 	
-	public void mouseHovered(MouseEvent e) {
-		/*mouseX = e.getX();
-		mouseY = e.getY();*/
-	}
-	
 	public void mouseDragged(MouseEvent e) {
 		int btn = e.getButton();
-		mouseX = snap(e.getX(), gridWidth);
-		mouseY = snap(e.getY(), gridHeight);
-		oldmouseX = mouseX;
-		oldmouseY = mouseY;
+		int newMouseX = snap(e.getX(), gridWidth);
+		int newMouseY = snap(e.getY(), gridHeight);
+		
 		int tx = pixelToTile(mouseX,mouseY).x;
 		int ty = pixelToTile(mouseX,mouseY).y;
-		int otx = pixelToTile(oldmouseX,oldmouseY).x;
-		int oty = pixelToTile(oldmouseX,oldmouseY).y;
+		int ntx = pixelToTile(newMouseX,newMouseY).x;
+		int nty = pixelToTile(newMouseX,newMouseY).y;
 		
 		// Set status panel
 		if (isPanelActive() && checkBounds(tx,ty,mapWidth,mapHeight)) {
@@ -600,7 +730,18 @@ public class MapPanel extends JPanel implements MouseListener,
 		if (btn == MouseEvent.BUTTON1) {
 			if (isPanelActive() && 
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
-				mapPressed(tx,ty,otx,oty);
+				if (drawMode == DrawMode.PENCIL || drawMode == DrawMode.FILL) {
+					// Update current mouse coords to ensure 
+					// draw cursor is flush with mouse cursor
+					mouseX = snap(e.getX(), gridWidth);
+					mouseY = snap(e.getY(), gridHeight);
+					tx = pixelToTile(mouseX,mouseY).x;
+					ty = pixelToTile(mouseX,mouseY).y;	
+					
+					mapPressed(tx,ty);
+				} else {
+					mapDragged(tx,ty,ntx,nty);
+				}
 			}
 		}
 	}
@@ -622,14 +763,6 @@ public class MapPanel extends JPanel implements MouseListener,
 					checkBounds(tx,ty,mapWidth,mapHeight)) {
 				mapPressed(tx,ty);
 			}
-		} else if (btn == MouseEvent.BUTTON3) {
-			// if right-click btn is pressed
-			mouseX = e.getX();
-			mouseY = e.getY();
-			if (isPanelActive() &&
-					checkBounds(mouseX,mouseY,mapWidth*gridWidth,mapHeight*gridHeight)) {
-				popupMenu.show(this, mouseX, mouseY);
-			}
 		}
 	}
 
@@ -638,39 +771,23 @@ public class MapPanel extends JPanel implements MouseListener,
 		
 		// if left-click btn released
 		if (btn == MouseEvent.BUTTON1) {
-			oldmouseX = snap(e.getX(), gridWidth);
-			oldmouseY = snap(e.getY(), gridHeight);
-			int tx = pixelToTile(oldmouseX,oldmouseY).x;
-			int ty = pixelToTile(oldmouseX,oldmouseY).y;
-			
-			if (isPanelActive() && 
-					checkBounds(tx,ty,mapWidth,mapHeight)) {
-				mapPressed(tx,ty);
-			}
-				
-		} else if (btn == MouseEvent.BUTTON3) {
-			// if right-click btn is released
-			oldmouseX = e.getX();
-			oldmouseY = e.getY();
-			if (isPanelActive() &&
-					checkBounds(oldmouseX,oldmouseY,mapWidth*gridWidth,mapHeight*gridHeight)) {
-				popupMenu.show(this, oldmouseX, oldmouseY);
-			}
+			mouseX = snap(e.getX(), gridWidth);
+			mouseY = snap(e.getY(), gridHeight);
 		}
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		/*int btn = e.getButton();
-		int tx, ty;
+		int btn = e.getButton();
 		
-		if (btn == MouseEvent.BUTTON1) {
+		// if right-click btn is clicked
+		if (btn == MouseEvent.BUTTON3) {
 			mouseX = e.getX();
 			mouseY = e.getY();
-			tx = mouseX / gridWidth;
-			ty = mouseY / gridHeight;
+			if (isPanelActive() &&
+				checkBounds(mouseX,mouseY,mapWidth*gridWidth,mapHeight*gridHeight)) {
+				popupMenu.show(this, mouseX, mouseY);
+			}
 		}
-		
-		update();*/
 	}
 	
 	public void mouseEntered(MouseEvent e) {
@@ -684,27 +801,105 @@ public class MapPanel extends JPanel implements MouseListener,
 	/**================================
 	 * KEY LISTENER METHODS.
 	//=================================**/
-	public void keyPressed(KeyEvent e) {
-		if (editorMode.equals(EditorMode.EVENT_MODE)) {
-			/* TODO: Handle event cursor input. */
+	private class KeyClass extends KeyAdapter {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+			
+			boolean up = (keyCode == KeyEvent.VK_UP);
+			boolean left = (keyCode == KeyEvent.VK_LEFT);
+			boolean right = (keyCode == KeyEvent.VK_RIGHT);
+			boolean down = (keyCode == KeyEvent.VK_DOWN);
+			
+			if (editorMode.equals(EditorMode.EVENT_MODE)) {
+				if (up) {
+					System.out.println("UP pressed");
+					moveUp(true);
+				}
+				if (left) {
+					System.out.println("LEFT pressed");
+					moveLeft(true);
+				}
+				if (right) {
+					System.out.println("RIGHT pressed");
+					moveRight(true);
+				}
+				if (down) {
+					System.out.println("DOWN pressed");
+					moveDown(true);
+				}
+				update();
+			}
 		}
-	}
-	
-	public void keyReleased(KeyEvent e) {
-		if (editorMode.equals(EditorMode.EVENT_MODE)) {
-			/* TODO: Handle event cursor input. */
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+			
+			boolean up = (keyCode == KeyEvent.VK_UP);
+			boolean left = (keyCode == KeyEvent.VK_LEFT);
+			boolean right = (keyCode == KeyEvent.VK_RIGHT);
+			boolean down = (keyCode == KeyEvent.VK_DOWN);
+			
+			if (editorMode.equals(EditorMode.EVENT_MODE)) {
+				if (up) {
+					System.out.println("UP released");
+					moveUp(false);
+				}
+				if (left) {
+					System.out.println("LEFT released");
+					moveLeft(false);
+				}
+				if (right) {
+					System.out.println("RIGHT released");
+					moveRight(false);
+				}
+				if (down) {
+					System.out.println("DOWN released");
+					moveDown(false);
+				}
+				update();
+			}
 		}
-	}
-	
-	public void keyTyped(KeyEvent e) {
 		
-	}
-	
-	public void addPropertyChangeListener(PropertyChangeEvent e) {
+		public void moveUp(boolean b) {
+			if (b && cursorY > 0) {
+				int cy = pixelToTile(cursorX,cursorY).y;
+				cy--;
+				cy = tileToPixel(cursorX,cursorY).y;
+				cursorY = cy;
+				b = false;
+			}
+		}
 		
-	}
+		public void moveLeft(boolean b) {
+			if (b && cursorX > 0) {
+				int cx = pixelToTile(cursorX,cursorY).x;
+				cx--;
+				cx = tileToPixel(cursorX,cursorY).x;
+				cursorX = cx;
+				b = false;
+			}
+		}
 	
-	public void removePropertyChangeListener(PropertyChangeEvent e) {
+		public void moveRight(boolean b) {
+			if (cursorX < mapWidth*gridWidth) {
+				int cx = pixelToTile(cursorX,cursorY).x;
+				cx++;
+				cx = tileToPixel(cursorX,cursorY).x;
+				cursorX = cx;
+				b = false;
+			}
+		}
 		
+		public void moveDown(boolean b) {
+			if (b && cursorY < mapHeight*gridHeight) {
+				int cy = pixelToTile(cursorX,cursorY).y;
+				cy++;
+				cy = tileToPixel(cursorX,cursorY).y;
+				cursorY = cy;
+				b = false;
+			}
+		}
 	}
 }

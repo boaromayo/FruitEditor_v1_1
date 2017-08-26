@@ -12,18 +12,12 @@ import java.util.*;
 
 import java.beans.*;
 
-public class FruitListener implements ActionListener,
-	ChangeListener, PropertyChangeListener {
+public class FruitListener implements ActionListener, WindowListener {
 	
 	private FruitEditor fruitEditor;
 	
-	//private Stack<ChangeEvent> changes;
-	private Stack<PropertyChangeEvent> actions;
-	
 	public FruitListener(FruitEditor f) {
 		fruitEditor = f;
-		
-		actions = new Stack<PropertyChangeEvent>();
 	}
 	
 	/**==========================
@@ -91,18 +85,39 @@ public class FruitListener implements ActionListener,
 			setGrid(gridBtn.isSelected());
 		}
 		
+		// VIEW -> SHIFT
+		else if (src == getComponent("shiftBtn")) {
+			new ShiftDialog(fruitEditor); // Load Shift Map dialog.
+		}
+		
 		// VIEW -> SCALE item listeners
 		else if (src == getComponent("oneItem") ||
 				src == getComponent("oneBtn")) {
+			JRadioButtonMenuItem oneItem = (JRadioButtonMenuItem) getComponent("oneItem");
+			JToggleButton oneBtn = (JToggleButton) getComponent("oneBtn");
+			oneItem.setSelected(true);
+			oneBtn.setSelected(true);
 			//setScale(Map.SCALE_ONE);
 		} else if (src == getComponent("twoItem") ||
 				src == getComponent("twoBtn")) {
+			JRadioButtonMenuItem twoItem = (JRadioButtonMenuItem) getComponent("twoItem");
+			JToggleButton twoBtn = (JToggleButton) getComponent("twoBtn");
+			twoItem.setSelected(true);
+			twoBtn.setSelected(true);
 			//setScale(Map.SCALE_TWO);
 		} else if (src == getComponent("fourItem") ||
 				src == getComponent("fourBtn")) {
+			JRadioButtonMenuItem fourItem = (JRadioButtonMenuItem) getComponent("fourItem");
+			JToggleButton fourBtn = (JToggleButton) getComponent("fourBtn");
+			fourItem.setSelected(true);
+			fourBtn.setSelected(true);
 			//setScale(Map.SCALE_FOUR);
 		} else if (src == getComponent("eightItem") ||
 				src == getComponent("eightBtn")) {
+			JRadioButtonMenuItem eightItem = (JRadioButtonMenuItem) getComponent("eightItem");
+			JToggleButton eightBtn = (JToggleButton) getComponent("eightBtn");
+			eightItem.setSelected(true);
+			eightBtn.setSelected(true);
 			//setScale(Map.SCALE_EIGHT);
 		}
 		
@@ -133,6 +148,13 @@ public class FruitListener implements ActionListener,
 			pencilItem.setSelected(true);
 			pencilBtn.setSelected(true);
 			setDrawMode(DrawMode.PENCIL);
+		} else if (src == getComponent("lineItem") ||
+				src == getComponent("lineBtn")) {
+			JRadioButtonMenuItem lineItem = (JRadioButtonMenuItem)getComponent("lineItem");
+			JToggleButton lineBtn = (JToggleButton)getComponent("lineBtn");
+			lineItem.setSelected(true);
+			lineBtn.setSelected(true);
+			setDrawMode(DrawMode.LINE);
 		} else if (src == getComponent("rectItem") ||
 				src == getComponent("rectBtn")) {
 			JRadioButtonMenuItem rectItem = (JRadioButtonMenuItem)getComponent("rectItem");
@@ -186,37 +208,30 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = open.getSelectedFile();
-			String confirmStr = "Map load complete.";
-			
 			try {
-				readText(file); // read the map file
-				setStatus(confirmStr + "\t");
+				readText(file);
+				fruitEditor.setActiveFile(file);
 			} catch (Exception e) {
-				System.err.println("ERROR: Could not read file " + file.getPath());
+				System.err.println("ERROR: Unable to read file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	/* TODO: This method has redundant functionality.
-	 * Maybe shorten this later. */
 	private void saveAction() {
-		JFileChooser save = makeFileChooser();
+		// If active file is blank, go to save prompt.
+		if (fruitEditor.getActiveFile() == null) {
+			saveAsAction();
+			return;
+		}
 		
-		int confirm = save.showSaveDialog(null);
-		
-		if (confirm == JFileChooser.APPROVE_OPTION) {
-			File file = save.getSelectedFile();
-			String confirmStr = "Map saved.";
-			
-			try {
-				writeText(file);
-				setStatus(confirmStr + "\t");
-				//statusPanel.repaint();
-			} catch (Exception e) {
-				System.err.println("ERROR: Unable to write file " + file.getPath());
-				e.printStackTrace();
-			}
+		File file = fruitEditor.getActiveFile();
+		try {
+			writeText(file);
+			fruitEditor.setActiveFile(file);
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to write file " + file.getPath());
+			e.printStackTrace();
 		}
 	}
 
@@ -227,28 +242,44 @@ public class FruitListener implements ActionListener,
 		
 		if (confirm == JFileChooser.APPROVE_OPTION) {
 			File file = saveAs.getSelectedFile();
-			String confirmStr = "Map saved as " + file.getName();
-			
 			try {
 				writeText(file);
-				setStatus(confirmStr);
+				fruitEditor.setActiveFile(file);
 			} catch (Exception e) {
-				System.err.println("ERROR: Unable to write file " + file);
+				System.err.println("ERROR: Unable to write file " + file.getPath());
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	private void closeAction() {
-		System.exit(0);
+		// If changes made, prompt user warning.
+		if (undoable()) {
+			int confirm = JOptionPane.showConfirmDialog(
+				fruitEditor.getFrame(), 
+				"Save before closing?\nUnsaved changes may be lost.",
+				"Close FruitEditor",
+				JOptionPane.YES_NO_CANCEL_OPTION);
+		
+			if (confirm == JOptionPane.YES_OPTION) {
+				saveAction();
+				fruitEditor.getFrame().dispose();
+			} else if (confirm == JOptionPane.NO_OPTION) {
+				fruitEditor.getFrame().dispose();
+			}
+		} else {
+			fruitEditor.getFrame().dispose();
+		}
 	}
 	
 	private void undo() {
-		fruitEditor.update();
+		UndoManager um = fruitEditor.getUndoManager();
+		um.undo();
 	}
 	
 	private void redo() {
-		fruitEditor.update();
+		UndoManager um = fruitEditor.getUndoManager();
+		um.redo();
 	}
 	
 	private void cutAction() {
@@ -270,16 +301,19 @@ public class FruitListener implements ActionListener,
 	/**================================
 	// SHORTCUT METHODS.
 	//=================================*/
-	private void setStatus(String text) {
-		fruitEditor.getStatusPanel().setStatus(text);
+	private void setGrid(boolean grid) {
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setGrid(grid);
 	}
 	
-	private void setGrid(boolean grid) {
-		fruitEditor.getMapPanel().setGrid(grid);
+	private void setDrawMode(DrawMode d) {
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setDrawMode(d);
 	}
 	
 	private void setMode(EditorMode e) {
-		fruitEditor.getMapPanel().setMode(e);
+		MapPanel mp = fruitEditor.getMapPanel();
+		mp.setMode(e);
 	}
 	
 	/*private void setScale(int scale) {
@@ -287,21 +321,41 @@ public class FruitListener implements ActionListener,
 		map.setScale(scale);
 	}*/
 	
-	private void setDrawMode(DrawMode d) {
-		Map map = fruitEditor.getMap();
-		map.setDrawMode(d);
+	private boolean undoable() {
+		return fruitEditor.undoable();
 	}
 	
 	/**================================
-	// STATE CHANGE METHODS
+	// WINDOW METHODS.
 	//=================================**/
-	public void stateChanged(ChangeEvent e) {
+	public void windowOpened(WindowEvent e) {
 		
 	}
 	
-	public void propertyChange(PropertyChangeEvent e) {
-		// For any action taken, place in a stack of actions
-		actions.add(e);
+	public void windowClosing(WindowEvent e) {
+		closeAction();
+	}
+	
+	public void windowClosed(WindowEvent e) {
+		UndoManager um = fruitEditor.getUndoManager();
+		um.clear();
+		System.exit(0);
+	}
+	
+	public void windowActivated(WindowEvent e) {
+		
+	}
+	
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+	
+	public void windowIconified(WindowEvent e) {
+		
+	}
+	
+	public void windowDeiconified(WindowEvent e) {
+		
 	}
 	
 	/**===========================
@@ -312,32 +366,46 @@ public class FruitListener implements ActionListener,
 			// Load reader
 			BufferedReader reader = new BufferedReader(
 					new FileReader(file));
+			Map map;
+			Tileset tileset;
 			
 			// Read in the map and convert text files to map
-			// Read first line to get tileset pathname
+			// Read first line to get map name
 			String line = reader.readLine();
-			String [] lines = line.split("\\s+");
+			
+			String mapName = line;
+			
+			// Read second line to get tileset pathname
+			line = reader.readLine();
 			
 			// Fetch tileset pathname
 			String path = line;
 			
-			// Read second line to get width and height
-			// Assume there are two positive integers
+			// Read second line to get map's parameters (ie, 8 8 32 32, the map and tile sizes)
 			line = reader.readLine();
+			String [] lines = line.split("\\s+");
 			
-			// Set width and height
+			// Set the parameters
 			int cols = Integer.parseInt(lines[0]);
 			int rows = Integer.parseInt(lines[1]);
+			int gw = Integer.parseInt(lines[2]);
+			int gh = Integer.parseInt(lines[3]);
 			
-			Map map = new Map(cols,rows);
-			Tileset tileset = new Tileset(path);
+			map = new Map(cols,rows,gw,gh);
+			tileset = new Tileset(path,gw,gh);
 			
-			// Read the IDs of tiles next and store them in an int array
+			// Read the IDs of tiles next and store them in an array
 			int [][] ids = new int[rows][cols];
 			int r, c;
-			r = c = 0;
+			r = 0;
 			
-			while (!line.isEmpty()) {
+			while (line != null) {
+				line = reader.readLine();
+				
+				if (line == null) 
+					break;
+				
+				lines = line.split("\\s+");
 				for (c = 0; c < lines.length; c++) {
 					ids[r][c] = Integer.parseInt(lines[c]);
 				}
@@ -345,7 +413,18 @@ public class FruitListener implements ActionListener,
 				r++;
 			}
 			
+			// Now make the map based on the list read earlier.
+			for (r = 0; r < rows; r++) {
+				for (c = 0; c < cols; c++) {
+					if (ids[r][c] == -1) // Skip any blank tiles on map 
+						continue; 
+					
+					map.setTile(c,r,tileset.getTile(ids[r][c]));
+				}
+			}
+			
 			fruitEditor.getMapPanel().setMap(map);
+			map.setName(mapName);
 			fruitEditor.getTilePanel().setTileset(tileset);
 			
 			// Close reader to cleanup
@@ -363,12 +442,15 @@ public class FruitListener implements ActionListener,
 				new BufferedWriter(new FileWriter(file)));
 			Map map = fruitEditor.getMap();
 			
-			// Write in tileset used
+			// Write in map name and tileset path.
+			writer.println(map.getName());
 			writer.println(fruitEditor.getTileset().getTilesetPath());
 			
-			// Write width and height
+			// Write map parameters in file.
 			writer.print(map.getWidth() + " ");
-			writer.println(map.getHeight());
+			writer.print(map.getHeight() + " ");
+			writer.print(map.getTileWidth() + " ");
+			writer.println(map.getTileHeight());
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();
@@ -411,12 +493,16 @@ public class FruitListener implements ActionListener,
 		// Accept text and .fmp files only
 		jfc.setAcceptAllFileFilterUsed(false);
 		
-		// Set to .fmp file filter
-		jfc.setFileFilter(filter);
+		// Set to txt file filter
+		jfc.setFileFilter(textfilter);
 		
 		// Set map name as default file name.
 		if (fruitEditor.getMapPanel().getMapName() != null) {
-			jfc.setSelectedFile(new File(fruitEditor.getMapPanel().getMapName()));
+			if (jfc.getFileFilter() == filter) {
+				jfc.setSelectedFile(new File(fruitEditor.getMapPanel().getMapName() + ".fmp"));
+			} else if (jfc.getFileFilter() == textfilter) {
+				jfc.setSelectedFile(new File(fruitEditor.getMapPanel().getMapName() + ".txt"));
+			}
 		}
 		
 		return jfc;
