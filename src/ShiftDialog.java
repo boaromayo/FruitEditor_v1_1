@@ -141,7 +141,7 @@ public class ShiftDialog extends JDialog implements ActionListener, ChangeListen
 		
 		return comboBox;
 	}
-	
+  
 	private JSpinner makeSpinner(int n, String name) {
 		JSpinner spinner;
 		

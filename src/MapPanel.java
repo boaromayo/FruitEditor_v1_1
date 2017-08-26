@@ -48,6 +48,9 @@ public class MapPanel extends JPanel implements MouseListener,
 	// GRID ON/OFF.
 	private boolean grid = true;
 	
+	// MAP CHANGED.
+	private boolean changed = false;
+	
 	// MOUSE COORDS.
 	private int mouseX;
 	private int mouseY;
@@ -164,6 +167,8 @@ public class MapPanel extends JPanel implements MouseListener,
 	}
 	
 	public void update() {
+		// TODO: Detect changes made.
+		changed = true;
 		revalidate();
 		repaint();
 	}
@@ -336,6 +341,36 @@ public class MapPanel extends JPanel implements MouseListener,
 					d += dx*2;
 					e -= dy - dx;
 				}
+=======
+	public void mapPressed(int x1, int y1, int x2, int y2) {
+		switch (drawMode) {
+		case PENCIL:
+			map.setTile(x1, y1, fruitEditor.getSelectedTile());
+			break;
+		case RECTANGLE:
+			rectFill(x1, y1, x2, y2, fruitEditor.getSelectedTile());
+			break;
+		case CIRCLE:
+			break;
+		default:
+			break;
+		}
+		
+		update();
+	}
+	
+	private void rectFill(int x, int y, int xmax, int ymax, Tile newTile) {
+		// Assume that x, y, xmax, and ymax are set to tile coords.
+		int r, c; // Counters
+		
+		x = Math.min(x, xmax);
+		y = Math.min(y, ymax);
+		xmax = Math.abs(x - xmax);
+		ymax = Math.abs(y - ymax);
+		
+		for (r=y; r<ymax; r++) {
+			for (c=x; c<xmax; c++) {
+				map.setTile(c,r,newTile);
 			}
 		}
 	}*/
@@ -415,7 +450,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	// for version 0.2.6
 	/*private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
 	 	// Mark current ids of map before change.
-	  	int [][][] mapIds = map.getMapIntArray();
+	  int [][][] mapIds = map.getMapIntArray();
 	  	
 		// Use static comparator method to prevent null-case errors.
 		if (Tile.compareTo(targetTile,newTile))
@@ -489,7 +524,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	public synchronized void resizeMap(int w, int h) {
 		if (isPanelActive())
 			fruitEditor.addChanges(new MapResizeCommand(this,map,w,h));
-		
+
 		mapWidth = w;
 		mapHeight = h;
 		map.resize(mapWidth,mapHeight);
@@ -526,7 +561,7 @@ public class MapPanel extends JPanel implements MouseListener,
 		mapWidth = w;
 		mapHeight = h;
 	}
-	
+  
 	/**========================================
 	 * setGrid() - Set grid on/off.
 	//=========================================**/
@@ -576,6 +611,10 @@ public class MapPanel extends JPanel implements MouseListener,
 		return mapHeight;
 	}
 	
+	public boolean hasChanged() {
+		return changed;
+	}
+	
 	// Keep this checkBounds() method private to prevent any interaction with other panels.
 	private boolean checkBounds(int x, int y, int w, int h) {
 		return (x >= 0 && x < w && y >= 0 && y < h);
@@ -586,6 +625,35 @@ public class MapPanel extends JPanel implements MouseListener,
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		return g2;
+	}
+	
+	/**=======================================
+	 * tileToPixel(x,y) - Convert tile to pixel coordinates.
+	//========================================**/
+	public Point tileToPixel(int x, int y) {
+		return new Point(x * gridWidth, y * gridHeight);
+	}
+	
+	/**=======================================
+	 * pixelToTile(x,y) - Convert pixel to tile coordinates.
+	//========================================**/
+	public Point pixelToTile(int x, int y) {
+		return new Point(x / gridWidth, y / gridHeight);
+	}
+	
+	/**=====================================
+	 * snap(n,snap) - Ensures tile snaps to map's grid.
+	//=====================================**/
+	public int snap(int n, int snap) {
+		return n - (n % snap);
+	}
+	
+	public void undo() {
+		fruitEditor.update();
+	}
+	
+	public void redo() {
+		fruitEditor.update();
 	}
 	
 	/**=======================================
@@ -803,7 +871,6 @@ public class MapPanel extends JPanel implements MouseListener,
 				b = false;
 			}
 		}
-	
 		
 		public void moveLeft(boolean b) {
 			if (b && cursorX > 0) {
