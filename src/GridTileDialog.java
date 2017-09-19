@@ -168,6 +168,14 @@ public class GridTileDialog implements ActionListener, ChangeListener {
 		gridHeight = gh;
 	}
 	
+	public void adjustGridWidthText() {
+		gridWidthText.setValue(gridWidth);
+	}
+	
+	public void adjustGridHeightText() {
+		gridHeightText.setValue(gridHeight);
+	}
+	
 	public void setOffsetX(int ox) {
 		offsetX = ox;
 	}
