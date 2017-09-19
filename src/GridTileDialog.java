@@ -168,6 +168,14 @@ public class GridTileDialog implements ActionListener, ChangeListener {
 		gridHeight = gh;
 	}
 	
+	public void adjustGridWidthText() {
+		gridWidthText.setValue(gridWidth);
+	}
+	
+	public void adjustGridHeightText() {
+		gridHeightText.setValue(gridHeight);
+	}
+	
 	public void setOffsetX(int ox) {
 		offsetX = ox;
 	}
@@ -269,7 +277,7 @@ public class GridTileDialog implements ActionListener, ChangeListener {
 	private void setupTileset() {
 		Tileset tileset = tilePanel.getTileset();
 		tilePanel.setTileset(new Tileset(tileset.getTilesetPath(), 
-				gridWidth, gridHeight, offsetX, offsetY, paddingV, paddingH));
+				gridWidth, gridHeight, offsetX, offsetY, paddingV, paddingH), true);
 		
 		dispose();
 	}
@@ -282,12 +290,14 @@ public class GridTileDialog implements ActionListener, ChangeListener {
 			if (src == gridWidthText) {
 				setGridWidth((Integer)gridWidthText.getValue());
 				if (lock) {
-					setGridHeight((Integer)gridHeightText.getValue());
+					setGridHeight((Integer)gridWidthText.getValue());
+					adjustGridHeightText();
 				}
 			} else if (src == gridHeightText) {
 				setGridHeight((Integer)gridHeightText.getValue());
 				if (lock) {
-					setGridWidth((Integer)gridWidthText.getValue());
+					setGridWidth((Integer)gridHeightText.getValue());
+					adjustGridWidthText();
 				}
 			} else if (src == offsetXText) {
 				setOffsetX((Integer)offsetXText.getValue());
