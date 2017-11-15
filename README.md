@@ -1,6 +1,6 @@
 # FruitEditor (v1_1)
 
-[![build-flag](https://travis-ci.org/boaromayo/FruitEditor_v1_1.svg?branch=master)](https://travis-ci.org/boaromayo/FruitEditor_v1_1)
+[![build-flag](https://travis-ci.org/boaromayo/FruitEditor_v1_1.svg?branch=dev)](https://travis-ci.org/boaromayo/FruitEditor_v1_1)
 
 <img src="http://i.imgur.com/IHVPzn5.png" alt="fe sample" width="60%" height="60%" />
 
