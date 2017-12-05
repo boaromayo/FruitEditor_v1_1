@@ -454,6 +454,13 @@ public class MapPanel extends JPanel implements MouseListener,
 		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
 	}*/
 	
+	public void deleteTile(int x, int y) {
+		int [][][] mapIds = map.getMapIntArray();
+		
+		map.setTile(x, y, new Tile());
+		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
+	}
+	
 	public void setViewport(JViewport vp) {
 		viewport = vp;
 	}
@@ -574,6 +581,10 @@ public class MapPanel extends JPanel implements MouseListener,
 	
 	public int getMapHeight() {
 		return mapHeight;
+	}
+	
+	public boolean modeEquals(EditorMode m) {
+		return editorMode.equals(m);
 	}
 	
 	// Keep this checkBounds() method private to prevent any interaction with other panels.

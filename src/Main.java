@@ -1,3 +1,12 @@
+/**====================================
+ * 
+ * FruitEditor
+ *
+ * @author boaromayo
+ * 
+ * Copyright (c) 2015-2017 boaromayo/Nico Poblete
+ * 
+ *=====================================*/
 package FruitEditor;
 
 import java.awt.EventQueue;

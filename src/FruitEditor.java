@@ -1,6 +1,7 @@
 package FruitEditor;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 
 import java.io.*;
@@ -45,6 +46,9 @@ public class FruitEditor {
 	
 	// TILESET.
 	private Tileset tileset;
+	
+	// CLIPBOARD.
+	private Clipboard clipboard;
 	
 	// HASH MAP FOR COMPONENTS.
 	private HashMap<String, JComponent> hash;
@@ -172,7 +176,10 @@ public class FruitEditor {
 		
 		// Initialize undo/redo history.
 		undoManager = new UndoManager();
-				
+		
+		// Initialize clipboard.
+		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		
 		// Setup the editor menu.
 		menuSetup();
 		
@@ -195,57 +202,6 @@ public class FruitEditor {
 		fruitFrame.setResizable(false);
 		fruitFrame.setVisible(true);
 	}
-	
-	/* TODO: May get rid of this since it's not needed. 
-	 * This is not a game-based app, where the run() loop is called every time. */
-	/*public void run() {
-		long startTime, diffTime;
-		
-		long targetTime = 1000 / FruitEditor.FPS;
-		
-		long waitTime;
-		//long elapsedTime = 0;
-		
-		//int frameCount = 0;
-		//int maxFrameCount = FruitEditor.FPS;
-		
-		try {
-			while (true) {
-				startTime = System.nanoTime();
-				
-				update();
-				
-				diffTime = (System.nanoTime() - startTime) / 1000000;
-				waitTime = targetTime - diffTime;
-				
-				if (waitTime < 0) {
-					waitTime = targetTime;
-				}
-				
-				Thread.sleep(waitTime);
-				
-				//elapsedTime += System.nanoTime() - startTime;
-				
-				//frameCount++;
-				
-				//if (frameCount == maxFrameCount) {
-					//frameCount = 0;
-					//elapsedTime = 0;
-				//}
-			}
-		} catch (Exception e) {
-			System.err.println("ERROR: Cannot open the panels properly. Reason: " +
-					e.getMessage());
-			e.getStackTrace();
-			System.exit(1);
-		}
-	}
-	
-	public void addNotify() {
-		if (t == null) {
-			t = new Thread();
-		}
-	}*/
 	
 	/**================================
 	// panelSetup() - Set up main panels.
@@ -293,6 +249,10 @@ public class FruitEditor {
 		editMenu.setEnabled(act);
 		viewMenu.setEnabled(act);
 		drawMenu.setEnabled(act);
+		cutItem.setEnabled(false);
+		copyItem.setEnabled(false);
+		pasteItem.setEnabled(false);
+		deleteItem.setEnabled(act);
 		toolMenu.setEnabled(act);
 	}
 		
@@ -385,8 +345,8 @@ public class FruitEditor {
 		redoItem.addActionListener(fruitListener);
 		/*cutItem.addActionListener(fruitListener);
 		copyItem.addActionListener(fruitListener);
-		pasteItem.addActionListener(fruitListener);
-		deleteItem.addActionListener(fruitListener);*/
+		pasteItem.addActionListener(fruitListener);*/
+		deleteItem.addActionListener(fruitListener);
 		
 		// Add in accelerator keys.
 		makeShortcut(undoItem, KeyEvent.VK_Z, "CTRL");
@@ -403,9 +363,6 @@ public class FruitEditor {
 		copyItem.setName("copyItem");
 		pasteItem.setName("pasteItem");
 		deleteItem.setName("deleteItem");
-		
-		// Add edits into actionmap.
-		//((JPanel))
 		
 		// Add in components.
 		editMenu.add(undoItem);
@@ -438,7 +395,6 @@ public class FruitEditor {
 		gridItem.addActionListener(fruitListener);
 
 		// Set grid item if grid is on.
-		//gridItem.setState(getMapPanel().gridOn());
 		gridItem.setSelected(true);
 		
 		// Add in components.
@@ -656,9 +612,9 @@ public class FruitEditor {
 	public void toggleTools(boolean act) {
 		saveBtn.setEnabled(act);
 		
-		cutBtn.setEnabled(act);
-		copyBtn.setEnabled(act);
-		pasteBtn.setEnabled(act);
+		cutBtn.setEnabled(false);
+		copyBtn.setEnabled(false);
+		pasteBtn.setEnabled(false);
 		deleteBtn.setEnabled(act);
 	
 		gridBtn.setEnabled(act);
@@ -1041,6 +997,13 @@ public class FruitEditor {
 	//=========================================**/
 	public Tile getSelectedTile() {
 		return getTilePanel().getSelectedTile();
+	}
+	
+	/**========================================
+	// getClipboard() - Get clipboard.
+	//=========================================**/
+	public Clipboard getClipboard() {
+		return clipboard;
 	}
 	
 	/**========================================

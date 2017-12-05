@@ -1,5 +1,6 @@
 package FruitEditor;
 
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 
 import java.io.*;
@@ -12,7 +13,7 @@ import java.util.*;
 
 import java.beans.*;
 
-public class FruitListener implements ActionListener, WindowListener {
+public class FruitListener implements ActionListener, WindowListener, ClipboardOwner {
 	
 	private FruitEditor fruitEditor;
 	
@@ -282,20 +283,67 @@ public class FruitListener implements ActionListener, WindowListener {
 		um.redo();
 	}
 	
+	// TODO: Fix CCP functionality here.
 	private void cutAction() {
+		/*Clipboard clip = fruitEditor.getClipboard();
+		MapPanel mp = fruitEditor.getMapPanel();
+		TilePanel tp = fruitEditor.getTilePanel();
+		Map map = fruitEditor.getMap();
+		Tile t = map.getTile(mp.getMapX(), mp.getMapY());
 		
+		try {
+			/*DataFlavor tileFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + 
+					";class=Tile");
+			tp.setSelectedTile(t);
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to cut Tile. REASON: " + 
+					e.getMessage());
+			e.printStackTrace();
+		}*/
 	}
 	
 	private void copyAction() {
+		/*Clipboard clip = fruitEditor.getClipboard();
+		Map map = fruitEditor.getMap();
+		MapPanel mp = fruitEditor.getMapPanel();
+		TilePanel tp = fruitEditor.getTilePanel();
+		Tile t = map.getTile(mp.getMapX(), mp.getMapY());
 		
+		try {
+			t.writeTile();
+			DataFlavor flavor = new DataFlavor();
+			Transferable transfr = clip.getContents((Transferable)t.readTile());
+			tp.setSelectedTile(t);
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to copy Tile. REASON: " + 
+					e.getMessage());
+			e.printStackTrace();
+		}*/
 	}
 	
 	private void pasteAction() {
+		// Paste serialized tile onto map.
+		/*Clipboard clip = fruitEditor.getClipboard();
+		MapPanel mp = fruitEditor.getMapPanel();
+		Map map = fruitEditor.getMap();
+		Tile t = clip.getContents(, this);
 		
+		try {
+			map.setTile(mp.getMapX(), mp.getMapY(), t.readFile());
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to paste Tile object. REASON: " + 
+					e.getMessage());
+			e.printStackTrace();
+		}*/
 	}
 	
 	private void deleteAction() {
+		// When deleting, replace with a blank tile.
+		MapPanel mp = fruitEditor.getMapPanel();
 		
+		if (mp.modeEquals(EditorMode.MAP_MODE)) {
+			mp.deleteTile(mp.getMapX(), mp.getMapY());
+		}
 	}
 	
 	/**================================
@@ -454,14 +502,14 @@ public class FruitListener implements ActionListener, WindowListener {
 			
 			// Write integer reps of tiles in for one layer only
 			int [][] ids = map.getMapIntArray2();
-			
+						
 			for (int r = 0; r < ids.length; r++) {
 				for (int c = 0; c < ids[0].length; c++) {
 					writer.print(ids[r][c] + " ");
 				}
 				writer.println();
 			}
-			
+						
 			// Flush and close writer as cleanup
 			writer.flush();
 			writer.close();
@@ -510,5 +558,10 @@ public class FruitListener implements ActionListener, WindowListener {
 	
 	private JComponent getComponent(String text) {
 		return fruitEditor.getComponent(text);
+	}
+
+	public void lostOwnership(Clipboard clip, Transferable t) {
+		clip = fruitEditor.getClipboard();
+		
 	}
 }

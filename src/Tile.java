@@ -2,8 +2,9 @@ package FruitEditor;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.io.*;
 
-public class Tile {
+public class Tile implements Serializable {
 	// IMAGE.
 	private BufferedImage img;
 	
@@ -120,5 +121,49 @@ public class Tile {
 		if (img != null) {
 			g.drawImage(img, x, y, null);
 		}
+	}
+	
+	public void writeTile() {
+		try {
+			// Start serialization.
+			FileOutputStream fos = new FileOutputStream("tile.bin");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(getTile()); // Save in tile.
+			
+			// Close streams.
+			oos.close();
+			fos.close();
+			
+			// Debug only.
+			System.out.println("Tile saved in tile.bin");	
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to write Tile object into file. REASON: " +
+					e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public Tile readTile() {
+		try {
+			// Start deserialization (may be unstable).
+			FileInputStream fis = new FileInputStream("tile.bin");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			Tile tile = (Tile)ois.readObject();
+			
+			// Close streams.
+			ois.close();
+			fis.close();
+			
+			// Debug console if things go right.
+			System.out.println("Tile deserialization successful.");
+			
+			return tile;
+		} catch (Exception e) {
+			System.err.println("ERROR: Unable to deserialize Tile object. REASON: " + 
+					e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }
