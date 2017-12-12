@@ -94,7 +94,7 @@ public class Map {
 		
 		for (k=ymin; k < ymax*xmax; k++) {
 			j = k / xmax;
-			i = k - (j * xmax);
+			i = k - (j * xmax); // equal to k % xmax
 			if (getTile(i,j) != null)
 				getTile(i,j).draw(g, i*tileWidth, j*tileHeight);
 		}
