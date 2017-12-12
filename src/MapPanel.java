@@ -257,7 +257,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			map.setTile(x, y, fruitEditor.getSelectedTile());
 			break;
 		case FILL:
-			//floodFill(x, y, map.getTile(x,y), fruitEditor.getSelectedTile());
+			floodFill(x, y, map.getTile(x,y), fruitEditor.getSelectedTile());
 			break;
 		default:
 			break;
@@ -308,7 +308,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	 *  return;
 	 * 
 	//========================================**/
-	// for version 0.2.6
+	// for version 0.2.7
 	/*private void lineFill(int x1, int y1, int x2, int y2, Tile oldTile, Tile newTile) {
 		int dx = Math.abs(x1 - x2);
 		int dy = Math.abs(y1 - y2);
@@ -351,7 +351,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	 * The algorithm is based on tips4java.wordpress.com's solution
 	 * for drawing filled rectangles via mouse.
 	//=========================================**/
-	// for version 0.2.6
+	// for version 0.2.7
 	/*private void rectFill(int x1, int y1, int x2, int y2, Tile oldTile, Tile newTile) {
 		// Assume that (x1,y1), and (x2,y2) are tile coords.
 		int r, c;
@@ -413,7 +413,7 @@ public class MapPanel extends JPanel implements MouseListener,
 	 *  return;
 	//========================================**/
 	// for version 0.2.6
-	/*private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
+	private void floodFill(int x, int y, Tile targetTile, Tile newTile) {
 	 	// Mark current ids of map before change.
 	  	int [][][] mapIds = map.getMapIntArray();
 	  	
@@ -452,7 +452,7 @@ public class MapPanel extends JPanel implements MouseListener,
 			}
 		}
 		fruitEditor.addChanges(new MapChangeCommand(map,fruitEditor.getTileset(),mapIds));
-	}*/
+	}
 	
 	public void deleteTile(int x, int y) {
 		int [][][] mapIds = map.getMapIntArray();

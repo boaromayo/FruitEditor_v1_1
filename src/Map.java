@@ -82,8 +82,7 @@ public class Map {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, mapWidth*tileWidth, mapHeight*tileHeight);
 		
-		int xmin = Math.max(x / tileWidth, 0);
-		int ymin = Math.max(y / tileHeight, 0);
+		int ymin = Math.max(y / tileHeight, 0); // no need for xmin
 		
 		int r = mapTiles.length;
 		int c = mapTiles[0].length;
@@ -91,11 +90,13 @@ public class Map {
 		int xmax = Math.min((x + (int)size.getWidth()) / tileWidth, c);
 		int ymax = Math.min((y + (int)size.getHeight()) / tileHeight, r);
 		
-		for (int j=ymin; j < ymax; j++) {
-			for (int i=xmin; i < xmax; i++) {
-				if (getTile(i,j) != null)
-					getTile(i,j).draw(g, i*tileWidth, j*tileHeight);
-			}
+		int i,j,k; // counters
+		
+		for (k=ymin; k < ymax*xmax; k++) {
+			j = k / xmax;
+			i = k - (j * xmax);
+			if (getTile(i,j) != null)
+				getTile(i,j).draw(g, i*tileWidth, j*tileHeight);
 		}
 	}
 	
@@ -108,10 +109,12 @@ public class Map {
 		int r = Math.min(mapTiles.length, h);
 		int c = Math.min(mapTiles[0].length, w);
 		
-		for (int j=0; j < r; j++) {
-			for (int i=0; i < c; i++) {
-				newMapTiles[j][i][0] = mapTiles[j][i][0];
-			}
+		int i,j,k; // counters
+		
+		for (k=0; k < r*c; k++) {
+			i = k / c;
+			j = k - (i * c);
+			newMapTiles[j][i][0] = mapTiles[j][i][0];
 		}
 		mapTiles = newMapTiles;
 	}
@@ -165,14 +168,16 @@ public class Map {
 			int rows = ids.length;
 			int cols = ids[0].length;
 			
-			int i, j; // Loop counters
+			int i; // Loop counter
 			
-			for (i=0; i < rows; i++)
-				for (j=0; j < cols; j++)
-					if (ids[i][j] < 0)
-						mapTiles[i][j][layer] = null;
-					else
-						mapTiles[i][j][layer] = t.getTile(ids[i][j]);
+			for (i=0; i < rows*cols; i++) {
+				int r = i / cols;
+				int c = i - (r * cols);
+				if (ids[r][c] < 0)
+					mapTiles[r][c][layer] = null;
+				else
+					mapTiles[r][c][layer] = t.getTile(ids[r][c]);
+			}
 		}
 	}
 	
@@ -182,16 +187,16 @@ public class Map {
 			int cols = ids[0].length;
 			int layers = ids[0][0].length;
 			
-			int i, j, k; // Loop counters
+			int i, l; // Loop counters
 			
-			for (i=0; i < rows; i++) {
-				for (j=0; j < cols; j++) {
-					for (k=0; k < layers; k++) {
-						if (ids[i][j][k] < 0)
-							mapTiles[i][j][k] = null;
-						else
-							mapTiles[i][j][k] = t.getTile(ids[i][j][k]);
-					}
+			for (i=0; i < rows*cols; i++) {
+				int r = i / cols;
+				int c = i - (r * cols);
+				for (l=0; l < layers; l++) {
+					if (ids[r][c][l] < 0)
+						mapTiles[r][c][l] = null;
+					else
+						mapTiles[r][c][l] = t.getTile(ids[r][c][l]);
 				}
 			}
 		}
