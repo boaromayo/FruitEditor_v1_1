@@ -87,8 +87,8 @@ public class Map {
 		int r = mapTiles.length;
 		int c = mapTiles[0].length;
 
-		int xmax = Math.min((x + (int)size.getWidth()) / tileWidth, c);
-		int ymax = Math.min((y + (int)size.getHeight()) / tileHeight, r);
+		int xmax = Math.min((x + (int)size.getWidth()) / tileWidth + c, c);
+		int ymax = Math.min((y + (int)size.getHeight()) / tileHeight + r, r);
 		
 		int i,j,k; // counters
 		
