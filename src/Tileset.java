@@ -249,6 +249,7 @@ public class Tileset {
 		for (i=0; i < rows; i++) {
 			for (j=0; j < cols; j++) {
 				tileImg[i][j] = tilesetImg.getSubimage(j*tileWidth, i*tileHeight, tileWidth, tileHeight);
+				tileImg[i][j] = FruitImgBank.get().convertToARGB(tileImg[i][j], 0, 0);
 			}
 		}
 		
@@ -260,17 +261,18 @@ public class Tileset {
 		int cols = fruitTiles[0].length;
 		BufferedImage[][] tileImg = new BufferedImage[rows][cols];
 		
-		int tsw = tilesetWidth - offX;
-		int tsh = tilesetHeight - offY;
+		/*int tsw = tilesetWidth - offX;
+		int tsh = tilesetHeight - offY;*/
 		
 		// Override current tileset image to account for spaces and offset
-		tilesetImg = FruitImgBank.get().loadBufferedImage(tilesetPath, offX, offY, tsw, tsh);
+		tilesetImg = FruitImgBank.get().loadBufferedImage(tilesetPath, offX, offY);
 		
 		int i, j; // Loop counters
 		
 		for (i=0; i < rows; i++) {
 			for (j=0; j < cols; j++) {
 				tileImg[i][j] = tilesetImg.getSubimage((j*tileWidth), (i*tileHeight), tileWidth, tileHeight);
+				tileImg[i][j] = FruitImgBank.get().convertToARGB(tileImg[i][j], 0, 0);
 			}
 		}
 		
